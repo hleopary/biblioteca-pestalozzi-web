@@ -54,12 +54,14 @@ git clone https://github.com/hleopary/biblioteca-pestalozzi-web.git
 cd biblioteca-pestalozzi-web
 
 # Cambiar a la rama de desarrollo
-git checkout leopary_prueba2
+git checkout leopary_prueba3
 
 # Abrir index.html en el navegador (doble clic o live-server)
 # Opción A: Doble clic en index.html
 # Opción B: npx live-server (si tenés Node instalado)
 ```
+
+> **Para el equipo:** clonar el repo, ubicarse en `leopary_prueba3` (`git checkout leopary_prueba3`) y abrir `index.html`. La versión publicada en GitHub Pages sale de `leopary_prueba2`.
 
 ---
 
@@ -68,12 +70,13 @@ git checkout leopary_prueba2
 | Rama | Propósito |
 |------|-----------|
 | `main` | **Limpia / vacía** (solo README mínimo). Nunca se desarrolla acá. |
-| `leopary_prueba2` | **Rama de trabajo y de publicación** — reimplementación del sitio según la maqueta de la cliente (publicada en GitHub el 14/10/2026 y en GitHub Pages). |
+| `leopary_prueba2` | **Rama publicada en GitHub Pages** (estable). Es la que ve el equipo en la URL. No recibe pushes directos. |
+| `leopary_prueba3` | **Rama de trabajo actual** (14/10/2026). Nace de `leopary_prueba2`; acá se hacen los cambios nuevos. |
 | `feature/*` | Ramas temporales para features grandes (opcional, salen de la rama de trabajo). |
 
 > **Rama `leopary_prueba1` (eliminada el 14/10/2026):** era la primera landing institucional (02/10/2026). No se perdió historial: su commit `de32831` quedó dentro de la historia de `leopary_prueba2` y se puede recuperar con `git show de32831:index.html`.
 
-**Deploy (GitHub Pages)**: publica la rama `leopary_prueba2` / `(root)` → https://hleopary.github.io/biblioteca-pestalozzi-web/
+**Deploy (GitHub Pages)**: publica la rama `leopary_prueba2` / `(root)` → https://hleopary.github.io/biblioteca-pestalozzi-web/ · la rama `leopary_prueba3` **no** se publica: sus avances llegan a la web solo por merge a `leopary_prueba2`
 
 **Merge a main**: Solo vía Pull Request cuando la versión esté lista para "producción" (entrega formal).
 
