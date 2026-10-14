@@ -68,11 +68,12 @@ git checkout leopary_prueba2
 | Rama | Propósito |
 |------|-----------|
 | `main` | **Limpia / vacía** (solo README mínimo). Nunca se desarrolla acá. |
-| `leopary_prueba1` | Primera landing institucional (02/10/2026). Versión previa. |
-| `leopary_prueba2` | **Rama de trabajo actual** — reimplementación del sitio según la maqueta de la cliente (publicada en GitHub el 14/10/2026). |
+| `leopary_prueba2` | **Rama de trabajo y de publicación** — reimplementación del sitio según la maqueta de la cliente (publicada en GitHub el 14/10/2026 y en GitHub Pages). |
 | `feature/*` | Ramas temporales para features grandes (opcional, salen de la rama de trabajo). |
 
-**Deploy a GitHub Pages**: Configurar en Settings → Pages → Source: `leopary_prueba1` / `(root)`.
+> **Rama `leopary_prueba1` (eliminada el 14/10/2026):** era la primera landing institucional (02/10/2026). No se perdió historial: su commit `de32831` quedó dentro de la historia de `leopary_prueba2` y se puede recuperar con `git show de32831:index.html`.
+
+**Deploy (GitHub Pages)**: publica la rama `leopary_prueba2` / `(root)` → https://hleopary.github.io/biblioteca-pestalozzi-web/
 
 **Merge a main**: Solo vía Pull Request cuando la versión esté lista para "producción" (entrega formal).
 
