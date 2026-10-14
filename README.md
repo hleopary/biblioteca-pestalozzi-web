@@ -54,7 +54,7 @@ git clone https://github.com/hleopary/biblioteca-pestalozzi-web.git
 cd biblioteca-pestalozzi-web
 
 # Cambiar a la rama de desarrollo
-git checkout leopary_prueba1
+git checkout leopary_prueba2
 
 # Abrir index.html en el navegador (doble clic o live-server)
 # Opción A: Doble clic en index.html
@@ -93,11 +93,35 @@ La versión de `leopary_prueba2` reimplementa el sitio según la **maqueta entre
 - [x] Asociación y préstamos: 3 trámites + bloque de consulta
 - [x] Footer: datos de contacto, redes y créditos
 - [x] Responsive (móvil / tablet / escritorio) y accesibilidad básica
-- [ ] Imágenes reales (hero, novedades y colecciones) — hoy hay placeholders de color
+- [x] Imágenes: `assets/img/hero.avif` y las 2 de colecciones (cargadas por el usuario, 14/10); las novedades no llevan imagen según la maqueta 2
 - [ ] Conectar el formulario de visita escolar a un servicio real (FormSubmit/Formspree)
 - [ ] Favicon e íconos definitivos
 
-> **Nota:** los bloques de imagen usan placeholders (degradados) hasta contar con las fotografías reales de la biblioteca. Están marcados en el HTML para reemplazarlos sin tocar el diseño.
+> **Nota:** los bloques `.media` conservan un degradado como respaldo por si falta el archivo; las imágenes se asignan por CSS (`background-image`) en `css/styles.css`, con rutas relativas a la carpeta `css/` (`../assets/img/...`). Se aceptan `.avif`.
+
+---
+
+## Paleta y ajustes de la maqueta 2
+
+Los colores se **midieron por píxel** sobre `practica_profesionalizante/apuntes/maqueta_web2.png` (la maqueta de la cliente) y se centralizan en `css/styles.css`.
+
+| Variable | Valor | Uso |
+|----------|-------|-----|
+| `--color-primary` | `#6b1d28` | Borravino (encabezado, botones, fondos oscuros) |
+| `--color-primary-dark` | `#4a121c` | Borravino oscuro (secciones oscuras, footer) |
+| `--color-accent` | `#8b5e2b` | Dorado general (borde inferior del encabezado, íconos, etiquetas) |
+| `--color-accent-dark` | `#6e4a22` | Dorado oscuro (texto dorado sobre fondos claros) |
+| `--color-accent-light` | `#d4a853` | Dorado claro (texto/íconos sobre fondos oscuros: eyebrows, footer) |
+| `--color-bg` | `#f4f1ea` | Crema (fondo general) |
+| `--color-surface` | `#fdfbf7` | Blanco marfil (tarjetas) |
+
+Ajustes respecto de la primera reimplementación:
+
+- **Línea dorada** de 3px en el borde inferior del encabezado (`#8b5e2b`).
+- **Hero:** velo bordó suavizado (oscuro a la izquierda, casi transparente a la derecha) para que la fotografía se vea sin perder legibilidad.
+- **Dorado general** `#b08d57` → `#8b5e2b` (+ un dorado claro `#d4a853` para textos e íconos sobre fondos oscuros).
+- **Etiquetas de Novedades** con color propio por tarjeta (`--tag-color` vía `:nth-child`): 1ª `#8b5e2b`, 2ª `#6b1d2b`, 3ª `#3d5a3e`.
+- **Bebeteca** con 4 tarjetas de emojis (⚽ 🦖 🐺 🧙‍♀️).
 
 ---
 
