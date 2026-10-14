@@ -259,11 +259,16 @@ textarea:focus-visible {
    Hero
    -------------------------------------------------------------------------- */
 
-/* TODO: reemplazar el degradado por la fotografía real de la biblioteca */
+/* Fondo: fotografía real con capa oscura encima para legibilidad del texto.
+   Si la foto no está, se ve el degradado oscuro como respaldo. */
 .hero {
-  background:
-    linear-gradient(120deg, rgba(74, 18, 28, 0.94), rgba(107, 29, 40, 0.8)),
+  background-color: #2b1b10;
+  background-image:
+    linear-gradient(120deg, rgba(74, 18, 28, 0.9), rgba(107, 29, 40, 0.72)),
+    url("../assets/img/hero.avif"),
     radial-gradient(circle at 72% 28%, #3d2817 0%, #2b1b10 70%);
+  background-size: cover;
+  background-position: center;
   color: #fff;
   padding: clamp(3rem, 7vw, 6rem) 0;
 }
@@ -487,13 +492,27 @@ textarea:focus-visible {
   color: var(--color-text-muted);
 }
 
-/* Placeholders de imagen (reemplazar por fotos reales) */
+/* Bloque de imagen de las tarjetas.
+   Por defecto muestra un degradado (placeholder); cada clase --<nombre>
+   agrega la foto real y deja el degradado como respaldo si falta el archivo. */
 .media {
   position: relative;
   min-height: 11rem;
   display: grid;
   place-items: center;
-  background: linear-gradient(140deg, #8a6b3f, #4a121c);
+  background-image: linear-gradient(140deg, #8a6b3f, #4a121c);
+  background-size: cover;
+  background-position: center;
+}
+
+.media--berisso {
+  background-image: url("../assets/img/coleccion-berisso-la-plata.avif"),
+    linear-gradient(140deg, #8a6b3f, #4a121c);
+}
+
+.media--colectividades {
+  background-image: url("../assets/img/coleccion-colectividades.avif"),
+    linear-gradient(140deg, #8a6b3f, #4a121c);
 }
 
 .media-tall { min-height: 14rem; }
