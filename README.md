@@ -69,7 +69,7 @@ git checkout leopary_prueba1
 |------|-----------|
 | `main` | **Limpia / vacía** (solo README mínimo). Nunca se desarrolla acá. |
 | `leopary_prueba1` | Primera landing institucional (02/10/2026). Versión previa. |
-| `leopary_prueba2` | **Rama de trabajo actual (local, sin push)** — reimplementación del sitio según la maqueta de la cliente. |
+| `leopary_prueba2` | **Rama de trabajo actual** — reimplementación del sitio según la maqueta de la cliente (publicada en GitHub el 14/10/2026). |
 | `feature/*` | Ramas temporales para features grandes (opcional, salen de la rama de trabajo). |
 
 **Deploy a GitHub Pages**: Configurar en Settings → Pages → Source: `leopary_prueba1` / `(root)`.
