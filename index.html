@@ -3,23 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Sitio institucional de la Biblioteca Popular Pestalozzi de Berisso: catálogo, servicios, actividades, horarios y ubicación.">
+  <meta name="description" content="Sitio institucional de la Biblioteca Popular Pestalozzi de Berisso: colecciones, novedades, visitas escolares, catálogos, horarios y contacto.">
   <title>Biblioteca Popular Pestalozzi | Berisso</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
+  <!-- Sprite de íconos (SVG inline, sin dependencias externas) -->
+  <svg class="icon-sprite" aria-hidden="true" focusable="false" width="0" height="0">
+    <symbol id="i-logo" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+    <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+    <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></symbol>
+    <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></symbol>
+    <symbol id="i-paw" viewBox="0 0 24 24"><circle cx="8" cy="8" r="2"/><circle cx="16" cy="8" r="2"/><circle cx="5" cy="13" r="2"/><circle cx="19" cy="13" r="2"/><path d="M12 12c-3.3 0-6.5 3-6.5 6H18.5C18.5 15 15.3 12 12 12z"/></symbol>
+    <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></symbol>
+    <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></symbol>
+    <symbol id="i-archive" viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></symbol>
+    <symbol id="i-user-plus" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></symbol>
+  </svg>
+
   <a class="skip-link" href="#contenido">Ir al contenido principal</a>
 
   <header class="site-header">
     <div class="container header-inner">
-      <div class="brand">
-        <span class="brand-mark" aria-hidden="true">BP</span>
+      <a class="brand" href="#inicio">
+        <svg class="icon brand-icon" aria-hidden="true"><use href="#i-logo"></use></svg>
         <span class="brand-text">
-          <strong>Biblioteca Popular Pestalozzi</strong>
-          <small>Berisso</small>
+          <strong>Biblioteca Popular</strong>
+          <small>Pestalozzi &middot; Berisso</small>
         </span>
-      </div>
+      </a>
 
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav">
         <span class="sr-only">Abrir menú de navegación</span>
@@ -28,11 +48,10 @@
 
       <nav id="main-nav" class="main-nav" aria-label="Navegación principal">
         <ul>
-          <li><a href="#nosotros">Nosotros</a></li>
-          <li><a href="#servicios">Servicios</a></li>
-          <li><a href="#catalogo">Catálogo</a></li>
-          <li><a href="#visitas">Visitas</a></li>
-          <li><a href="#contacto">Contacto</a></li>
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#colecciones">Colecciones</a></li>
+          <li><a href="#visitas">Visitas Escolares</a></li>
+          <li><a href="#catalogos">Catálogos y Trámites</a></li>
         </ul>
       </nav>
     </div>
@@ -40,227 +59,340 @@
 
   <main id="contenido">
 
-    <section class="hero">
+    <!-- Sección 1: Hero -->
+    <section id="inicio" class="hero">
+      <!-- TODO: reemplazar el fondo por la fotografía de la biblioteca cuando esté disponible -->
       <div class="container hero-inner">
-        <h1>Un espacio de lectura para toda la comunidad</h1>
-        <p class="hero-lead">
-          La Biblioteca Popular Pestalozzi abre sus puertas en Berisso con prestamo de
-          libros, sala de lectura, talleres y actividades culturales para todas las edades.
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#catalogo">Ver catalogo</a>
-          <a class="btn btn-secondary" href="#visitas">Pedir una visita guiada</a>
+        <div class="hero-content">
+          <p class="eyebrow">Fundada en 1951 &middot; Berisso, Buenos Aires</p>
+          <h1>Biblioteca Popular Pestalozzi</h1>
+          <p class="hero-lead">
+            Desde 1951 somos un espacio de cultura, educación y encuentro comunitario
+            en Berisso. Nacimos vinculados al Club Atlético Pestalozzi y hoy seguimos
+            siendo parte del corazón del barrio, con más de 43.000 volúmenes,
+            colecciones especiales y actividades para toda la comunidad.
+          </p>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-number">12.000+</span>
+            <span class="stat-label">volúmenes en acervo</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">70+</span>
+            <span class="stat-label">años de historia</span>
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="nosotros" class="section">
+    <!-- Sección 2: Atención al público / Horarios -->
+    <section class="section section-horarios">
+      <div class="container horarios-grid">
+        <div class="horarios-info">
+          <p class="eyebrow">Atención al público</p>
+          <h2>Horarios vigentes</h2>
+          <p class="muted">Actualizados para el cuatrimestre en curso. Ante dudas, consultá por WhatsApp.</p>
+          <a class="btn btn-whatsapp" href="https://wa.me/5492210000000">
+            <svg class="icon icon-fill" aria-hidden="true"><use href="#i-whatsapp"></use></svg>
+            Consultar por WhatsApp
+          </a>
+        </div>
+
+        <table class="schedule">
+          <caption class="sr-only">Horarios de atención de la biblioteca</caption>
+          <tbody>
+            <tr><th scope="row">Lunes</th><td>Cerrado</td></tr>
+            <tr><th scope="row">Martes</th><td>16:00 &ndash; 18:00</td></tr>
+            <tr><th scope="row">Miércoles</th><td>10:00 &ndash; 12:00</td></tr>
+            <tr><th scope="row">Jueves</th><td>Cerrado</td></tr>
+            <tr><th scope="row">Viernes</th><td>Cerrado</td></tr>
+            <tr><th scope="row">Sábado</th><td>Cerrado</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Sección 3: Noticias e incorporaciones -->
+    <section class="section section-novedades">
       <div class="container">
-        <h2>Quienes somos</h2>
-        <p>
-          La Biblioteca Popular Pestalozzi es una <strong>asociacion civil sin fines de lucro</strong>
-          constituida por vecinos de Berisso para sostener el acceso igualitario a la lectura.
-        </p>
-        <p>
-          Funciona con el apoyo de voluntarios, donaciones de la comunidad y fondos
-          del CONABIP. Todo su material esta disponible en prestamo y consulta.
-        </p>
-        <ul class="feature-list">
-          <li>Fondo abierto a toda la comunidad, sin costo de membresia.</li>
-          <li>Espacio de estudio silencioso y sala de lectura con wifi.</li>
-          <li>Programa de actividades culturales y de promocion del aprendizaje.</li>
+        <p class="eyebrow">Noticias e incorporaciones</p>
+        <h2>Novedades de la biblioteca</h2>
+
+        <div class="card-grid card-grid-3">
+          <article class="card novedad">
+            <div class="media" role="img" aria-label="Foto: estantería con libros de literatura argentina">
+              <span class="media-label">Foto: literatura argentina</span>
+            </div>
+            <div class="card-body">
+              <span class="tag">Donación provincial</span>
+              <h3>85 nuevos títulos de literatura argentina</h3>
+              <p>El Ministerio de Educación de la Provincia de Buenos Aires donó una colección de 85 libros de autores nacionales, incluyendo obras de narrativa, poesía y ensayo.</p>
+              <span class="card-date">Agosto 2025</span>
+            </div>
+          </article>
+
+          <article class="card novedad">
+            <div class="media" role="img" aria-label="Foto: portada de El Eternauta">
+              <span class="media-label">Foto: El Eternauta</span>
+            </div>
+            <div class="card-body">
+              <span class="tag">Recomendación de la semana</span>
+              <h3>&ldquo;El Eternauta&rdquo; &ndash; H.G. Oesterheld</h3>
+              <p>Clásico imprescindible de la historieta argentina. Disponible en nuestra sala de lectura para consulta en el local.</p>
+              <span class="card-date">Septiembre 2025</span>
+            </div>
+          </article>
+
+          <article class="card novedad">
+            <div class="media" role="img" aria-label="Foto: libros del fondo de colectividades">
+              <span class="media-label">Foto: colectividades</span>
+            </div>
+            <div class="card-body">
+              <span class="tag">Donación de socios</span>
+              <h3>Fondo de colectividades: 40 nuevas incorporaciones</h3>
+              <p>Gracias a la generosidad de familias de la comunidad italiana y española de Berisso, incorporamos nuevos materiales a la colección de colectividades de inmigrantes.</p>
+              <span class="card-date">Julio 2025</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección 4: Patrimonio bibliográfico / Colecciones especiales -->
+    <section id="colecciones" class="section section-colecciones">
+      <div class="container">
+        <p class="eyebrow">Patrimonio bibliográfico</p>
+        <h2>Colecciones Especiales</h2>
+        <p class="section-lead">Fondos identitarios que reflejan la historia de nuestra ciudad y sus comunidades.</p>
+
+        <div class="card-grid card-grid-2">
+          <article class="card coleccion">
+            <div class="media media-tall" role="img" aria-label="Foto: estanterías de biblioteca">
+              <span class="media-label">Foto: estanterías</span>
+              <span class="badge">+800 títulos</span>
+            </div>
+            <div class="card-body">
+              <h3>Autores de Berisso y La Plata</h3>
+              <p>Más de 800 títulos de escritores locales y regionales. Narrativa, poesía, ensayo e historia sobre la región y sus protagonistas.</p>
+              <a class="link-arrow" href="#catalogos">Consultar disponibilidad <svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+            </div>
+          </article>
+
+          <article class="card coleccion">
+            <div class="media media-tall" role="img" aria-label="Foto: sala de lectura con mesas de madera">
+              <span class="media-label">Foto: sala de lectura</span>
+              <span class="badge">+400 documentos</span>
+            </div>
+            <div class="card-body">
+              <h3>Colectividades de Inmigrantes</h3>
+              <p>Fondo documental y literario sobre las comunidades italiana, española, griega, lituana y ucraniana que forjaron la identidad de Berisso.</p>
+              <a class="link-arrow" href="#catalogos">Consultar disponibilidad <svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección 5: Sala infantil / Bebeteca -->
+    <section class="section section-bebeteca">
+      <div class="container bebeteca-inner">
+        <p class="eyebrow">Para los más pequeños</p>
+        <h2>Sala Infantil &middot; Bebeteca</h2>
+        <p class="section-lead">Un espacio lúdico y acogedor pensado para niños y niñas desde los primeros meses de vida. Colecciones temáticas organizadas por intereses:</p>
+
+        <ul class="icon-grid">
+          <li class="icon-item"><svg class="icon" aria-hidden="true"><use href="#i-globe"></use></svg><span>Cuentos del mundo</span></li>
+          <li class="icon-item"><svg class="icon" aria-hidden="true"><use href="#i-book"></use></svg><span>Primeras lecturas</span></li>
+          <li class="icon-item"><svg class="icon" aria-hidden="true"><use href="#i-paw"></use></svg><span>Animales y fábulas</span></li>
+          <li class="icon-item"><svg class="icon" aria-hidden="true"><use href="#i-rocket"></use></svg><span>Aventuras</span></li>
         </ul>
       </div>
     </section>
 
-    <section id="servicios" class="section section-alt">
-      <div class="container">
-        <h2>Servicios y actividades</h2>
-        <div class="card-grid">
+    <!-- Sección 6: Visitas escolares -->
+    <section id="visitas" class="section section-visitas">
+      <div class="container visitas-grid">
+        <div class="visitas-info">
+          <h2>¿Cómo funciona?</h2>
+          <ol class="steps">
+            <li>Completás el formulario con los datos del grupo.</li>
+            <li>La bibliotecaria evalúa disponibilidad y te confirma en 48 hs.</li>
+            <li>Recibís la confirmación por correo o WhatsApp.</li>
+            <li>¡La visita guiada está lista para tu escuela!</li>
+          </ol>
+          <p class="urgencia">¿Tenés urgencia?</p>
+          <a class="btn btn-whatsapp" href="https://wa.me/5492210000000">
+            <svg class="icon icon-fill" aria-hidden="true"><use href="#i-whatsapp"></use></svg>
+            Escribinos al WhatsApp
+          </a>
+        </div>
 
-          <article class="card">
-            <h3>Prestamo de libros</h3>
-            <p>Prestamos de hasta dos libros por persona, por quince dias, con renovacion online.</p>
-          </article>
+        <div class="visitas-form">
+          <form id="visita-form" class="form" novalidate>
+            <div class="form-field">
+              <label for="escuela">Nombre de la escuela <span class="req">*</span></label>
+              <input type="text" id="escuela" name="escuela" placeholder="Ej: Escuela Primaria N.° 12" required>
+              <p class="field-error" hidden>Ingresá el nombre de la escuela.</p>
+            </div>
 
-          <article class="card">
-            <h3>Sala de lectura</h3>
-            <p>Espacio tranquilo para estudiar, leer y trabajar, con regla de silencio.</p>
-          </article>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="docente">Docente a cargo <span class="req">*</span></label>
+                <input type="text" id="docente" name="docente" placeholder="Nombre y apellido" required>
+                <p class="field-error" hidden>Ingresá el nombre del docente.</p>
+              </div>
+              <div class="form-field">
+                <label for="email">Correo electrónico <span class="req">*</span></label>
+                <input type="email" id="email" name="email" placeholder="docente@mail.com" required>
+                <p class="field-error" hidden>Ingresá un correo electrónico válido.</p>
+              </div>
+            </div>
 
-          <article class="card">
-            <h3>Talleres</h3>
-            <p>Cuentos infantiles, escritura creativa, alfabetizacion digital y clubs de lectura.</p>
-          </article>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="telefono">Teléfono / WhatsApp <span class="req">*</span></label>
+                <input type="tel" id="telefono" name="telefono" placeholder="+54 221 000-000" required>
+                <p class="field-error" hidden>Ingresá un teléfono de contacto.</p>
+              </div>
+              <div class="form-field">
+                <label for="grado">Grado / Año <span class="req">*</span></label>
+                <input type="text" id="grado" name="grado" placeholder="Ej: 3.° grado" required>
+                <p class="field-error" hidden>Indicá el grado o año.</p>
+              </div>
+            </div>
 
-          <article class="card">
-            <h3>Actividades culturales</h3>
-            <p>Presentaciones de autores, muestras y conversatorios con autores locales.</p>
-          </article>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="cantidad">Cantidad de alumnos <span class="req">*</span></label>
+                <input type="number" id="cantidad" name="cantidad" placeholder="Ej: 25" min="1" max="200" required>
+                <p class="field-error" hidden>Ingresá una cantidad de alumnos válida.</p>
+              </div>
+              <div class="form-field">
+                <label for="fecha">Fecha tentativa <span class="req">*</span></label>
+                <input type="date" id="fecha" name="fecha" required>
+                <p class="field-error" hidden>Elegí una fecha tentativa.</p>
+              </div>
+            </div>
 
-          <article class="card">
-            <h3>Visitas guiadas</h3>
-            <p>Recorridos para escuelas y grupos, con una introduccion al proyecto de la biblioteca.</p>
-          </article>
+            <div class="form-field">
+              <label for="comentarios">Comentarios adicionales</label>
+              <textarea id="comentarios" name="comentarios" rows="4"></textarea>
+            </div>
 
-          <article class="card">
-            <h3>Colecciones especiales</h3>
-            <p>Material de historia local y archivo de la comunidad, disponible para consulta.</p>
-          </article>
-
+            <button class="btn btn-primary" type="submit">Enviar solicitud de visita</button>
+            <p class="form-status" id="form-status" role="status" aria-live="polite" hidden></p>
+          </form>
         </div>
       </div>
     </section>
 
-    <section id="catalogo" class="section">
+    <!-- Sección 7: Catálogos y trámites -->
+    <section id="catalogos" class="section section-catalogos">
       <div class="container">
-        <h2>Catalogo destacado</h2>
-        <p class="section-lead">Una seleccion de nuestro fondo, disponible en la sala.</p>
+        <p class="eyebrow">Acceso digital</p>
+        <h2>Catálogos y Trámites</h2>
+        <p class="section-lead">Todo lo que necesitás, accesible desde cualquier dispositivo.</p>
 
-        <div class="card-grid card-grid-books">
-
-          <article class="card book">
-            <span class="book-tag">Narrativa</span>
-            <h3>Rayuela</h3>
-            <p class="book-author">Julio Cortazar</p>
+        <div class="card-grid card-grid-2">
+          <article class="card catalogo">
+            <svg class="icon icon-lg" aria-hidden="true"><use href="#i-database"></use></svg>
+            <div class="card-body">
+              <h3>Catálogo Koha</h3>
+              <p class="tag">Libros físicos disponibles</p>
+              <p>Consultá en tiempo real el acervo de libros físicos de la biblioteca. Buscá por título, autor, tema o ISBN.</p>
+              <a class="link-arrow" href="#">Acceder <svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+            </div>
           </article>
 
-          <article class="card book">
-            <span class="book-tag">Ensayo</span>
-            <h3>Sobre la lectura</h3>
-            <p class="book-author">Jorge Luis Borges</p>
+          <article class="card catalogo">
+            <svg class="icon icon-lg" aria-hidden="true"><use href="#i-archive"></use></svg>
+            <div class="card-body">
+              <h3>Repositorio Greenstone</h3>
+              <p class="tag">Obras digitalizadas</p>
+              <p>Accedé a las colecciones digitalizadas: publicaciones periódicas, documentos históricos y obras de dominio público.</p>
+              <a class="link-arrow" href="#">Acceder <svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección 8: Asociación y préstamos -->
+    <section class="section section-asociacion">
+      <div class="container">
+        <h2>Asociación y préstamos</h2>
+        <p class="section-lead">Todo lo que necesitás, accesible desde cualquier dispositivo.</p>
+
+        <div class="card-grid card-grid-3">
+          <article class="card tramite">
+            <svg class="icon icon-lg" aria-hidden="true"><use href="#i-user-plus"></use></svg>
+            <div class="card-body">
+              <h3>Asociarme a la biblioteca</h3>
+              <p>Completá el formulario para obtener tu credencial de socio/a. Totalmente gratuito para vecinos de Berisso.</p>
+              <a class="btn btn-primary" href="#">Formulario de asociación</a>
+            </div>
           </article>
 
-          <article class="card book">
-            <span class="book-tag>Poesia</span>
-            <h3>Veinte poemas de amor</h3>
-            <p class="book-author">Pablo Neruda</p>
+          <article class="card tramite">
+            <svg class="icon icon-lg" aria-hidden="true"><use href="#i-book"></use></svg>
+            <div class="card-body">
+              <h3>Solicitar préstamo mensual</h3>
+              <p>Socios y socias pueden solicitar hasta 5 libros en préstamo por mes. Completá el formulario online.</p>
+              <a class="btn btn-primary" href="#">Pedir un préstamo</a>
+            </div>
           </article>
 
-          <article class="card book">
-            <span class="book-tag">Infantil</span>
-            <h3>El Principito</h3>
-            <p class="book-author">Antoine de Saint-Exupery</p>
+          <article class="card tramite">
+            <svg class="icon icon-lg" aria-hidden="true"><use href="#i-refresh"></use></svg>
+            <div class="card-body">
+              <h3>Renovar préstamo</h3>
+              <p>¿Necesitás más tiempo? Renová tu préstamo sin moverte de casa, hasta 15 días antes del vencimiento.</p>
+              <a class="btn btn-primary" href="#">Renovar mi préstamo</a>
+            </div>
           </article>
-
         </div>
 
-        <p class="note">
-          El catalogo completo se esta preparando. Consulta en mesa de atencion por el
-          material disponible sobre un tema o autor.
-        </p>
-      </div>
-    </section>
-
-    <section id="visitas" class="section section-alt">
-      <div class="container">
-        <h2>Visitas guiadas</h2>
-        <p>
-          Las escuelas y grupos pueden solicitar una visita guiada a la biblioteca.
-          Escribinos desde el formulario de contacto indicando la cantidad de asistentes,
-          el grado o grupo y la fecha estimada, y coordinamos el recorrido.
-        </p>
-      </div>
-    </section>
-
-    <section id="horarios" class="section">
-      <div class="container">
-        <h2>Horarios y ubicacion</h2>
-
-        <div class="two-columns">
+        <div class="consulta">
           <div>
-            <h3>Horarios de atencion</h3>
-            <table class="schedule">
-              <caption class="sr-only">Horarios de atencion de la biblioteca</caption>
-              <thead>
-                <tr><th scope="col">Dia</th><th scope="col">Horario</th></tr>
-              </thead>
-              <tbody>
-                <tr><th scope="row">Lunes a Viernes</th><td>09:00 a 18:00</td></tr>
-                <tr><th scope="row">Sabados</th><td>09:00 a 13:00</td></tr>
-                <tr><th scope="row">Domingos</th><td>Cerrado</td></tr>
-              </tbody>
-            </table>
-            <p class="note">Consulta con la biblioteca antes de venir en dias festivos.</p>
+            <p class="consulta-title">¿Tenés alguna consulta?</p>
+            <p class="muted">Escribinos por correo o WhatsApp y te respondemos.</p>
           </div>
-
-          <div>
-            <h3>Direccion</h3>
-            <address>
-              Betsabe Cruz<br>
-              Berisso, Provincia de Buenos Aires<br>
-              Argentina
-            </address>
-            <p class="note">
-              Referi el material de contacto actualizado en el formulario de la seccion Contacto.
-            </p>
-          </div>
+          <a class="btn btn-secondary" href="#contacto">
+            <svg class="icon" aria-hidden="true"><use href="#i-mail"></use></svg>
+            Enviar correo
+          </a>
         </div>
-      </div>
-    </section>
-
-    <section id="contacto" class="section section-alt">
-      <div class="container">
-        <h2>Contacto</h2>
-        <p class="section-lead">
-          Escribinos y te respondemos. Tambien podes pasar por la biblioteca durante el
-          horario de atencion.
-        </p>
-
-        <form id="contacto-form" class="contact-form" novalidate>
-          <div class="form-field">
-            <label for="nombre">Nombre y apellido</label>
-            <input type="text" id="nombre" name="nombre" autocomplete="name" required>
-            <p class="field-error" id="error-nombre" hidden>Completa tu nombre.</p>
-          </div>
-
-          <div class="form-field">
-            <label for="email">Correo electronico</label>
-            <input type="email" id="email" name="email" autocomplete="email" required>
-            <p class="field-error" id="error-email" hidden>Ingresa un correo valido.</p>
-          </div>
-
-          <div class="form-field">
-            <label for="motivo">Motivo</label>
-            <select id="motivo" name="motivo" required>
-              <option value="">Seleccionar</option>
-              <option value="visita">Visita guiada</option>
-              <option value="prestamo">Consulta de prestamo</option>
-              <option value="donacion">Donacion de material</option>
-              <option value="voluntariado">Voluntariado</option>
-              <option value="otro">Otro</option>
-            </select>
-            <p class="field-error" id="error-motivo" hidden>Elige un motivo.</p>
-          </div>
-
-          <div class="form-field">
-            <label for="mensaje">Mensaje</label>
-            <textarea id="mensaje" name="mensaje" rows="5" required minlength="10"></textarea>
-            <p class="field-error" id="error-mensaje" hidden>Escribe un mensaje de al menos 10 caracteres.</p>
-          </div>
-
-          <button class="btn btn-primary" type="submit">Enviar mensaje</button>
-
-          <p class="form-status" id="form-status" role="status" aria-live="polite" hidden></p>
-        </form>
       </div>
     </section>
 
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div>
-        <p><strong>Biblioteca Popular Pestalozzi</strong></p>
-        <p>Betsabe Cruz, Berisso, Provincia de Buenos Aires</p>
+  <footer class="site-footer" id="contacto">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand brand-footer" href="#inicio">
+          <svg class="icon brand-icon" aria-hidden="true"><use href="#i-logo"></use></svg>
+          <span class="brand-text"><strong>Biblioteca Pestalozzi</strong></span>
+        </a>
+        <p>Fundada en 1951 junto al Club Atlético Pestalozzi en Berisso, Buenos Aires. Espacio de cultura, educación y comunidad al servicio del barrio.</p>
+        <div class="social">
+          <a href="#" aria-label="Instagram"><svg class="icon" aria-hidden="true"><use href="#i-instagram"></use></svg></a>
+          <a href="#" aria-label="Facebook"><svg class="icon icon-fill" aria-hidden="true"><use href="#i-facebook"></use></svg></a>
+        </div>
       </div>
-      <div>
-        <p>Proyecto Integrador desarrollado por <strong>Grupo Clouds</strong></p>
-        <p class="muted">
-          Eduardo Moreno, Marcelo Moreno, Leandro Paryszewski, Melissa Galeano
-          &middot; <span id="year"></span>
-        </p>
+
+      <div class="footer-contact">
+        <p class="footer-heading">Contacto</p>
+        <p><svg class="icon" aria-hidden="true"><use href="#i-map"></use></svg> Calle Ejemplo 1234, Berisso, Buenos Aires</p>
+        <p><svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg> <a href="tel:+542214000000">(0221) 400-0000</a></p>
+        <p><svg class="icon" aria-hidden="true"><use href="#i-mail"></use></svg> <a href="mailto:biblioteca@pestalozzi.org.ar">biblioteca@pestalozzi.org.ar</a></p>
       </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <p>&copy; <span id="year"></span> Biblioteca Popular Pestalozzi &middot; Berisso, Buenos Aires</p>
+      <p>Sitio desarrollado con <span aria-hidden="true">&hearts;</span> para la comunidad &middot; Grupo Clouds</p>
     </div>
   </footer>
 

@@ -68,8 +68,9 @@ git checkout leopary_prueba1
 | Rama | Propósito |
 |------|-----------|
 | `main` | **Limpia / vacía** (solo README mínimo). Nunca se desarrolla acá. |
-| `leopary_prueba1` | **Rama de trabajo** — todo el desarrollo ocurre acá. |
-| `feature/*` | Ramas temporales para features grandes (opcional, salen de `leopary_prueba1`). |
+| `leopary_prueba1` | Primera landing institucional (02/10/2026). Versión previa. |
+| `leopary_prueba2` | **Rama de trabajo actual (local, sin push)** — reimplementación del sitio según la maqueta de la cliente. |
+| `feature/*` | Ramas temporales para features grandes (opcional, salen de la rama de trabajo). |
 
 **Deploy a GitHub Pages**: Configurar en Settings → Pages → Source: `leopary_prueba1` / `(root)`.
 
@@ -77,17 +78,26 @@ git checkout leopary_prueba1
 
 ---
 
-## Alcance (checklist de la landing MVP)
+## Alcance (maqueta de la cliente)
 
-- [ ] Hero: nombre, eslogan, CTAs (Catálogo / Asociate)
-- [ ] Nosotros: historia, rol bibliotecas populares, CONABIP
-- [ ] Servicios y actividades: préstamo, sala de lectura, talleres, actividades culturales
-- [ ] Catálogo destacado: cards con libro, autor, género
-- [ ] Horarios y ubicación: dirección, horarios, mapa/iframe
-- [ ] Contacto: formulario validado (JS) + envío simulado (FormSubmit)
-- [ ] Footer: datos biblioteca + créditos Grupo Clouds
-- [ ] Responsive: móvil (< 768px) / tablet / desktop
-- [ ] Accesibilidad básica: contraste, foco visible, labels, alt en imágenes
+La versión de `leopary_prueba2` reimplementa el sitio según la **maqueta entregada por la Biblioteca**. Secciones, de arriba hacia abajo:
+
+- [x] Header: logo, nombre y navegación (Inicio, Colecciones, Visitas Escolares, Catálogos y Trámites)
+- [x] Hero: antetítulo, título, descripción y estadísticas (`12.000+` / `70+`)
+- [x] Atención al público: horarios vigentes + botón de WhatsApp
+- [x] Noticias e incorporaciones: 3 tarjetas de novedades
+- [x] Patrimonio bibliográfico: 2 tarjetas de colecciones especiales
+- [x] Sala Infantil · Bebeteca: 4 íconos temáticos
+- [x] Visitas escolares: pasos "¿Cómo funciona?" + formulario validado (JS)
+- [x] Acceso digital: catálogos Koha y Greenstone
+- [x] Asociación y préstamos: 3 trámites + bloque de consulta
+- [x] Footer: datos de contacto, redes y créditos
+- [x] Responsive (móvil / tablet / escritorio) y accesibilidad básica
+- [ ] Imágenes reales (hero, novedades y colecciones) — hoy hay placeholders de color
+- [ ] Conectar el formulario de visita escolar a un servicio real (FormSubmit/Formspree)
+- [ ] Favicon e íconos definitivos
+
+> **Nota:** los bloques de imagen usan placeholders (degradados) hasta contar con las fotografías reales de la biblioteca. Están marcados en el HTML para reemplazarlos sin tocar el diseño.
 
 ---
 

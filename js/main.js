@@ -1,5 +1,8 @@
 "use strict";
 
+/* --------------------------------------------------------------------------
+   Menú de navegación (móvil)
+   -------------------------------------------------------------------------- */
 function initNavToggle() {
   const toggle = document.querySelector(".nav-toggle");
   const nav = document.getElementById("main-nav");
@@ -21,56 +24,58 @@ function initNavToggle() {
   });
 }
 
+/* --------------------------------------------------------------------------
+   Año dinámico en el footer
+   -------------------------------------------------------------------------- */
 function initCurrentYear() {
   const year = document.getElementById("year");
 
   if (year) {
-    year.textContent = new Date().getFullYear();
+    year.textContent = String(new Date().getFullYear());
   }
 }
 
+/* --------------------------------------------------------------------------
+   Validación del formulario de visita escolar
+   -------------------------------------------------------------------------- */
 function validateField(field) {
   const wrapper = field.closest(".form-field");
   const error = wrapper ? wrapper.querySelector(".field-error") : null;
-  let message = "";
-
-  if (field.validity.valueMissing) {
-    if (field.type === "text") {
-      message = "Completa tu nombre.";
-    } else if (field.tagName === "SELECT") {
-      message = "Elige un motivo.";
-    } else if (field.type === "email") {
-      message = "Ingresa un correo valido.";
-    } else {
-      message = "Este campo es obligatorio.";
-    }
-  } else if (field.type === "email" && field.validity.typeMismatch) {
-    message = "Ingresa un correo valido.";
-  } else if (field.validity.tooShort) {
-    message = "El mensaje debe tener al menos 10 caracteres.";
-  }
+  const valid = field.checkValidity();
 
   if (wrapper) {
-    wrapper.classList.toggle("has-error", message !== "");
+    wrapper.classList.toggle("has-error", !valid);
   }
 
   if (error) {
-    error.hidden = message === "";
-    error.textContent = message;
+    error.hidden = valid;
   }
 
-  return message === "";
+  return valid;
 }
 
-function initContactForm() {
-  const form = document.getElementById("contacto-form");
+function showStatus(element, message, stateClass) {
+  if (!element) {
+    return;
+  }
+
+  element.textContent = message;
+  element.classList.remove("is-success", "is-error");
+  element.classList.add(stateClass);
+  element.hidden = false;
+}
+
+function initVisitaForm() {
+  const form = document.getElementById("visita-form");
 
   if (!form) {
     return;
   }
 
   const status = document.getElementById("form-status");
-  const fields = Array.prototype.slice.call(form.querySelectorAll("input, select, textarea"));
+  const fields = Array.prototype.slice.call(
+    form.querySelectorAll("input, textarea")
+  );
 
   fields.forEach(function (field) {
     field.addEventListener("blur", function () {
@@ -78,7 +83,8 @@ function initContactForm() {
     });
 
     field.addEventListener("input", function () {
-      if (field.closest(".form-field").classList.contains("has-error")) {
+      const wrapper = field.closest(".form-field");
+      if (wrapper && wrapper.classList.contains("has-error")) {
         validateField(field);
       }
     });
@@ -93,28 +99,25 @@ function initContactForm() {
 
     if (invalid.length > 0) {
       invalid[0].focus();
-      showStatus(status, "Revisa los campos marcados antes de enviar.", "is-error");
+      showStatus(
+        status,
+        "Revisá los campos marcados antes de enviar.",
+        "is-error"
+      );
       return;
     }
 
-    showStatus(status, "Mensaje enviado. Te contactamos dentro de las proximas 48 horas.", "is-success");
+    showStatus(
+      status,
+      "Solicitud enviada. La bibliotecaria te confirma la disponibilidad dentro de las próximas 48 horas.",
+      "is-success"
+    );
     form.reset();
   });
-}
-
-function showStatus(element, message, stateClass) {
-  if (!element) {
-    return;
-  }
-
-  element.textContent = message;
-  element.classList.remove("is-success", "is-error");
-  element.classList.add(stateClass);
-  element.hidden = false;
 }
 
 document.addEventListener("DOMContentLoaded", function () {
   initNavToggle();
   initCurrentYear();
-  initContactForm();
+  initVisitaForm();
 });
