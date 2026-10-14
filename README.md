@@ -22,7 +22,7 @@ Sitio web estático (HTML + CSS + JS vanilla) para la **Biblioteca Popular Pesta
 - **CSS3** con variables personalizadas (custom properties), Flexbox/Grid, responsive mobile-first
 - **JavaScript vanilla (ES6+)** módulos, sin dependencias ni bundler
 - **Formularios**: FormSubmit / Formspree (sin backend propio)
-- **Despliegue**: GitHub Pages (rama `leopary_prueba1`) o Cloudflare Pages
+- **Despliegue**: GitHub Pages (rama `leopary_prueba2`) o Cloudflare Pages
 - **Control de versiones**: Git + GitHub (`hleopary/biblioteca-pestalozzi-web`)
 
 > **Decisión**: Cero dependencias, cero build. Se abre `index.html` directo en navegador para desarrollo local.
