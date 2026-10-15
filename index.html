@@ -11,7 +11,8 @@
 
   <!-- Sprite de íconos (SVG inline, sin dependencias externas) -->
   <svg class="icon-sprite" aria-hidden="true" focusable="false" width="0" height="0">
-    <symbol id="i-logo" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+    <symbol id="i-logo" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></symbol>
     <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></symbol>
     <symbol id="i-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
     <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></symbol>
@@ -62,7 +63,7 @@
       <div class="container hero-inner">
         <div class="hero-content">
           <p class="eyebrow">Fundada en 1951 &middot; Berisso, Buenos Aires</p>
-          <h1>Biblioteca Popular Pestalozzi</h1>
+          <h1>Biblioteca Popular<br><span class="hero-title-accent">Pestalozzi</span></h1>
           <p class="hero-lead">
             Desde 1951 somos un espacio de cultura, educación y encuentro comunitario
             en Berisso. Nacimos vinculados al Club Atlético Pestalozzi y hoy seguimos
@@ -90,23 +91,20 @@
           <p class="eyebrow">Atención al público</p>
           <h2>Horarios vigentes</h2>
           <p class="muted">Actualizados para el cuatrimestre en curso. Ante dudas, consultá por WhatsApp.</p>
-          <a class="btn btn-whatsapp" href="https://wa.me/5492210000000">
-            <svg class="icon icon-fill" aria-hidden="true"><use href="#i-whatsapp"></use></svg>
+          <a class="link-chat" href="https://wa.me/5492210000000">
+            <svg class="icon" aria-hidden="true"><use href="#i-chat"></use></svg>
             Consultar por WhatsApp
           </a>
         </div>
 
-        <table class="schedule">
-          <caption class="sr-only">Horarios de atención de la biblioteca</caption>
-          <tbody>
-            <tr><th scope="row">Lunes</th><td>Cerrado</td></tr>
-            <tr><th scope="row">Martes</th><td>16:00 &ndash; 18:00</td></tr>
-            <tr><th scope="row">Miércoles</th><td>10:00 &ndash; 12:00</td></tr>
-            <tr><th scope="row">Jueves</th><td>Cerrado</td></tr>
-            <tr><th scope="row">Viernes</th><td>Cerrado</td></tr>
-            <tr><th scope="row">Sábado</th><td>Cerrado</td></tr>
-          </tbody>
-        </table>
+        <ul class="schedule" aria-label="Horarios de atención de la biblioteca">
+          <li class="schedule-day"><span class="day">Lunes</span><span class="hours">Cerrado</span></li>
+          <li class="schedule-day is-open"><span class="day">Martes</span><span class="hours">16:00 &ndash; 18:00</span></li>
+          <li class="schedule-day is-open"><span class="day">Miércoles</span><span class="hours">10:00 &ndash; 12:00</span></li>
+          <li class="schedule-day"><span class="day">Jueves</span><span class="hours">Cerrado</span></li>
+          <li class="schedule-day"><span class="day">Viernes</span><span class="hours">Cerrado</span></li>
+          <li class="schedule-day"><span class="day">Sábado</span><span class="hours">Cerrado</span></li>
+        </ul>
       </div>
     </section>
 
@@ -149,33 +147,39 @@
 
     <!-- Sección 4: Patrimonio bibliográfico / Colecciones especiales -->
     <section id="colecciones" class="section section-colecciones">
-      <div class="container">
-        <p class="eyebrow">Patrimonio bibliográfico</p>
-        <h2>Colecciones Especiales</h2>
-        <p class="section-lead">Fondos identitarios que reflejan la historia de nuestra ciudad y sus comunidades.</p>
+      <div class="section-band">
+        <div class="container">
+          <p class="eyebrow">Patrimonio bibliográfico</p>
+          <h2>Colecciones Especiales</h2>
+          <p class="section-lead">Fondos identitarios que reflejan la historia de nuestra ciudad y sus comunidades.</p>
+        </div>
+      </div>
 
-        <div class="card-grid card-grid-2">
-          <article class="card coleccion">
-            <div class="media media-tall media--berisso" role="img" aria-label="Autores de Berisso y La Plata">
-              <span class="badge">+800 títulos</span>
-            </div>
-            <div class="card-body">
-              <h3>Autores de Berisso y La Plata</h3>
-              <p>Más de 800 títulos de escritores locales y regionales. Narrativa, poesía, ensayo e historia sobre la región y sus protagonistas.</p>
-              <a class="link-arrow" href="#catalogos">Consultar disponibilidad <svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
-            </div>
-          </article>
+      <div class="section-body">
+        <div class="container">
+          <div class="card-grid card-grid-2">
+            <article class="card coleccion">
+              <div class="media media-tall media--berisso" role="img" aria-label="Autores de Berisso y La Plata">
+                <span class="badge">+800 títulos</span>
+              </div>
+              <div class="card-body">
+                <h3>Autores de Berisso y La Plata</h3>
+                <p>Más de 800 títulos de escritores locales y regionales. Narrativa, poesía, ensayo e historia sobre la región y sus protagonistas.</p>
+                <a class="link-arrow" href="#catalogos">Consultar disponibilidad <svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+              </div>
+            </article>
 
-          <article class="card coleccion">
-            <div class="media media-tall media--colectividades" role="img" aria-label="Colectividades de inmigrantes">
-              <span class="badge">+400 documentos</span>
-            </div>
-            <div class="card-body">
-              <h3>Colectividades de Inmigrantes</h3>
-              <p>Fondo documental y literario sobre las comunidades italiana, española, griega, lituana y ucraniana que forjaron la identidad de Berisso.</p>
-              <a class="link-arrow" href="#catalogos">Consultar disponibilidad <svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
-            </div>
-          </article>
+            <article class="card coleccion">
+              <div class="media media-tall media--colectividades" role="img" aria-label="Colectividades de inmigrantes">
+                <span class="badge">+400 documentos</span>
+              </div>
+              <div class="card-body">
+                <h3>Colectividades de Inmigrantes</h3>
+                <p>Fondo documental y literario sobre las comunidades italiana, española, griega, lituana y ucraniana que forjaron la identidad de Berisso.</p>
+                <a class="link-arrow" href="#catalogos">Consultar disponibilidad <svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+              </div>
+            </article>
+          </div>
         </div>
       </div>
     </section>
@@ -184,7 +188,7 @@
     <section class="section section-bebeteca">
       <div class="container bebeteca-inner">
         <p class="eyebrow">Para los más pequeños</p>
-        <h2>Sala Infantil &middot; Bebeteca</h2>
+        <h2><span class="h2-emoji" aria-hidden="true">📚</span>Sala Infantil &middot; Bebeteca</h2>
         <p class="section-lead">Un espacio lúdico y acogedor pensado para niños y niñas desde los primeros meses de vida. Colecciones temáticas organizadas por intereses:</p>
 
         <ul class="bebeteca-grid">
@@ -214,108 +218,124 @@
 
     <!-- Sección 6: Visitas escolares -->
     <section id="visitas" class="section section-visitas">
-      <div class="container visitas-grid">
-        <div class="visitas-info">
-          <h2>¿Cómo funciona?</h2>
-          <ol class="steps">
-            <li>Completás el formulario con los datos del grupo.</li>
-            <li>La bibliotecaria evalúa disponibilidad y te confirma en 48 hs.</li>
-            <li>Recibís la confirmación por correo o WhatsApp.</li>
-            <li>¡La visita guiada está lista para tu escuela!</li>
-          </ol>
-          <p class="urgencia">¿Tenés urgencia?</p>
-          <a class="btn btn-whatsapp" href="https://wa.me/5492210000000">
-            <svg class="icon icon-fill" aria-hidden="true"><use href="#i-whatsapp"></use></svg>
-            Escribinos al WhatsApp
-          </a>
+      <div class="section-band">
+        <div class="container">
+          <p class="eyebrow">Para instituciones educativas</p>
+          <h2>Solicitud de Visita Guiada Escolar</h2>
+          <p class="section-lead">Completá el formulario y nos comunicamos en 48 horas hábiles para confirmar la visita.</p>
         </div>
+      </div>
 
-        <div class="visitas-form">
-          <form id="visita-form" class="form" novalidate>
-            <div class="form-field">
-              <label for="escuela">Nombre de la escuela <span class="req">*</span></label>
-              <input type="text" id="escuela" name="escuela" placeholder="Ej: Escuela Primaria N.° 12" required>
-              <p class="field-error" hidden>Ingresá el nombre de la escuela.</p>
-            </div>
+      <div class="section-body">
+        <div class="container visitas-grid">
+          <div class="visitas-info">
+            <h3>¿Cómo funciona?</h3>
+            <ol class="steps">
+              <li>Completás el formulario con los datos del grupo.</li>
+              <li>La bibliotecaria evalúa disponibilidad y te confirma en 48 hs.</li>
+              <li>Recibís la confirmación por correo o WhatsApp.</li>
+              <li>¡La visita guiada está lista para tu escuela!</li>
+            </ol>
+            <p class="urgencia">¿Tenés urgencia?</p>
+            <a class="link-chat" href="https://wa.me/5492210000000">
+              <svg class="icon" aria-hidden="true"><use href="#i-chat"></use></svg>
+              Escribinos al WhatsApp
+            </a>
+          </div>
 
-            <div class="form-row">
+          <div class="visitas-form">
+            <form id="visita-form" class="form" novalidate>
               <div class="form-field">
-                <label for="docente">Docente a cargo <span class="req">*</span></label>
-                <input type="text" id="docente" name="docente" placeholder="Nombre y apellido" required>
-                <p class="field-error" hidden>Ingresá el nombre del docente.</p>
+                <label for="escuela">Nombre de la escuela <span class="req">*</span></label>
+                <input type="text" id="escuela" name="escuela" placeholder="Ej: Escuela Primaria N.° 12" required>
+                <p class="field-error" hidden>Ingresá el nombre de la escuela.</p>
               </div>
-              <div class="form-field">
-                <label for="email">Correo electrónico <span class="req">*</span></label>
-                <input type="email" id="email" name="email" placeholder="docente@mail.com" required>
-                <p class="field-error" hidden>Ingresá un correo electrónico válido.</p>
-              </div>
-            </div>
 
-            <div class="form-row">
-              <div class="form-field">
-                <label for="telefono">Teléfono / WhatsApp <span class="req">*</span></label>
-                <input type="tel" id="telefono" name="telefono" placeholder="+54 221 000-000" required>
-                <p class="field-error" hidden>Ingresá un teléfono de contacto.</p>
+              <div class="form-row">
+                <div class="form-field">
+                  <label for="docente">Docente a cargo <span class="req">*</span></label>
+                  <input type="text" id="docente" name="docente" placeholder="Nombre y apellido" required>
+                  <p class="field-error" hidden>Ingresá el nombre del docente.</p>
+                </div>
+                <div class="form-field">
+                  <label for="email">Correo electrónico <span class="req">*</span></label>
+                  <input type="email" id="email" name="email" placeholder="docente@mail.com" required>
+                  <p class="field-error" hidden>Ingresá un correo electrónico válido.</p>
+                </div>
               </div>
-              <div class="form-field">
-                <label for="grado">Grado / Año <span class="req">*</span></label>
-                <input type="text" id="grado" name="grado" placeholder="Ej: 3.° grado" required>
-                <p class="field-error" hidden>Indicá el grado o año.</p>
-              </div>
-            </div>
 
-            <div class="form-row">
-              <div class="form-field">
-                <label for="cantidad">Cantidad de alumnos <span class="req">*</span></label>
-                <input type="number" id="cantidad" name="cantidad" placeholder="Ej: 25" min="1" max="200" required>
-                <p class="field-error" hidden>Ingresá una cantidad de alumnos válida.</p>
+              <div class="form-row">
+                <div class="form-field">
+                  <label for="telefono">Teléfono / WhatsApp <span class="req">*</span></label>
+                  <input type="tel" id="telefono" name="telefono" placeholder="+54 221 000-000" required>
+                  <p class="field-error" hidden>Ingresá un teléfono de contacto.</p>
+                </div>
+                <div class="form-field">
+                  <label for="grado">Grado / Año <span class="req">*</span></label>
+                  <input type="text" id="grado" name="grado" placeholder="Ej: 3.° grado" required>
+                  <p class="field-error" hidden>Indicá el grado o año.</p>
+                </div>
               </div>
-              <div class="form-field">
-                <label for="fecha">Fecha tentativa <span class="req">*</span></label>
-                <input type="date" id="fecha" name="fecha" required>
-                <p class="field-error" hidden>Elegí una fecha tentativa.</p>
+
+              <div class="form-row">
+                <div class="form-field">
+                  <label for="cantidad">Cantidad de alumnos <span class="req">*</span></label>
+                  <input type="number" id="cantidad" name="cantidad" placeholder="Ej: 25" min="1" max="200" required>
+                  <p class="field-error" hidden>Ingresá una cantidad de alumnos válida.</p>
+                </div>
+                <div class="form-field">
+                  <label for="fecha">Fecha tentativa <span class="req">*</span></label>
+                  <input type="date" id="fecha" name="fecha" required>
+                  <p class="field-error" hidden>Elegí una fecha tentativa.</p>
+                </div>
               </div>
-            </div>
 
-            <div class="form-field">
-              <label for="comentarios">Comentarios adicionales</label>
-              <textarea id="comentarios" name="comentarios" rows="4"></textarea>
-            </div>
+              <div class="form-field">
+                <label for="comentarios">Comentarios adicionales</label>
+                <textarea id="comentarios" name="comentarios" rows="4"></textarea>
+              </div>
 
-            <button class="btn btn-primary" type="submit">Enviar solicitud de visita</button>
-            <p class="form-status" id="form-status" role="status" aria-live="polite" hidden></p>
-          </form>
+              <button class="btn btn-primary" type="submit">Enviar solicitud de visita</button>
+              <p class="form-status" id="form-status" role="status" aria-live="polite" hidden></p>
+            </form>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Sección 7: Catálogos y trámites -->
     <section id="catalogos" class="section section-catalogos">
-      <div class="container">
-        <p class="eyebrow">Acceso digital</p>
-        <h2>Catálogos y Trámites</h2>
-        <p class="section-lead">Todo lo que necesitás, accesible desde cualquier dispositivo.</p>
+      <div class="section-band">
+        <div class="container">
+          <p class="eyebrow">Acceso digital</p>
+          <h2>Catálogos y Trámites</h2>
+          <p class="section-lead">Todo lo que necesitás, accesible desde cualquier dispositivo.</p>
+        </div>
+      </div>
 
-        <div class="card-grid card-grid-2">
-          <article class="card catalogo">
-            <svg class="icon icon-lg" aria-hidden="true"><use href="#i-database"></use></svg>
-            <div class="card-body">
-              <h3>Catálogo Koha</h3>
-              <p class="tag">Libros físicos disponibles</p>
-              <p>Consultá en tiempo real el acervo de libros físicos de la biblioteca. Buscá por título, autor, tema o ISBN.</p>
-              <a class="link-arrow" href="#">Acceder <svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
-            </div>
-          </article>
+      <div class="section-body">
+        <div class="container">
+          <div class="card-grid card-grid-2">
+            <article class="card catalogo">
+              <svg class="icon icon-lg" aria-hidden="true"><use href="#i-database"></use></svg>
+              <div class="card-body">
+                <h3>Catálogo Koha</h3>
+                <p class="tag">Libros físicos disponibles</p>
+                <p>Consultá en tiempo real el acervo de libros físicos de la biblioteca. Buscá por título, autor, tema o ISBN.</p>
+                <a class="link-arrow" href="#">Acceder <svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+              </div>
+            </article>
 
-          <article class="card catalogo">
-            <svg class="icon icon-lg" aria-hidden="true"><use href="#i-archive"></use></svg>
-            <div class="card-body">
-              <h3>Repositorio Greenstone</h3>
-              <p class="tag">Obras digitalizadas</p>
-              <p>Accedé a las colecciones digitalizadas: publicaciones periódicas, documentos históricos y obras de dominio público.</p>
-              <a class="link-arrow" href="#">Acceder <svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
-            </div>
-          </article>
+            <article class="card catalogo">
+              <svg class="icon icon-lg" aria-hidden="true"><use href="#i-archive"></use></svg>
+              <div class="card-body">
+                <h3>Repositorio Greenstone</h3>
+                <p class="tag">Obras digitalizadas</p>
+                <p>Accedé a las colecciones digitalizadas: publicaciones periódicas, documentos históricos y obras de dominio público.</p>
+                <a class="link-arrow" href="#">Acceder <svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+              </div>
+            </article>
+          </div>
         </div>
       </div>
     </section>

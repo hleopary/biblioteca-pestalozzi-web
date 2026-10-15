@@ -5,16 +5,22 @@
    ========================================================================== */
 
 :root {
-  --color-primary: #6b1d28;      /* borravino (header, botones, footer) */
-  --color-primary-dark: #4a121c; /* borravino oscuro (secciones oscuras, footer) */
-  --color-accent: #8b5e2b;       /* dorado / terracota (detalles, badges) */
-  --color-accent-dark: #6e4a22;  /* dorado oscuro (texto dorado sobre claro) */
+  --color-primary: #6b1d2b;      /* borravino de la maqueta (header, bandas, botones) */
+  --color-primary-dark: #55151f; /* borravino oscuro (hover) */
+  --color-accent: #8b5e2b;       /* dorado / terracota (lineas, chips, bordes) */
+  --color-accent-dark: #8b5e2b;  /* dorado para texto sobre fondos claros */
   --color-accent-light: #d4a853; /* dorado claro (texto/iconos sobre fondos oscuros) */
-  --color-bg: #f4f1ea;           /* crema (fondo general) */
-  --color-surface: #fdfbf7;      /* blanco marfil (tarjetas) */
-  --color-text: #222222;
-  --color-text-muted: #666666;
-  --color-border: #ddd6c8;
+  --color-bg: #faf3e8;           /* crema (fondo general) */
+  --color-bg-alt: #ede4d4;       /* beige (horarios y visitas) */
+  --color-surface: #ffffff;      /* tarjetas blancas */
+  --color-surface-alt: #ede4d4;  /* tarjetas beige (bebeteca, tramites, consulta) */
+  --color-off: #eadecd;          /* celda apagada (horarios) */
+  --color-off-border: #d7c7b1;   /* borde de celda apagada */
+  --color-line: #c8b49a;         /* lineas separadoras y bordes de tarjeta */
+  --color-border: #c8b49a;
+  --color-footer: #1c1008;       /* pie de pagina */
+  --color-text: #1c1008;
+  --color-text-muted: #6b5a48;
   --color-error: #b3261e;
   --color-success: #1b5e20;
 
@@ -27,9 +33,9 @@
   --space-lg: 2rem;
   --space-xl: 3.5rem;
 
-  --radius: 10px;
-  --container: 74rem;
-  --shadow: 0 10px 30px rgba(34, 34, 34, 0.08);
+  --radius: 6px;
+  --container: 72.5rem;
+  --shadow: none;
 }
 
 *,
@@ -61,7 +67,7 @@ h3 {
 }
 
 h1 { font-size: clamp(2.25rem, 5vw, 3.5rem); }
-h2 { font-size: clamp(1.6rem, 3.5vw, 2.25rem); }
+h2 { font-size: clamp(1.6rem, 3.5vw, 2.25rem); color: var(--color-primary); }
 h3 { font-size: 1.15rem; }
 
 p { margin: 0 0 var(--space-md); }
@@ -291,17 +297,24 @@ textarea:focus-visible {
 
 .hero-lead {
   color: rgba(255, 255, 255, 0.88);
-  max-width: 42rem;
+  max-width: 35rem;
   font-size: 1.05rem;
   margin-bottom: 0;
 }
 
-/* Bloque único con borde que agrupa las dos estadísticas, separadas por una línea */
+/* Segunda línea del título, en dorado claro (como la maqueta) */
+.hero-title-accent { color: var(--color-accent-light); }
+
+/* Bloque único con borde que agrupa las dos estadísticas, separadas por una línea.
+   En la maqueta es un panel borravino de ~224px de ancho, alineado al borde derecho. */
 .hero-stats {
   display: grid;
-  border: 1px solid rgba(212, 168, 83, 0.5);
-  border-radius: var(--radius);
-  background-color: rgba(74, 18, 28, 0.6);
+  width: 100%;
+  max-width: 14rem;
+  justify-self: end;
+  border: 1px solid rgba(212, 168, 83, 0.6);
+  border-radius: 4px;
+  background-color: rgba(74, 18, 28, 0.82);
   overflow: hidden;
 }
 
@@ -317,12 +330,13 @@ textarea:focus-visible {
 .stat-number {
   display: block;
   font-family: var(--font-heading);
-  font-size: 2rem;
-  color: #fff;
+  font-size: 2.25rem;
+  line-height: 1.1;
+  color: var(--color-accent-light);
 }
 
 .stat-label {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.85);
 }
 
@@ -337,20 +351,54 @@ textarea:focus-visible {
   max-width: 44rem;
 }
 
-.section-novedades,
-.section-visitas { background-color: var(--color-surface); }
-
-.section-colecciones,
-.section-catalogos {
-  background-color: var(--color-primary-dark);
-  color: #fff;
+/* Franja de título borravino con línea dorada al pie (maqueta: colecciones,
+   visitas y catálogos). El cuerpo de la sección va sobre fondo crema o beige. */
+.section-band {
+  background-color: var(--color-primary);
+  border-bottom: 3px solid var(--color-accent);
+  padding: 2.5rem 0 3.25rem;
 }
 
-.section-colecciones .section-lead,
-.section-catalogos .section-lead { color: rgba(255, 255, 255, 0.8); }
+.section-band .eyebrow { color: var(--color-accent-light); }
+.section-band h2 { color: var(--color-bg); margin-bottom: 0.75rem; }
 
-.section-colecciones .eyebrow,
-.section-catalogos .eyebrow { color: var(--color-accent-light); }
+.section-band .section-lead {
+  color: rgba(250, 243, 232, 0.9);
+  max-width: 41rem;
+}
+
+.section-body { padding: 3rem 0; }
+.section-body .card-grid { margin-top: 0; }
+
+/* Fondos por sección (maqueta) */
+.section-horarios { background-color: var(--color-bg-alt); }
+
+.section-novedades {
+  background-color: var(--color-bg);
+  border-top: 1px solid var(--color-line);
+}
+
+.section-colecciones,
+.section-visitas,
+.section-catalogos {
+  padding: 0;
+  background-color: var(--color-bg);
+}
+
+.section-visitas,
+.section-catalogos { border-top: 1px solid var(--color-line); }
+
+.section-visitas .section-body { background-color: var(--color-bg-alt); }
+
+/* Bebeteca y Asociación: línea separadora del ancho del contenedor */
+.section-bebeteca,
+.section-asociacion { padding-top: 0; }
+
+.section-bebeteca > .container,
+.section-asociacion > .container {
+  border-top: 1px solid var(--color-line);
+  padding-top: 1.5rem;
+}
 
 /* --------------------------------------------------------------------------
    Botones y enlaces
@@ -389,13 +437,18 @@ textarea:focus-visible {
 
 .btn-secondary:hover { background-color: rgba(107, 29, 40, 0.06); }
 
-.btn-whatsapp {
-  background-color: #25d366;
-  color: #0b3d22;
-  margin-top: var(--space-sm);
+/* Enlace de contacto tipo texto borravino con ícono (la maqueta no usa verde) */
+.link-chat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
 }
 
-.btn-whatsapp:hover { background-color: #1ebe5b; }
+.link-chat .icon { width: 1.05rem; height: 1.05rem; }
+.link-chat:hover { color: var(--color-accent); text-decoration: underline; }
 
 .link-arrow {
   display: inline-flex;
@@ -416,33 +469,41 @@ textarea:focus-visible {
 
 .horarios-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-xl);
-  align-items: center;
+  grid-template-columns: minmax(0, 21rem) 1fr;
+  gap: 2rem;
+  align-items: start;
 }
 
+/* Grilla de 3 columnas x 2 filas (maqueta). Cada celda: día a la izquierda,
+   horario a la derecha. Las celdas abiertas van en blanco; las cerradas, apagadas. */
 .schedule {
-  width: 100%;
-  border-collapse: collapse;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.schedule-day {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: 52px;
+  padding: 0 1rem;
+  background-color: var(--color-off);
+  border: 1px solid var(--color-off-border);
+  border-radius: 4px;
+}
+
+.schedule-day.is-open {
   background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  box-shadow: var(--shadow);
+  border-color: var(--color-line);
 }
 
-.schedule th,
-.schedule td {
-  text-align: left;
-  padding: 0.8rem 1rem;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.schedule tr:last-child th,
-.schedule tr:last-child td { border-bottom: 0; }
-
-.schedule th { font-weight: 600; }
-.schedule td { text-align: right; color: var(--color-text-muted); }
+.schedule-day .day { font-weight: 600; }
+.schedule-day .hours { color: var(--color-text-muted); font-size: 0.9rem; }
 
 /* --------------------------------------------------------------------------
    Tarjetas
@@ -461,7 +522,7 @@ textarea:focus-visible {
   display: flex;
   flex-direction: column;
   background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-line);
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow);
@@ -510,7 +571,7 @@ textarea:focus-visible {
 .card-date {
   margin-top: auto;
   padding-top: 0.6rem;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--color-line);
   font-size: 0.8rem;
   color: var(--color-text-muted);
 }
@@ -538,7 +599,7 @@ textarea:focus-visible {
     linear-gradient(140deg, #8b5e2b, #4a121c);
 }
 
-.media-tall { min-height: 14rem; }
+.media-tall { min-height: 12.5rem; }
 
 .media-label {
   font-size: 0.75rem;
@@ -547,30 +608,26 @@ textarea:focus-visible {
   color: rgba(255, 255, 255, 0.85);
 }
 
+/* Chip en la esquina inferior derecha de la foto (maqueta) */
 .badge {
   position: absolute;
-  top: 0.75rem;
-  left: 0.75rem;
+  bottom: 0.75rem;
+  right: 0.75rem;
   background-color: var(--color-accent);
-  color: #fff;
+  color: var(--color-bg);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   padding: 0.25rem 0.65rem;
-  border-radius: 999px;
+  border-radius: 4px;
 }
 
 /* --------------------------------------------------------------------------
    Sección: Bebeteca
    -------------------------------------------------------------------------- */
 
-.bebeteca-inner { text-align: center; }
-
-.bebeteca-inner .section-lead {
-  margin-left: auto;
-  margin-right: auto;
-}
+.h2-emoji { margin-right: 0.35rem; }
 
 .bebeteca-grid {
   list-style: none;
@@ -578,37 +635,30 @@ textarea:focus-visible {
   padding: 0;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-md);
+  gap: 1rem;
 }
 
 .bebeteca-card {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 0.5rem;
-  padding: var(--space-md);
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+  gap: 0.4rem;
+  padding: 1.25rem;
+  background-color: var(--color-surface-alt);
+  border: 1px solid var(--color-line);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }
 
 .bebeteca-emoji {
-  display: grid;
-  place-items: center;
-  width: 3.5rem;
-  height: 3.5rem;
-  font-size: 1.9rem;
+  font-size: 2.25rem;
   line-height: 1;
-  background-color: #fff;
-  border: 1px solid var(--color-border);
-  border-radius: 50%;
+  margin-bottom: 0.25rem;
 }
 
 .bebeteca-card h3 {
   margin: 0;
   font-size: 1rem;
+  color: var(--color-primary);
 }
 
 .bebeteca-card p {
@@ -623,10 +673,20 @@ textarea:focus-visible {
 
 .visitas-grid {
   display: grid;
-  grid-template-columns: 1fr 1.3fr;
-  gap: var(--space-xl);
+  grid-template-columns: 32% 1fr;
+  gap: 2rem;
   align-items: start;
 }
+
+/* Tarjeta blanca con los pasos (maqueta: ~351px sobre 1120px) */
+.visitas-info {
+  padding: 1.5rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+}
+
+.visitas-info h3 { margin-bottom: var(--space-md); }
 
 .steps {
   list-style: none;
@@ -651,7 +711,7 @@ textarea:focus-visible {
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
-  background-color: var(--color-accent);
+  background-color: var(--color-primary);
   color: #fff;
   display: grid;
   place-items: center;
@@ -665,7 +725,7 @@ textarea:focus-visible {
 
 .form {
   background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-line);
   border-radius: var(--radius);
   padding: var(--space-lg);
   box-shadow: var(--shadow);
@@ -737,6 +797,10 @@ textarea:focus-visible {
 .catalogo .card-body,
 .tramite .card-body { padding: 0; }
 
+/* Trámites (asociación) y consulta: fondo beige en la maqueta */
+.tramite,
+.consulta { background-color: var(--color-surface-alt); }
+
 .catalogo > .icon,
 .tramite > .icon {
   color: var(--color-primary);
@@ -756,8 +820,7 @@ textarea:focus-visible {
   gap: var(--space-md);
   flex-wrap: wrap;
   padding: var(--space-lg);
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-line);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }
@@ -776,7 +839,8 @@ textarea:focus-visible {
    -------------------------------------------------------------------------- */
 
 .site-footer {
-  background-color: var(--color-primary-dark);
+  background-color: var(--color-footer);
+  border-top: 3px solid var(--color-accent);
   color: rgba(255, 255, 255, 0.8);
   padding-top: var(--space-xl);
 }
@@ -856,8 +920,10 @@ textarea:focus-visible {
 
 @media (max-width: 960px) {
   .hero-inner { grid-template-columns: 1fr; }
+  .hero-stats { max-width: none; justify-self: stretch; }
   .horarios-grid,
   .visitas-grid { grid-template-columns: 1fr; }
+  .schedule { grid-template-columns: repeat(2, 1fr); }
   .card-grid-3 { grid-template-columns: repeat(2, 1fr); }
   .bebeteca-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-grid { grid-template-columns: 1fr; }
@@ -880,6 +946,7 @@ textarea:focus-visible {
   }
 
   .form-row { grid-template-columns: 1fr; }
+  .schedule { grid-template-columns: 1fr; }
   .card-grid-2,
   .card-grid-3 { grid-template-columns: 1fr; }
   .bebeteca-grid { grid-template-columns: 1fr; }

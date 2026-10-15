@@ -88,10 +88,10 @@ La versión de `leopary_prueba2` reimplementa el sitio según la **maqueta entre
 
 - [x] Header: logo, nombre y navegación (Inicio, Colecciones, Visitas Escolares, Catálogos y Trámites)
 - [x] Hero: antetítulo, título, descripción y estadísticas (`12.000+` / `70+`)
-- [x] Atención al público: horarios vigentes + botón de WhatsApp
+- [x] Atención al público: grilla de horarios 3×2 y enlace de WhatsApp (texto bordó)
 - [x] Noticias e incorporaciones: 3 tarjetas de novedades
 - [x] Patrimonio bibliográfico: 2 tarjetas de colecciones especiales
-- [x] Sala Infantil · Bebeteca: 4 íconos temáticos
+- [x] Sala Infantil · Bebeteca: 4 tarjetas beige
 - [x] Visitas escolares: pasos "¿Cómo funciona?" + formulario validado (JS)
 - [x] Acceso digital: catálogos Koha y Greenstone
 - [x] Asociación y préstamos: 3 trámites + bloque de consulta
@@ -111,21 +111,46 @@ Los colores se **midieron por píxel** sobre `practica_profesionalizante/apuntes
 
 | Variable | Valor | Uso |
 |----------|-------|-----|
-| `--color-primary` | `#6b1d28` | Borravino (encabezado, botones, fondos oscuros) |
-| `--color-primary-dark` | `#4a121c` | Borravino oscuro (secciones oscuras, footer) |
-| `--color-accent` | `#8b5e2b` | Dorado general (borde inferior del encabezado, íconos, etiquetas) |
-| `--color-accent-dark` | `#6e4a22` | Dorado oscuro (texto dorado sobre fondos claros) |
-| `--color-accent-light` | `#d4a853` | Dorado claro (texto/íconos sobre fondos oscuros: eyebrows, footer) |
-| `--color-bg` | `#f4f1ea` | Crema (fondo general) |
-| `--color-surface` | `#fdfbf7` | Blanco marfil (tarjetas) |
+| `--color-primary` | `#6b1d2b` | Borravino (encabezado, bandas bordó, botones) |
+| `--color-primary-dark` | `#55151f` | Borravino oscuro (hover) |
+| `--color-accent` | `#8b5e2b` | Dorado general (línea del encabezado, líneas de las bandas, chips, bordes) |
+| `--color-accent-dark` | `#8b5e2b` | Dorado para texto sobre fondos claros (eyebrows) |
+| `--color-accent-light` | `#d4a853` | Dorado claro (texto/íconos sobre fondos oscuros: "Pestalozzi", estadísticas, título de banda) |
+| `--color-bg` | `#faf3e8` | Crema (fondo general) |
+| `--color-bg-alt` | `#ede4d4` | Beige (horarios y visitas) |
+| `--color-surface` | `#ffffff` | Tarjetas blancas (colecciones, visita, catálogos) |
+| `--color-surface-alt` | `#ede4d4` | Tarjetas beige (bebeteca, trámites, consulta) |
+| `--color-off` | `#eadecd` | Celda apagada de la grilla de horarios |
+| `--color-off-border` | `#d7c7b1` | Borde de celda apagada |
+| `--color-line` | `#c8b49a` | Líneas separadoras y bordes de tarjeta |
+| `--color-footer` | `#1c1008` | Pie de página |
+| `--color-text` | `#1c1008` | Texto principal |
+| `--color-text-muted` | `#6b5a48` | Texto secundario |
 
-Ajustes respecto de la primera reimplementación:
+Geometría: contenedor **72.5 rem (1120 px)**, radio de tarjetas **6 px** y **sin sombras** (`--shadow: none`).
+
+### Ronda 1 (14/10)
 
 - **Línea dorada** de 3px en el borde inferior del encabezado (`#8b5e2b`).
 - **Hero:** velo bordó suavizado (oscuro a la izquierda, casi transparente a la derecha) para que la fotografía se vea sin perder legibilidad.
 - **Dorado general** `#b08d57` → `#8b5e2b` (+ un dorado claro `#d4a853` para textos e íconos sobre fondos oscuros).
 - **Etiquetas de Novedades** con color propio por tarjeta (`--tag-color` vía `:nth-child`): 1ª `#8b5e2b`, 2ª `#6b1d2b`, 3ª `#3d5a3e`.
 - **Bebeteca** con 4 tarjetas de emojis (⚽ 🦖 🐺 🧙‍♀️).
+
+### Ronda 2 (14/10, rama `leopary_prueba3`)
+
+Comparación "juego de las 200 diferencias" contra `maqueta_web2.png`, resuelta **midiendo píxeles** (Chrome headless + PIL) en vez de mirar. Cambios:
+
+- **Ícono de marca:** libro cerrado (Feather `book`) en lugar de la pluma; se agregó un ícono de chat para los enlaces de WhatsApp.
+- **Hero:** "Pestalozzi" en dorado claro `#d4a853` en una segunda línea; caja de estadísticas de 224 px con borde fino dorado, divisor interno y números en dorado (se quitó el relleno verde).
+- **Horarios:** grilla de 3 columnas × 2 filas, celdas de 52 px con 8 px de separación; Martes y Miércoles en blanco y el resto apagadas; enlaces de WhatsApp como **texto bordó con ícono de chat** (se eliminó `.btn-whatsapp`).
+- **Colecciones:** chips de fecha abajo a la derecha de cada foto; banda bordó + cuerpo crema.
+- **Bebeteca:** tarjetas beige alineadas a la izquierda y emoji `📚` delante del `h2`.
+- **Visitas:** banda bordó + línea dorada de 3 px + cuerpo beige; **Catálogos:** igual con cuerpo crema.
+- **Footer:** `#1c1008` con línea dorada superior de 3 px.
+- Paleta y contenedor re-medidos (tabla de arriba).
+
+Pendientes respecto de la maqueta (para la próxima iteración): tamaños de fuente y espaciados generales, la columna CONTACTO extra del footer, el párrafo de entrada duplicado en "Asociación", el título del cuerpo de Catálogos y la línea divisoria del pie del footer.
 
 ---
 
