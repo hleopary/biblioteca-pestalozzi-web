@@ -378,6 +378,45 @@ textarea:focus-visible {
   border-top: 1px solid var(--color-line);
 }
 
+/* Novedades: scroll horizontal fluido si hay más de 3 publicaciones */
+.section-novedades .card-grid-3 {
+  display: flex;
+  overflow-x: auto;
+  gap: var(--space-lg);
+  padding-bottom: 1.25rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.section-novedades .card-grid-3::-webkit-scrollbar {
+  height: 6px;
+}
+.section-novedades .card-grid-3::-webkit-scrollbar-track {
+  background: var(--color-bg-alt);
+  border-radius: 4px;
+}
+.section-novedades .card-grid-3::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 4px;
+}
+.section-novedades .card-grid-3::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+.section-novedades .card.novedad {
+  flex: 0 0 calc((100% - (var(--space-lg) * 2)) / 3);
+  min-width: 290px;
+  max-width: 380px;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 900px) {
+  .section-novedades .card.novedad {
+    flex: 0 0 85%;
+    min-width: 260px;
+  }
+}
+
 .section-colecciones,
 .section-visitas,
 .section-catalogos {
@@ -749,6 +788,7 @@ textarea:focus-visible {
 .req { color: var(--color-error); }
 
 .form-field input,
+.form-field select,
 .form-field textarea {
   width: 100%;
   padding: 0.7rem 0.8rem;
@@ -762,6 +802,7 @@ textarea:focus-visible {
 .form-field textarea { resize: vertical; }
 
 .form-field.has-error input,
+.form-field.has-error select,
 .form-field.has-error textarea { border-color: var(--color-error); }
 
 .field-error {

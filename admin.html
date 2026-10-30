@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión Interna — Biblioteca Popular Pestalozzi</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- Encabezado del Panel -->
+  <header class="admin-header">
+    <div class="admin-header-inner">
+      <div class="admin-brand">
+        <h1>Biblioteca Popular Pestalozzi</h1>
+        <span>Panel de Gestión Interna</span>
+      </div>
+      <div class="admin-actions">
+        <a href="index.html" class="btn btn-secondary btn-sm" target="_blank">Ver Sitio Público ↗</a>
+        <button id="btn-perfil" class="btn btn-secondary btn-sm" style="display: none;" title="Ver perfil y cambiar contraseña">
+          👤 Perfil
+        </button>
+        <button id="btn-logout" class="btn btn-danger btn-sm" style="display: none;">Cerrar Sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-container">
+    <!-- Alertas globales -->
+    <div id="admin-alert" class="alert" role="alert"></div>
+
+    <!-- 1. Pantalla de Login (visible si no hay sesión) -->
+    <section id="login-section" class="login-wrapper">
+      <div class="card">
+        <h2 class="card-title">Acceso a Administración</h2>
+        <p class="card-lead">Ingresá tus credenciales para actualizar horarios, novedades y solicitudes.</p>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label for="username">Usuario</label>
+            <input type="text" id="username" class="form-control" placeholder="Ej: betsabe" required autofocus>
+          </div>
+          <div class="form-group">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 0.5rem;">
+            Ingresar al Panel
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 2. Panel Principal (visible tras autenticarse) -->
+    <section id="dashboard-section" style="display: none;">
+      <!-- Barra Superior con Tabs a la izquierda y Notas comprimido a la derecha -->
+      <div class="dashboard-topbar">
+        <nav class="tabs" role="tablist">
+          <button class="tab-btn active" data-tab="tab-horarios" role="tab" aria-selected="true">
+            🗓️ Horarios Cuatrimestrales
+          </button>
+          <button class="tab-btn" data-tab="tab-visitas" role="tab" aria-selected="false">
+            🎒 Visitas Escolares (<span id="count-visitas-badge">0</span>)
+          </button>
+          <button class="tab-btn" data-tab="tab-novedades" role="tab" aria-selected="false">
+            📰 Novedades de la Biblioteca
+          </button>
+        </nav>
+        <div class="notas-dropdown-wrapper">
+          <button id="btn-toggle-notas" class="btn-notas-compact" type="button" aria-expanded="false" title="Abrir bloc de notas personal">
+            <span>📝 Notas</span>
+            <span id="notas-mini-sync" class="badge-mini-sync">Sincronizado</span>
+          </button>
+
+          <!-- Popover desplegado justo debajo del botón (coincide con el recuadro rojo) -->
+          <div id="notas-popover" class="notas-popover" aria-labelledby="notas-popover-title">
+            <div class="notas-header">
+              <div class="notas-title-group">
+                <h3 id="notas-popover-title" class="notas-title">📝 Notas Personales</h3>
+                <span id="notas-status-pill" class="notas-status-pill">Sincronizado</span>
+              </div>
+              <button id="btn-close-notas" class="modal-close" type="button" aria-label="Cerrar notas">&times;</button>
+            </div>
+            <p class="notas-caption">Bloc personal para recordatorios, llamadas o pendientes. Se autoguarda al escribir y sincroniza con el servidor.</p>
+            <textarea id="admin-notas-textarea" class="notas-textarea" placeholder="Escribí acá tus notas, pendientes o teléfonos..."></textarea>
+            <div class="notas-footer">
+              <span id="notas-last-saved" class="notas-meta">Última actualización: --</span>
+              <button id="btn-limpiar-notas" class="btn-clean-notas" type="button">Limpiar notas</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vistas de las Pestañas al 100% de Ancho -->
+      <div class="dashboard-main-full">
+
+          <!-- Pestaña 1: Horarios Cuatrimestrales -->
+          <div id="tab-horarios" class="tab-content active" role="tabpanel">
+            <div class="card">
+              <h2 class="card-title">Actualizar Cartelera de Atención</h2>
+              <p class="card-lead">
+                Modificá los días y turnos de atención para el cuatrimestre vigente. Los cambios impactan de inmediato en la web pública.
+              </p>
+
+              <form id="horarios-form">
+                <div id="horarios-editor-container" class="horarios-editor">
+                  <p>Cargando horarios actuales...</p>
+                </div>
+
+                <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+                  <button type="submit" class="btn btn-primary">
+                    Guardar Horarios Cuatrimestrales
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Pestaña 2: Visitas Escolares -->
+          <div id="tab-visitas" class="tab-content" role="tabpanel">
+            <div class="card">
+              <div class="visitas-toolbar">
+                <div>
+                  <h2 class="card-title">Solicitudes de Visitas Escolares</h2>
+                  <p class="card-lead" style="margin-bottom: 0;">Consultá, filtrá y gestioná las solicitudes de docentes y escuelas.</p>
+                </div>
+                <div class="visitas-filters">
+                  <input type="text" id="busqueda-visitas" class="form-control form-control-sm" placeholder="🔍 Buscar escuela o docente..." style="min-width: 220px;">
+                  <select id="filtro-estado-visitas" class="form-control form-control-sm" style="min-width: 150px;">
+                    <option value="">Todos los estados</option>
+                    <option value="pendiente">Solo Pendientes</option>
+                    <option value="confirmada">Solo Confirmadas</option>
+                    <option value="realizada">Solo Realizadas</option>
+                    <option value="rechazada">Solo Rechazadas</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table id="visitas-table" class="visitas-table">
+                  <thead>
+                    <tr>
+                      <th style="min-width: 130px;">Fecha y Turno</th>
+                      <th style="min-width: 200px;">Institución y Nivel</th>
+                      <th style="min-width: 200px;">Docente y Contacto</th>
+                      <th style="text-align: center; width: 90px;">Alumnos</th>
+                      <th style="width: 130px;">Estado</th>
+                      <th style="width: 170px;">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="visitas-table-body">
+                    <tr>
+                      <td colspan="6" style="text-align: center; color: var(--color-text-muted); padding: 2.5rem;">Cargando solicitudes...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pestaña 3: Novedades -->
+          <div id="tab-novedades" class="tab-content" role="tabpanel">
+            <div class="card" style="margin-bottom: 1.5rem;">
+              <h2 class="card-title">Publicar Nueva Novedad</h2>
+              <p class="card-lead">Se mostrarán en la página principal las 3 novedades activas más recientes.</p>
+
+              <form id="novedad-form">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                  <div class="form-group">
+                    <label for="nov-categoria">Categoría (Etiqueta)</label>
+                    <input type="text" id="nov-categoria" class="form-control" placeholder="Ej: Donación, Taller, Novedad" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="nov-color">Color de Etiqueta</label>
+                    <select id="nov-color" class="form-control">
+                      <option value="#8b5e2b">Dorado Tostado (#8b5e2b)</option>
+                      <option value="#6b1d2b">Borravino (#6b1d2b)</option>
+                      <option value="#3d5a3e">Verde (#3d5a3e)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="nov-fecha">Mes / Año visible</label>
+                    <input type="text" id="nov-fecha" class="form-control" placeholder="Ej: Noviembre 2026" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="nov-titulo">Título de la noticia</label>
+                  <input type="text" id="nov-titulo" class="form-control" placeholder="Ej: Incorporación de 50 libros infantiles" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="nov-desc">Descripción o resumen</label>
+                  <textarea id="nov-desc" class="form-control" rows="3" placeholder="Detalle informativo de la novedad..." required></textarea>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end;">
+                  <button type="submit" class="btn btn-primary">Agregar Novedad</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title" style="font-size: 1.1rem;">Novedades Registradas</h3>
+              <div id="novedades-list-container" class="novedades-grid">
+                <p>Cargando novedades...</p>
+              </div>
+            </div>
+          </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal Institucional: Confirmación de Eliminación -->
+  <div id="modal-confirm" class="modal-overlay" role="dialog" aria-labelledby="modal-confirm-title" aria-modal="true">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 id="modal-confirm-title" style="color: var(--color-error); display: flex; align-items: center; gap: 0.5rem; font-size: 1.15rem;">
+          ⚠️ Confirmar Eliminación
+        </h3>
+        <button id="btn-modal-confirm-close" class="modal-close" type="button" aria-label="Cerrar modal">&times;</button>
+      </div>
+      <p id="modal-confirm-msg" style="margin: 1.25rem 0; font-size: 0.95rem; color: var(--color-text); line-height: 1.5;">
+        ¿Estás seguro de que deseás eliminar este elemento? Esta acción no se puede deshacer.
+      </p>
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+        <button id="btn-modal-confirm-cancel" type="button" class="btn btn-secondary">Cancelar</button>
+        <button id="btn-modal-confirm-ok" type="button" class="btn btn-danger">Eliminar Definitivamente</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Mi Perfil / Seguridad -->
+  <div id="modal-perfil" class="modal-overlay" role="dialog" aria-labelledby="modal-perfil-title" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-perfil-title">👤 Perfil y Seguridad</h3>
+        <button id="btn-close-modal-perfil" class="modal-close" aria-label="Cerrar modal">&times;</button>
+      </div>
+
+      <div class="profile-info">
+        <p><strong>Usuario:</strong> <span id="perfil-usuario">betsabe</span></p>
+        <p><strong>Nombre:</strong> <span id="perfil-nombre">Betsabé Cruz (Bibliotecaria)</span></p>
+        <p><strong>Email:</strong> <span id="perfil-email">bibliotecapestalozzi.berisso@gmail.com</span></p>
+      </div>
+
+      <h4 style="font-size: 1rem; margin-bottom: 0.6rem; color: var(--color-primary);">Cambiar Contraseña</h4>
+      <form id="password-form">
+        <div class="form-group">
+          <label for="pass-actual">Contraseña Actual</label>
+          <input type="password" id="pass-actual" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="pass-nueva">Nueva Contraseña (mínimo 6 caracteres)</label>
+          <input type="password" id="pass-nueva" class="form-control" minlength="6" required>
+        </div>
+        <div class="form-group">
+          <label for="pass-confirmar">Confirmar Nueva Contraseña</label>
+          <input type="password" id="pass-confirmar" class="form-control" minlength="6" required>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+          <button type="button" id="btn-cancelar-perfil" class="btn btn-secondary">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Actualizar Contraseña</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Detalle de Solicitud de Visita Escolar -->
+  <div id="modal-visita-detalle" class="modal-overlay" role="dialog" aria-labelledby="modal-visita-title" aria-modal="true">
+    <div class="modal-card" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 id="modal-visita-title">🎒 Detalle de la Visita Escolar</h3>
+        <button id="btn-close-modal-visita" class="modal-close" aria-label="Cerrar modal">&times;</button>
+      </div>
+
+      <div id="modal-visita-body" style="font-size: 0.92rem; line-height: 1.6;">
+        <!-- Se llena dinámicamente con JS -->
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 1.25rem;">
+        <button type="button" id="btn-cerrar-detalle" class="btn btn-secondary">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="admin-footer">
+    <p>Biblioteca Popular Pestalozzi &middot; Berisso, Buenos Aires &middot; Grupo Clouds (IFTS29)</p>
+  </footer>
+
+  <script src="js/api-client.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

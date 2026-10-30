@@ -24,3 +24,5 @@ Cada documento describe una decisión técnica o de diseño significativa, su co
 | [ADR-0007](0007-diseno-fiel-maqueta-tokens-css.md) | Sistema de diseño flat editorial, tokens CSS centralizados y fidelidad por píxel | Aceptado | 2026-10-14 |
 | [ADR-0008](0008-optimizacion-imagenes-avif-fallback-css.md) | Optimización de imágenes en formato AVIF y degradados de respaldo en CSS | Aceptado | 2026-10-14 |
 | [ADR-0009](0009-estrategia-ramas-despliegue-github-pages.md) | Estrategia de ramas Git y ciclo de publicación en GitHub Pages | Aceptado | 2026-10-14 |
+| [ADR-0010](0010-backend-nodejs-express-gestion-dinamica.md) | Incorporación de Backend Node.js / Express para Gestión Dinámica y Persistencia | Aceptado | 2026-10-29 |
+| [ADR-0011](0011-popover-notas-drag-drop-novedades.md) | Popover de Notas Flotante, Modal Institucional de Confirmación y Drag & Drop con Scroll en Novedades | Aceptado | 2026-10-30 |
