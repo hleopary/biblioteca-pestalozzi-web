@@ -14,6 +14,7 @@ const authRoutes = require("./src/routes/authRoutes");
 const horariosRoutes = require("./src/routes/horariosRoutes");
 const visitasRoutes = require("./src/routes/visitasRoutes");
 const novedadesRoutes = require("./src/routes/novedadesRoutes");
+const notasRoutes = require("./src/routes/notasRoutes");
 const errorHandler = require("./src/middlewares/errorHandler");
 
 const app = express();
@@ -39,6 +40,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/horarios", horariosRoutes);
 app.use("/api/visitas", visitasRoutes);
 app.use("/api/novedades", novedadesRoutes);
+app.use("/api/notas", notasRoutes);
 
 // Servir archivos estáticos del frontend (landing + admin) para desarrollo o despliegue conjunto
 const frontendPath = path.resolve(__dirname, "..");

@@ -2,16 +2,28 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   const tokenKey = "pestalozzi_token";
+  const localNotasKey = "pestalozzi_notas_backup";
   let authToken = localStorage.getItem(tokenKey);
+  let currentUser = null;
+  let allVisitas = []; // Almacena visitas para filtrado y búsqueda local
 
   // Elementos DOM
   const alertBox = document.getElementById("admin-alert");
   const loginSection = document.getElementById("login-section");
   const dashboardSection = document.getElementById("dashboard-section");
   const btnLogout = document.getElementById("btn-logout");
+  const btnPerfil = document.getElementById("btn-perfil");
   const loginForm = document.getElementById("login-form");
   const tabButtons = document.querySelectorAll(".tab-btn");
   const tabContents = document.querySelectorAll(".tab-content");
+
+  // Modales
+  const modalPerfil = document.getElementById("modal-perfil");
+  const btnCloseModalPerfil = document.getElementById("btn-close-modal-perfil");
+  const btnCancelarPerfil = document.getElementById("btn-cancelar-perfil");
+  const modalVisita = document.getElementById("modal-visita-detalle");
+  const btnCloseModalVisita = document.getElementById("btn-close-modal-visita");
+  const btnCerrarDetalle = document.getElementById("btn-cerrar-detalle");
 
   function showAlert(message, isError = false) {
     if (!alertBox) return;
@@ -31,7 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      await PestalozziAPI.verifyToken(authToken);
+      const res = await PestalozziAPI.verifyToken(authToken);
+      currentUser = res.usuario;
       showDashboard();
     } catch (err) {
       logout();
@@ -42,21 +55,25 @@ document.addEventListener("DOMContentLoaded", () => {
     loginSection.style.display = "block";
     dashboardSection.style.display = "none";
     btnLogout.style.display = "none";
+    if (btnPerfil) btnPerfil.style.display = "none";
   }
 
   function showDashboard() {
     loginSection.style.display = "none";
     dashboardSection.style.display = "block";
     btnLogout.style.display = "inline-flex";
+    if (btnPerfil) btnPerfil.style.display = "inline-flex";
 
     loadHorarios();
     loadVisitas();
     loadNovedades();
+    loadNotas();
   }
 
   function logout() {
     localStorage.removeItem(tokenKey);
     authToken = null;
+    currentUser = null;
     showLogin();
     showAlert("Sesión cerrada.");
   }
@@ -89,6 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const res = await PestalozziAPI.login(user, pass);
       authToken = res.token;
+      currentUser = res.usuario;
       localStorage.setItem(tokenKey, authToken);
       showAlert("Bienvenida Betsabé. Sesión iniciada.");
       loginForm.reset();
@@ -99,7 +117,62 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* ------------------------------------------------------------------------
-     1. Pestaña Horarios
+     Modal de Perfil y Cambio de Contraseña (desde el Navbar)
+     ------------------------------------------------------------------------ */
+  function openModalPerfil() {
+    if (!modalPerfil) return;
+    if (currentUser) {
+      const uEl = document.getElementById("perfil-usuario");
+      const nEl = document.getElementById("perfil-nombre");
+      const eEl = document.getElementById("perfil-email");
+      if (uEl) uEl.textContent = currentUser.username || "betsabe";
+      if (nEl) nEl.textContent = currentUser.nombre || "Betsabé Cruz";
+      if (eEl) eEl.textContent = currentUser.email || "bibliotecapestalozzi.berisso@gmail.com";
+    }
+    modalPerfil.classList.add("is-open");
+  }
+
+  function closeModalPerfil() {
+    if (!modalPerfil) return;
+    modalPerfil.classList.remove("is-open");
+    const form = document.getElementById("password-form");
+    if (form) form.reset();
+  }
+
+  if (btnPerfil) btnPerfil.addEventListener("click", openModalPerfil);
+  if (btnCloseModalPerfil) btnCloseModalPerfil.addEventListener("click", closeModalPerfil);
+  if (btnCancelarPerfil) btnCancelarPerfil.addEventListener("click", closeModalPerfil);
+  if (modalPerfil) {
+    modalPerfil.addEventListener("click", (e) => {
+      if (e.target === modalPerfil) closeModalPerfil();
+    });
+  }
+
+  const passwordForm = document.getElementById("password-form");
+  if (passwordForm) {
+    passwordForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const actual = document.getElementById("pass-actual").value;
+      const nueva = document.getElementById("pass-nueva").value;
+      const confirmar = document.getElementById("pass-confirmar").value;
+
+      if (nueva !== confirmar) {
+        showAlert("Las contraseñas nuevas no coinciden.", true);
+        return;
+      }
+
+      try {
+        await PestalozziAPI.updatePassword(authToken, actual, nueva);
+        showAlert("Contraseña cambiada exitosamente.");
+        closeModalPerfil();
+      } catch (err) {
+        showAlert("Error al cambiar contraseña: " + err.message, true);
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------------------
+     1. Pestaña Horarios Cuatrimestrales
      ------------------------------------------------------------------------ */
   const horariosContainer = document.getElementById("horarios-editor-container");
   const horariosForm = document.getElementById("horarios-form");
@@ -175,80 +248,160 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* ------------------------------------------------------------------------
-     2. Pestaña Visitas Escolares
+     2. Pestaña Visitas Escolares (Optimizada y Espaciosa)
      ------------------------------------------------------------------------ */
   const visitasTableBody = document.getElementById("visitas-table-body");
   const filtroVisitas = document.getElementById("filtro-estado-visitas");
+  const busquedaVisitas = document.getElementById("busqueda-visitas");
   const badgeCountVisitas = document.getElementById("count-visitas-badge");
 
   async function loadVisitas() {
     if (!visitasTableBody) return;
-    const estado = filtroVisitas ? filtroVisitas.value : "";
 
     try {
-      const res = await PestalozziAPI.getVisitasAdmin(authToken, estado);
-      const visitas = res.data || [];
+      const res = await PestalozziAPI.getVisitasAdmin(authToken);
+      allVisitas = res.data || [];
 
       if (badgeCountVisitas) {
-        badgeCountVisitas.textContent = visitas.length;
+        badgeCountVisitas.textContent = allVisitas.length;
       }
 
-      if (visitas.length === 0) {
-        visitasTableBody.innerHTML = `
-          <tr><td colspan="8" style="text-align: center; color: var(--color-text-muted); padding: 2rem;">No hay solicitudes de visitas escolares registradas.</td></tr>
-        `;
-        return;
-      }
+      renderVisitas();
+    } catch (err) {
+      visitasTableBody.innerHTML = `<tr><td colspan="8" style="color: red; text-align: center; padding: 2rem;">Error al cargar visitas.</td></tr>`;
+    }
+  }
 
-      visitasTableBody.innerHTML = "";
+  function renderVisitas() {
+    if (!visitasTableBody) return;
+    const estadoFiltro = filtroVisitas ? filtroVisitas.value : "";
+    const textoBusqueda = busquedaVisitas ? busquedaVisitas.value.trim().toLowerCase() : "";
 
-      visitas.forEach((v) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><strong>${v.fecha_preferida}</strong></td>
-          <td>${v.institucion}</td>
-          <td>${v.responsable} (${v.nivel})</td>
-          <td>
-            <a href="mailto:${v.email}">${v.email}</a><br>
-            <small>${v.telefono}</small>
-          </td>
-          <td>${v.alumnos_cant}</td>
-          <td>${v.turno}</td>
-          <td>
-            <span class="badge badge-${v.estado}">${v.estado}</span>
-          </td>
-          <td>
-            <select class="form-control change-estado" data-id="${v.id}" style="padding: 0.25rem 0.4rem; font-size: 0.8rem;">
+    const filtradas = allVisitas.filter((v) => {
+      const matchEstado = !estadoFiltro || v.estado === estadoFiltro;
+      const matchTexto =
+        !textoBusqueda ||
+        (v.institucion && v.institucion.toLowerCase().includes(textoBusqueda)) ||
+        (v.responsable && v.responsable.toLowerCase().includes(textoBusqueda)) ||
+        (v.email && v.email.toLowerCase().includes(textoBusqueda));
+      return matchEstado && matchTexto;
+    });
+
+    if (filtradas.length === 0) {
+      visitasTableBody.innerHTML = `
+        <tr><td colspan="8" style="text-align: center; color: var(--color-text-muted); padding: 2.5rem;">
+          No se encontraron solicitudes con los filtros aplicados.
+        </td></tr>
+      `;
+      return;
+    }
+
+    visitasTableBody.innerHTML = "";
+
+    filtradas.forEach((v) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td style="font-weight: 700; white-space: nowrap;">${v.fecha_preferida}</td>
+        <td>
+          <div class="inst-title">${v.institucion}</div>
+          <span class="inst-sub">Nivel: ${v.nivel}</span>
+        </td>
+        <td>
+          <div class="doc-name">${v.responsable}</div>
+        </td>
+        <td>
+          <a href="mailto:${v.email}" class="contact-link">${v.email}</a>
+          <span class="contact-tel">📞 ${v.telefono}</span>
+        </td>
+        <td style="text-align: center;">
+          <span class="alumnos-badge">${v.alumnos_cant}</span>
+        </td>
+        <td style="white-space: nowrap;">${v.turno}</td>
+        <td>
+          <span class="badge badge-${v.estado}">${v.estado}</span>
+        </td>
+        <td>
+          <div class="actions-group">
+            <select class="select-estado" data-id="${v.id}" title="Cambiar estado">
               <option value="pendiente" ${v.estado === "pendiente" ? "selected" : ""}>Pendiente</option>
               <option value="confirmada" ${v.estado === "confirmada" ? "selected" : ""}>Confirmar</option>
               <option value="realizada" ${v.estado === "realizada" ? "selected" : ""}>Realizada</option>
               <option value="rechazada" ${v.estado === "rechazada" ? "selected" : ""}>Rechazar</option>
             </select>
-          </td>
-        `;
+            <button class="btn-ver-obs" data-id="${v.id}" title="Ver observaciones y datos completos">👁️</button>
+          </div>
+        </td>
+      `;
 
-        const selectEstado = tr.querySelector(".change-estado");
-        selectEstado.addEventListener("change", async (e) => {
-          const nuevoEstado = e.target.value;
-          try {
-            await PestalozziAPI.updateVisitaEstado(authToken, v.id, nuevoEstado);
-            showAlert(`Visita de "${v.institucion}" marcada como ${nuevoEstado}.`);
-            loadVisitas();
-          } catch (err) {
-            showAlert("Error al actualizar estado: " + err.message, true);
-          }
-        });
-
-        visitasTableBody.appendChild(tr);
+      // Evento de cambio de estado
+      const selectEstado = tr.querySelector(".select-estado");
+      selectEstado.addEventListener("change", async (e) => {
+        const nuevoEstado = e.target.value;
+        try {
+          await PestalozziAPI.updateVisitaEstado(authToken, v.id, nuevoEstado);
+          showAlert(`Estado actualizado a '${nuevoEstado}'.`);
+          v.estado = nuevoEstado;
+          renderVisitas();
+        } catch (err) {
+          showAlert("Error al actualizar estado: " + err.message, true);
+        }
       });
-    } catch (err) {
-      visitasTableBody.innerHTML = `<tr><td colspan="8" style="color: red;">Error al cargar visitas.</td></tr>`;
-    }
+
+      // Evento de ver detalle
+      const btnDetalle = tr.querySelector(".btn-ver-obs");
+      btnDetalle.addEventListener("click", () => {
+        abrirModalDetalleVisita(v);
+      });
+
+      visitasTableBody.appendChild(tr);
+    });
   }
 
-  if (filtroVisitas) {
-    filtroVisitas.addEventListener("change", loadVisitas);
+  function abrirModalDetalleVisita(v) {
+    if (!modalVisita) return;
+    const body = document.getElementById("modal-visita-body");
+    if (body) {
+      body.innerHTML = `
+        <div style="background: var(--color-bg-alt); padding: 1rem; border-radius: var(--radius); margin-bottom: 1rem;">
+          <h4 style="color: var(--color-primary); font-size: 1.15rem; margin-bottom: 0.3rem;">${v.institucion}</h4>
+          <p><strong>Nivel / Grado:</strong> ${v.nivel} &middot; <strong>Alumnos:</strong> ${v.alumnos_cant}</p>
+          <p><strong>Fecha solicitada:</strong> ${v.fecha_preferida} &middot; <strong>Turno:</strong> ${v.turno}</p>
+          <p><strong>Estado actual:</strong> <span class="badge badge-${v.estado}">${v.estado}</span></p>
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+          <h5 style="color: var(--color-text); font-size: 0.95rem; margin-bottom: 0.25rem;">Contacto del Docente:</h5>
+          <p><strong>Responsable:</strong> ${v.responsable}</p>
+          <p><strong>Email:</strong> <a href="mailto:${v.email}">${v.email}</a></p>
+          <p><strong>Teléfono / WhatsApp:</strong> <a href="https://wa.me/${v.telefono.replace(/\D/g, '')}" target="_blank">${v.telefono}</a></p>
+        </div>
+
+        <div>
+          <h5 style="color: var(--color-text); font-size: 0.95rem; margin-bottom: 0.25rem;">Comentarios / Observaciones:</h5>
+          <p style="background: #fff; border: 1px solid var(--color-line); border-radius: var(--radius); padding: 0.75rem; white-space: pre-wrap; font-style: ${v.observaciones ? 'normal' : 'italic'}; color: ${v.observaciones ? 'inherit' : 'var(--color-text-muted)'};">
+            ${v.observaciones ? v.observaciones : "No se registraron comentarios adicionales."}
+          </p>
+        </div>
+      `;
+    }
+    modalVisita.classList.add("is-open");
   }
+
+  function cerrarModalDetalleVisita() {
+    if (!modalVisita) return;
+    modalVisita.classList.remove("is-open");
+  }
+
+  if (btnCloseModalVisita) btnCloseModalVisita.addEventListener("click", cerrarModalDetalleVisita);
+  if (btnCerrarDetalle) btnCerrarDetalle.addEventListener("click", cerrarModalDetalleVisita);
+  if (modalVisita) {
+    modalVisita.addEventListener("click", (e) => {
+      if (e.target === modalVisita) cerrarModalDetalleVisita();
+    });
+  }
+
+  if (filtroVisitas) filtroVisitas.addEventListener("change", renderVisitas);
+  if (busquedaVisitas) busquedaVisitas.addEventListener("input", renderVisitas);
 
   /* ------------------------------------------------------------------------
      3. Pestaña Novedades
@@ -328,32 +481,96 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ------------------------------------------------------------------------
-     4. Pestaña Seguridad
+     4. Bloc de Notas Lateral de Betsabé
      ------------------------------------------------------------------------ */
-  const passwordForm = document.getElementById("password-form");
+  const notasTextarea = document.getElementById("admin-notas-textarea");
+  const btnGuardarNotas = document.getElementById("btn-guardar-notas");
+  const btnLimpiarNotas = document.getElementById("btn-limpiar-notas");
+  const notasStatusPill = document.getElementById("notas-status-pill");
+  const notasLastSaved = document.getElementById("notas-last-saved");
+  let autoSaveTimeout = null;
 
-  if (passwordForm) {
-    passwordForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const actual = document.getElementById("pass-actual").value;
-      const nueva = document.getElementById("pass-nueva").value;
-      const confirmar = document.getElementById("pass-confirmar").value;
+  async function loadNotas() {
+    if (!notasTextarea) return;
 
-      if (nueva !== confirmar) {
-        showAlert("Las contraseñas nuevas no coinciden.", true);
-        return;
+    // Cargar primero de localStorage por inmediatez
+    const backup = localStorage.getItem(localNotasKey);
+    if (backup) {
+      notasTextarea.value = backup;
+    }
+
+    try {
+      const res = await PestalozziAPI.getNotas(authToken);
+      if (res.ok && res.data && typeof res.data.contenido === "string") {
+        notasTextarea.value = res.data.contenido;
+        localStorage.setItem(localNotasKey, res.data.contenido);
+        if (res.data.updated_at) {
+          const date = new Date(res.data.updated_at);
+          notasLastSaved.textContent = `Guardado: ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+        }
       }
+    } catch (err) {
+      console.info("Notas cargadas desde almacenamiento local.");
+    }
+  }
 
-      try {
-        await PestalozziAPI.updatePassword(authToken, actual, nueva);
-        showAlert("Contraseña cambiada exitosamente.");
-        passwordForm.reset();
-      } catch (err) {
-        showAlert("Error al cambiar contraseña: " + err.message, true);
+  async function guardarNotas(showFeedback = true) {
+    if (!notasTextarea) return;
+    const contenido = notasTextarea.value;
+    localStorage.setItem(localNotasKey, contenido);
+
+    if (notasStatusPill) {
+      notasStatusPill.textContent = "Guardando...";
+      notasStatusPill.className = "notas-status-pill saving";
+    }
+
+    try {
+      const res = await PestalozziAPI.updateNotas(authToken, contenido);
+      if (notasStatusPill) {
+        notasStatusPill.textContent = "Sincronizado";
+        notasStatusPill.className = "notas-status-pill";
+      }
+      if (notasLastSaved) {
+        const date = new Date();
+        notasLastSaved.textContent = `Guardado: ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      }
+      if (showFeedback) {
+        showAlert("Notas guardadas.");
+      }
+    } catch (err) {
+      if (notasStatusPill) {
+        notasStatusPill.textContent = "Guardado local";
+        notasStatusPill.className = "notas-status-pill";
+      }
+    }
+  }
+
+  if (notasTextarea) {
+    notasTextarea.addEventListener("input", () => {
+      if (notasStatusPill) {
+        notasStatusPill.textContent = "Modificado...";
+        notasStatusPill.className = "notas-status-pill saving";
+      }
+      clearTimeout(autoSaveTimeout);
+      autoSaveTimeout = setTimeout(() => {
+        guardarNotas(false);
+      }, 900);
+    });
+  }
+
+  if (btnGuardarNotas) {
+    btnGuardarNotas.addEventListener("click", () => guardarNotas(true));
+  }
+
+  if (btnLimpiarNotas) {
+    btnLimpiarNotas.addEventListener("click", () => {
+      if (confirm("¿Querés borrar todo el contenido del bloc de notas?")) {
+        notasTextarea.value = "";
+        guardarNotas(true);
       }
     });
   }
 
-  // Comprobación inicial de token
+  // Comprobación inicial
   checkAuth();
 });

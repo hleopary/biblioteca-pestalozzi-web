@@ -147,6 +147,22 @@ const PestalozziAPI = (function () {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
       });
+    },
+
+    // Bloc de Notas de Betsabé
+    async getNotas(token) {
+      return request("/notas", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+    },
+
+    async updateNotas(token, contenido) {
+      return request("/notas", {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ contenido })
+      });
     }
   };
 })();

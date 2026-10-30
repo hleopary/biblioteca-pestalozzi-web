@@ -60,6 +60,14 @@ db.exec(`
     activa INTEGER NOT NULL DEFAULT 1,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
+
+  CREATE TABLE IF NOT EXISTS notas (
+    id INTEGER PRIMARY KEY CHECK (id = 1),
+    contenido TEXT NOT NULL DEFAULT '',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  INSERT OR IGNORE INTO notas (id, contenido) VALUES (1, '');
 `);
 
 module.exports = db;

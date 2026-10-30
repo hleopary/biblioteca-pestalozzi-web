@@ -29,7 +29,10 @@ Incorporar un backend propio desacoplado en **Node.js con Express** bajo una arq
    - Endpoints protegidos para actualización de horarios, administración de visitas y CRUD de novedades.
 4. **Panel de Gestión Interna (`admin.html`)**:
    - Interfaz web simple y accesible adaptada a la paleta institucional para que la bibliotecaria administre el sitio con autonomía.
-5. **Resiliencia en el Frontend**:
+   - Acceso al Perfil de la bibliotecaria y cambio de contraseña centralizado en la barra de navegación superior.
+5. **Bloc de Notas Rápido Persistente**:
+   - Espacio lateral dedicado para anotaciones de la bibliotecaria (llamadas, pendientes, recordatorios de docentes), con sincronización automática en base de datos (`/api/notas`) y respaldo en almacenamiento local.
+6. **Resiliencia en el Frontend**:
    - El cliente JavaScript (`js/api-client.js` y `js/main.js`) consulta la API dinámica pero conserva los contenidos HTML estáticos como respaldo (fallback) en caso de que el backend se encuentre momentáneamente fuera de línea.
 
 ## Relación con ADRs anteriores

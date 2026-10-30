@@ -187,9 +187,43 @@ server.listen(PORT, async () => {
     if (!resDel.ok) throw new Error(`Error en DELETE HTTP ${resDel.status}`);
   });
 
+  // 11. Bloc de Notas
+  await test("PUT y GET /api/notas guardan y recuperan notas de Betsabé", async () => {
+    const textoNota = "Llamar a la Escuela 12 el lunes a las 10hs para confirmar visita.";
+    const resPut = await fetch(`${baseUrl}/notas`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`
+      },
+      body: JSON.stringify({ contenido: textoNota })
+    });
+
+    if (!resPut.ok) throw new Error(`Error en PUT /api/notas HTTP ${resPut.status}`);
+
+    const resGet = await fetch(`${baseUrl}/notas`, {
+      headers: { Authorization: `Bearer ${authToken}` }
+    });
+
+    if (!resGet.ok) throw new Error(`Error en GET /api/notas HTTP ${resGet.status}`);
+    const dataGet = await resGet.json();
+    if (dataGet.data?.contenido !== textoNota) {
+      throw new Error("El contenido de la nota no coincide.");
+    }
+  });
+
+  await test("DELETE /api/notas/:id elimina una nota específica", async () => {
+    const resDel = await fetch(`${baseUrl}/notas/${testNovedadId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${authToken}` }
+    });
+
+    if (!resDel.ok) throw new Error(`Error en DELETE HTTP ${resDel.status}`);
+  });
+
   console.log("\n-------------------------------------------------------");
   if (failures === 0) {
-    console.log("✓ TODAS LAS PRUEBAS PASARON EXITOSAMENTE (10/10)");
+    console.log("✓ TODAS LAS PRUEBAS PASARON EXITOSAMENTE (12/12)");
   } else {
     console.error(`✗ FALLARON ${failures} PRUEBAS`);
   }

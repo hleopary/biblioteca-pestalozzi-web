@@ -17,6 +17,9 @@
       </div>
       <div class="admin-actions">
         <a href="index.html" class="btn btn-secondary btn-sm" target="_blank">Ver Sitio Público ↗</a>
+        <button id="btn-perfil" class="btn btn-secondary btn-sm" style="display: none;" title="Ver perfil y cambiar contraseña">
+          👤 Perfil
+        </button>
         <button id="btn-logout" class="btn btn-danger btn-sm" style="display: none;">Cerrar Sesión</button>
       </div>
     </div>
@@ -50,164 +53,213 @@
 
     <!-- 2. Panel Principal (visible tras autenticarse) -->
     <section id="dashboard-section" style="display: none;">
-      <nav class="tabs" role="tablist">
-        <button class="tab-btn active" data-tab="tab-horarios" role="tab" aria-selected="true">
-          🗓️ Horarios Cuatrimestrales
-        </button>
-        <button class="tab-btn" data-tab="tab-visitas" role="tab" aria-selected="false">
-          🎒 Visitas Escolares (<span id="count-visitas-badge">0</span>)
-        </button>
-        <button class="tab-btn" data-tab="tab-novedades" role="tab" aria-selected="false">
-          📰 Novedades de la Biblioteca
-        </button>
-        <button class="tab-btn" data-tab="tab-seguridad" role="tab" aria-selected="false">
-          🔒 Seguridad / Clave
-        </button>
-      </nav>
-
-      <!-- Pestaña 1: Horarios Cuatrimestrales -->
-      <div id="tab-horarios" class="tab-content active" role="tabpanel">
-        <div class="card">
-          <h2 class="card-title">Actualizar Cartelera de Atención</h2>
-          <p class="card-lead">
-            Modificá los días y turnos de atención para el cuatrimestre vigente. Los cambios impactan de inmediato en la web pública.
-          </p>
-
-          <form id="horarios-form">
-            <div id="horarios-editor-container" class="horarios-editor">
-              <p>Cargando horarios actuales...</p>
-            </div>
-
-            <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
-              <button type="submit" class="btn btn-primary">
-                Guardar Horarios Cuatrimestrales
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <!-- Pestaña 2: Visitas Escolares -->
-      <div id="tab-visitas" class="tab-content" role="tabpanel">
-        <div class="card">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
-            <div>
-              <h2 class="card-title">Solicitudes de Visitas Escolares</h2>
-              <p class="card-lead" style="margin-bottom: 0;">Consultá y gestioná los turnos pedidos por docentes y escuelas.</p>
-            </div>
-            <div style="display: flex; gap: 0.5rem; align-items: center;">
-              <label for="filtro-estado-visitas" style="font-size: 0.85rem; font-weight: 600;">Filtrar:</label>
-              <select id="filtro-estado-visitas" class="form-control" style="width: auto; padding: 0.4rem 0.6rem;">
-                <option value="">Todas</option>
-                <option value="pendiente">Pendientes</option>
-                <option value="confirmada">Confirmadas</option>
-                <option value="realizada">Realizadas</option>
-                <option value="rechazada">Rechazadas</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table id="visitas-table">
-              <thead>
-                <tr>
-                  <th>Fecha Solicitada</th>
-                  <th>Institución</th>
-                  <th>Docente</th>
-                  <th>Contacto</th>
-                  <th>Alumnos</th>
-                  <th>Turno</th>
-                  <th>Estado</th>
-                  <th>Acción</th>
-                </tr>
-              </thead>
-              <tbody id="visitas-table-body">
-                <tr>
-                  <td colspan="8" style="text-align: center; color: var(--color-text-muted);">Cargando solicitudes...</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pestaña 3: Novedades -->
-      <div id="tab-novedades" class="tab-content" role="tabpanel">
-        <div class="card" style="margin-bottom: 1.5rem;">
-          <h2 class="card-title">Publicar Nueva Novedad</h2>
-          <p class="card-lead">Se mostrarán en la página principal las 3 novedades activas más recientes.</p>
-
-          <form id="novedad-form">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-              <div class="form-group">
-                <label for="nov-categoria">Categoría (Etiqueta)</label>
-                <input type="text" id="nov-categoria" class="form-control" placeholder="Ej: Donación, Taller, Novedad" required>
-              </div>
-              <div class="form-group">
-                <label for="nov-color">Color de Etiqueta</label>
-                <select id="nov-color" class="form-control">
-                  <option value="#8b5e2b">Dorado Tostado (#8b5e2b)</option>
-                  <option value="#6b1d2b">Borravino (#6b1d2b)</option>
-                  <option value="#3d5a3e">Verde (#3d5a3e)</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="nov-fecha">Mes / Año visible</label>
-                <input type="text" id="nov-fecha" class="form-control" placeholder="Ej: Noviembre 2026" required>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="nov-titulo">Título de la noticia</label>
-              <input type="text" id="nov-titulo" class="form-control" placeholder="Ej: Incorporación de 50 libros infantiles" required>
-            </div>
-
-            <div class="form-group">
-              <label for="nov-desc">Descripción o resumen</label>
-              <textarea id="nov-desc" class="form-control" rows="3" placeholder="Detalle informativo de la novedad..." required></textarea>
-            </div>
-
-            <div style="display: flex; justify-content: flex-end;">
-              <button type="submit" class="btn btn-primary">Agregar Novedad</button>
-            </div>
-          </form>
-        </div>
-
-        <div class="card">
-          <h3 class="card-title" style="font-size: 1.1rem;">Novedades Registradas</h3>
-          <div id="novedades-list-container" class="novedades-grid">
-            <p>Cargando novedades...</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pestaña 4: Seguridad -->
-      <div id="tab-seguridad" class="tab-content" role="tabpanel">
-        <div class="card" style="max-width: 500px;">
-          <h2 class="card-title">Cambiar Contraseña de Acceso</h2>
-          <p class="card-lead">Actualizá la clave para el usuario administrador de Betsabé.</p>
-
-          <form id="password-form">
-            <div class="form-group">
-              <label for="pass-actual">Contraseña Actual</label>
-              <input type="password" id="pass-actual" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label for="pass-nueva">Nueva Contraseña (mínimo 6 caracteres)</label>
-              <input type="password" id="pass-nueva" class="form-control" minlength="6" required>
-            </div>
-            <div class="form-group">
-              <label for="pass-confirmar">Confirmar Nueva Contraseña</label>
-              <input type="password" id="pass-confirmar" class="form-control" minlength="6" required>
-            </div>
-            <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem;">
-              Actualizar Contraseña
+      <div class="dashboard-grid">
+        <!-- Columna Principal de Contenidos -->
+        <div class="dashboard-main">
+          <nav class="tabs" role="tablist">
+            <button class="tab-btn active" data-tab="tab-horarios" role="tab" aria-selected="true">
+              🗓️ Horarios Cuatrimestrales
             </button>
-          </form>
+            <button class="tab-btn" data-tab="tab-visitas" role="tab" aria-selected="false">
+              🎒 Visitas Escolares (<span id="count-visitas-badge">0</span>)
+            </button>
+            <button class="tab-btn" data-tab="tab-novedades" role="tab" aria-selected="false">
+              📰 Novedades de la Biblioteca
+            </button>
+          </nav>
+
+          <!-- Pestaña 1: Horarios Cuatrimestrales -->
+          <div id="tab-horarios" class="tab-content active" role="tabpanel">
+            <div class="card">
+              <h2 class="card-title">Actualizar Cartelera de Atención</h2>
+              <p class="card-lead">
+                Modificá los días y turnos de atención para el cuatrimestre vigente. Los cambios impactan de inmediato en la web pública.
+              </p>
+
+              <form id="horarios-form">
+                <div id="horarios-editor-container" class="horarios-editor">
+                  <p>Cargando horarios actuales...</p>
+                </div>
+
+                <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+                  <button type="submit" class="btn btn-primary">
+                    Guardar Horarios Cuatrimestrales
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Pestaña 2: Visitas Escolares -->
+          <div id="tab-visitas" class="tab-content" role="tabpanel">
+            <div class="card">
+              <div class="visitas-toolbar">
+                <div>
+                  <h2 class="card-title">Solicitudes de Visitas Escolares</h2>
+                  <p class="card-lead" style="margin-bottom: 0;">Consultá, filtrá y gestioná las solicitudes de docentes y escuelas.</p>
+                </div>
+                <div class="visitas-filters">
+                  <input type="text" id="busqueda-visitas" class="form-control form-control-sm" placeholder="🔍 Buscar escuela o docente..." style="min-width: 220px;">
+                  <select id="filtro-estado-visitas" class="form-control form-control-sm" style="min-width: 150px;">
+                    <option value="">Todos los estados</option>
+                    <option value="pendiente">Solo Pendientes</option>
+                    <option value="confirmada">Solo Confirmadas</option>
+                    <option value="realizada">Solo Realizadas</option>
+                    <option value="rechazada">Solo Rechazadas</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table id="visitas-table" class="visitas-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 110px;">Fecha</th>
+                      <th>Institución</th>
+                      <th>Docente</th>
+                      <th>Contacto</th>
+                      <th style="text-align: center; width: 85px;">Alumnos</th>
+                      <th style="width: 125px;">Turno</th>
+                      <th style="width: 115px;">Estado</th>
+                      <th style="width: 160px;">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="visitas-table-body">
+                    <tr>
+                      <td colspan="8" style="text-align: center; color: var(--color-text-muted); padding: 2.5rem;">Cargando solicitudes...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pestaña 3: Novedades -->
+          <div id="tab-novedades" class="tab-content" role="tabpanel">
+            <div class="card" style="margin-bottom: 1.5rem;">
+              <h2 class="card-title">Publicar Nueva Novedad</h2>
+              <p class="card-lead">Se mostrarán en la página principal las 3 novedades activas más recientes.</p>
+
+              <form id="novedad-form">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                  <div class="form-group">
+                    <label for="nov-categoria">Categoría (Etiqueta)</label>
+                    <input type="text" id="nov-categoria" class="form-control" placeholder="Ej: Donación, Taller, Novedad" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="nov-color">Color de Etiqueta</label>
+                    <select id="nov-color" class="form-control">
+                      <option value="#8b5e2b">Dorado Tostado (#8b5e2b)</option>
+                      <option value="#6b1d2b">Borravino (#6b1d2b)</option>
+                      <option value="#3d5a3e">Verde (#3d5a3e)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="nov-fecha">Mes / Año visible</label>
+                    <input type="text" id="nov-fecha" class="form-control" placeholder="Ej: Noviembre 2026" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="nov-titulo">Título de la noticia</label>
+                  <input type="text" id="nov-titulo" class="form-control" placeholder="Ej: Incorporación de 50 libros infantiles" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="nov-desc">Descripción o resumen</label>
+                  <textarea id="nov-desc" class="form-control" rows="3" placeholder="Detalle informativo de la novedad..." required></textarea>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end;">
+                  <button type="submit" class="btn btn-primary">Agregar Novedad</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title" style="font-size: 1.1rem;">Novedades Registradas</h3>
+              <div id="novedades-list-container" class="novedades-grid">
+                <p>Cargando novedades...</p>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <!-- Columna Lateral: NOTAS de Betsabé -->
+        <aside class="dashboard-sidebar">
+          <div class="card card-notas">
+            <div class="notas-header">
+              <div class="notas-title-group">
+                <h3 class="notas-title">📝 Notas</h3>
+                <span id="notas-status-pill" class="notas-status-pill">Sincronizado</span>
+              </div>
+              <button id="btn-guardar-notas" class="btn btn-primary btn-sm" type="button">Guardar</button>
+            </div>
+            <p class="notas-caption">Bloc personal para recordatorios, llamadas a docentes o pendientes. Se autoguarda al escribir.</p>
+            <textarea id="admin-notas-textarea" class="notas-textarea" placeholder="Escribí tus notas acá..."></textarea>
+            <div class="notas-footer">
+              <span id="notas-last-saved" class="notas-meta">Última actualización: --</span>
+              <button id="btn-limpiar-notas" class="btn-clean-notas" type="button">Limpiar notas</button>
+            </div>
+          </div>
+        </aside>
       </div>
     </section>
   </main>
+
+  <!-- Modal: Mi Perfil / Seguridad -->
+  <div id="modal-perfil" class="modal-overlay" role="dialog" aria-labelledby="modal-perfil-title" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-perfil-title">👤 Perfil y Seguridad</h3>
+        <button id="btn-close-modal-perfil" class="modal-close" aria-label="Cerrar modal">&times;</button>
+      </div>
+
+      <div class="profile-info">
+        <p><strong>Usuario:</strong> <span id="perfil-usuario">betsabe</span></p>
+        <p><strong>Nombre:</strong> <span id="perfil-nombre">Betsabé Cruz (Bibliotecaria)</span></p>
+        <p><strong>Email:</strong> <span id="perfil-email">bibliotecapestalozzi.berisso@gmail.com</span></p>
+      </div>
+
+      <h4 style="font-size: 1rem; margin-bottom: 0.6rem; color: var(--color-primary);">Cambiar Contraseña</h4>
+      <form id="password-form">
+        <div class="form-group">
+          <label for="pass-actual">Contraseña Actual</label>
+          <input type="password" id="pass-actual" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="pass-nueva">Nueva Contraseña (mínimo 6 caracteres)</label>
+          <input type="password" id="pass-nueva" class="form-control" minlength="6" required>
+        </div>
+        <div class="form-group">
+          <label for="pass-confirmar">Confirmar Nueva Contraseña</label>
+          <input type="password" id="pass-confirmar" class="form-control" minlength="6" required>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+          <button type="button" id="btn-cancelar-perfil" class="btn btn-secondary">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Actualizar Contraseña</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Detalle de Solicitud de Visita Escolar -->
+  <div id="modal-visita-detalle" class="modal-overlay" role="dialog" aria-labelledby="modal-visita-title" aria-modal="true">
+    <div class="modal-card" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 id="modal-visita-title">🎒 Detalle de la Visita Escolar</h3>
+        <button id="btn-close-modal-visita" class="modal-close" aria-label="Cerrar modal">&times;</button>
+      </div>
+
+      <div id="modal-visita-body" style="font-size: 0.92rem; line-height: 1.6;">
+        <!-- Se llena dinámicamente con JS -->
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 1.25rem;">
+        <button type="button" id="btn-cerrar-detalle" class="btn btn-secondary">Cerrar</button>
+      </div>
+    </div>
+  </div>
 
   <footer class="admin-footer">
     <p>Biblioteca Popular Pestalozzi &middot; Berisso, Buenos Aires &middot; Grupo Clouds (IFTS29)</p>
