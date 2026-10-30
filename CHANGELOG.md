@@ -18,11 +18,11 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
   - Endpoints REST para cartelera cuatrimestral de horarios (`/api/horarios`).
   - Endpoints para recepción, listado y cambio de estado de visitas escolares (`/api/visitas`) con notificaciones vía Nodemailer.
   - Endpoints CRUD para novedades institucionales (`/api/novedades`).
-  - Endpoints para guardado y recuperación de notas de la bibliotecaria (`/api/notas`).
+  - Endpoints para guardado, recuperación y eliminación de notas de la bibliotecaria (`/api/notas` con soporte `DELETE /api/notas/:id`).
 - **Panel de Gestión Interna (`admin.html`)**:
-  - Incorporación de bloc lateral de **"Notas Rápidas"** para anotaciones de Betsabé con auto-guardado en base de datos SQLite y respaldo local.
+  - Incorporación de bloc lateral de **"Notas Rápidas"** para anotaciones de Betsabé con auto-guardado en base de datos SQLite, respaldo local y botón de limpieza con `deleteNotaById`.
   - Reubicación de **"Perfil y Seguridad"** a un acceso directo en la barra de navegación superior (navbar) mediante modal interactivo.
-  - Rediseño y optimización de la tabla de **Solicitudes de Visitas Escolares**: estructura ancha y holgada, buscador en tiempo real, selector de estado con ancho óptimo y modal para ver observaciones completas.
+  - Rediseño y optimización de la tabla de **Solicitudes de Visitas Escolares**: estructura ancha y holgada, buscador en tiempo real, selector de estado con ancho óptimo, eliminación de solicitudes y modal para ver observaciones completas.
   - Estilos dedicados en `css/admin.css` y lógica interactiva en `js/admin.js`.
 - **Integración en Frontend**:
   - Cliente HTTP modular `js/api-client.js` con detección automática de entorno.

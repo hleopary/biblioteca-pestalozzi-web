@@ -329,6 +329,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <option value="rechazada" ${v.estado === "rechazada" ? "selected" : ""}>Rechazar</option>
             </select>
             <button class="btn-ver-obs" data-id="${v.id}" title="Ver observaciones y datos completos">👁️</button>
+            <button class="btn-ver-obs btn-del-visita" data-id="${v.id}" title="Eliminar solicitud" style="color: var(--color-error);">🗑️</button>
           </div>
         </td>
       `;
@@ -351,6 +352,22 @@ document.addEventListener("DOMContentLoaded", () => {
       const btnDetalle = tr.querySelector(".btn-ver-obs");
       btnDetalle.addEventListener("click", () => {
         abrirModalDetalleVisita(v);
+      });
+
+      // Evento de eliminar visita
+      const btnDel = tr.querySelector(".btn-del-visita");
+      btnDel.addEventListener("click", async () => {
+        if (confirm(`¿Seguro que deseás eliminar la solicitud de "${v.institucion}"?`)) {
+          try {
+            await PestalozziAPI.deleteVisita(authToken, v.id);
+            showAlert("Solicitud eliminada correctamente.");
+            allVisitas = allVisitas.filter(item => item.id !== v.id);
+            if (badgeCountVisitas) badgeCountVisitas.textContent = allVisitas.length;
+            renderVisitas();
+          } catch (err) {
+            showAlert("Error al eliminar solicitud: " + err.message, true);
+          }
+        }
       });
 
       visitasTableBody.appendChild(tr);
@@ -563,10 +580,23 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (btnLimpiarNotas) {
-    btnLimpiarNotas.addEventListener("click", () => {
+    btnLimpiarNotas.addEventListener("click", async () => {
       if (confirm("¿Querés borrar todo el contenido del bloc de notas?")) {
-        notasTextarea.value = "";
-        guardarNotas(true);
+        try {
+          await PestalozziAPI.deleteNotaById(authToken, 1);
+          notasTextarea.value = "";
+          localStorage.removeItem(localNotasKey);
+          if (notasStatusPill) {
+            notasStatusPill.textContent = "Limpio";
+            notasStatusPill.className = "notas-status-pill";
+          }
+          if (notasLastSaved) {
+            notasLastSaved.textContent = "Notas eliminadas";
+          }
+          showAlert("Notas eliminadas correctamente.");
+        } catch (err) {
+          showAlert("Error al eliminar notas: " + err.message, true);
+        }
       }
     });
   }

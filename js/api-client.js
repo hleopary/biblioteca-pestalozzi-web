@@ -163,6 +163,13 @@ const PestalozziAPI = (function () {
         headers: { Authorization: `Bearer ${token}` },
         body: JSON.stringify({ contenido })
       });
+    },
+
+    async deleteNotaById(token, id = 1) {
+      return request(`/notas/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` }
+      });
     }
   };
 })();

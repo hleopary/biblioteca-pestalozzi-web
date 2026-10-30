@@ -39,11 +39,11 @@ function updateNotas(req, res, next) {
 
 function deleteNotaById(req, res, next) {
   try {
-    const id = req.params.id;
+    const id = parseInt(req.params.id, 10) || 1;
     db.prepare("DELETE FROM notas WHERE id = ?").run(id);
     res.json({
       ok: true,
-      mensaje: "Notas eliminadas correctamente."
+      mensaje: "Nota eliminada correctamente.",
     });
   } catch (err) {
     next(err);
