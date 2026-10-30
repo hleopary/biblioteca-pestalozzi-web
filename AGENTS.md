@@ -37,6 +37,11 @@ Este documento define las directrices, convenciones, arquitectura y restriccione
 6. **Actualización Obligatoria de CHANGELOG.md**:
    - Al concluir cualquier tarea, feature, corrección de diseño o ajuste técnico, se debe actualizar obligatoriamente el archivo `CHANGELOG.md` clasificando el cambio según el estándar [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) (en `[Sin publicar]` o versión correspondiente).
 
+7. **Regla de Ramas: Siempre Partir de `dev`**:
+   - Toda nueva funcionalidad (`feat/...`), corrección (`fix/...`) o tarea técnica **debe crearse obligatoriamente a partir de la rama `dev`**.
+   - **Nunca** se desarrolla directamente en `main` ni directamente en `dev`.
+   - El flujo es: `dev` ➔ `feat/nombre-tarea` ➔ PR/Merge a `dev` ➔ `main` para releases consolidados.
+
 ---
 
 ## 3. Estructura de Archivos
@@ -117,9 +122,10 @@ Todas las variables de diseño están centralizadas en el bloque `:root` de `css
 
 ## 6. Flujo de Trabajo en Git
 
-- **`main`**: Rama principal del proyecto.
+- **`main`**: Rama principal del proyecto (producción y entregas consolidadas).
+- **`dev`**: Rama troncal de desarrollo. **Todas las nuevas tareas nacen de aquí.**
+- **`feat/*`, `fix/*`, `chore/*`**: Ramas de trabajo individuales creadas obligatoriamente a partir de `dev`.
 - **`leopary_prueba2`**: Rama de despliegue activa en GitHub Pages.
-- **`leopary_prueba3` / ramas temáticas**: Ramas de trabajo para ajustes y nuevas funcionalidades.
 - **Mensajes de commit**: Seguir el estándar Conventional Commits en español:
   - `feat: ...` para nuevas funcionalidades.
   - `fix: ...` para corrección de errores.
