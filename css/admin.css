@@ -35,6 +35,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 /* Header */
@@ -122,7 +123,7 @@ body {
   font-size: 0.82rem;
 }
 
-/* Contenedor Principal Amplio */
+/* Contenedor Principal Amplio (100% disponible) */
 .admin-container {
   max-width: 1440px;
   width: 100%;
@@ -131,36 +132,141 @@ body {
   flex: 1;
 }
 
-/* Layout del Dashboard: Columna Principal + Sidebar de Notas */
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: 1fr 340px;
-  gap: 1.5rem;
-  align-items: start;
+/* Barra Superior del Dashboard: Tabs a la izquierda y Botón Notas comprimido a la derecha */
+.dashboard-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 2px solid var(--color-line);
+  margin-bottom: 1.5rem;
+  gap: 1rem;
 }
 
-@media (max-width: 1024px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
+/* Tabs: sin overflow que cause barras o flechas de scroll */
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: -2px; /* para unir con el borde inferior */
+  overflow: visible; /* Elimina flechas/scroll en navegadores */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  flex-wrap: wrap;
+}
+.tabs::-webkit-scrollbar {
+  display: none;
 }
 
-.dashboard-main {
-  min-width: 0; /* Evita que tablas rompan el grid */
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
-/* Sidebar / Card de Notas */
-.dashboard-sidebar {
-  position: sticky;
-  top: 1rem;
+.tab-btn:hover {
+  color: var(--color-primary);
 }
 
-.card-notas {
-  background: var(--color-surface);
+.tab-btn.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+/* Botón comprimido de Notas al lado de las tabs */
+.btn-notas-compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--color-surface);
+  color: var(--color-primary);
   border: 1px solid var(--color-line);
-  border-radius: var(--radius);
-  padding: 1.25rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  border-bottom: none;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius) var(--radius) 0 0;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-bottom: -2px;
+  transition: all 0.2s ease;
+  box-shadow: 0 -2px 4px rgba(0,0,0,0.03);
+}
+
+.btn-notas-compact:hover {
+  background-color: var(--color-bg-alt);
+}
+
+.badge-mini-sync {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  border-radius: 10px;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* Contenido Principal Expandido al 100% */
+.dashboard-main-full {
+  width: 100%;
+}
+
+.tab-content {
+  display: none;
+}
+.tab-content.active {
+  display: block;
+}
+
+/* ==========================================================================
+   Drawer / Panel Lateral Desplegable de Notas (QUEDA POR ARRIBA)
+   ========================================================================== */
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(28, 16, 8, 0.45);
+  z-index: 1040;
+  display: none;
+  backdrop-filter: blur(1px);
+}
+.drawer-overlay.is-open {
+  display: block;
+}
+
+.notas-drawer {
+  position: fixed;
+  top: 0;
+  right: -420px;
+  width: 390px;
+  max-width: 92vw;
+  height: 100vh;
+  background-color: var(--color-surface);
+  border-left: 3px solid var(--color-accent);
+  box-shadow: -8px 0 25px rgba(0, 0, 0, 0.2);
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
+  padding: 1.5rem;
+  visibility: hidden;
+}
+
+.notas-drawer.is-open {
+  right: 0;
+  visibility: visible;
+}
+
+.notas-drawer-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .notas-header {
@@ -168,18 +274,17 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
 }
 
 .notas-title-group {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
+  gap: 0.6rem;
 }
 
 .notas-title {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: var(--color-primary);
   font-weight: 700;
 }
@@ -197,25 +302,39 @@ body {
   color: #f57f17;
 }
 
+.btn-close-drawer {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 0.2rem;
+}
+.btn-close-drawer:hover {
+  color: var(--color-primary);
+}
+
 .notas-caption {
   font-size: 0.8rem;
   color: var(--color-text-muted);
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.9rem;
   line-height: 1.35;
 }
 
 .notas-textarea {
   width: 100%;
-  min-height: 420px;
-  padding: 0.8rem;
+  flex: 1;
+  min-height: 250px;
+  padding: 0.85rem;
   font-family: inherit;
-  font-size: 0.92rem;
-  line-height: 1.5;
+  font-size: 0.95rem;
+  line-height: 1.55;
   color: var(--color-text);
   background-color: #fffdf9;
   border: 1px solid var(--color-line);
   border-radius: var(--radius);
-  resize: vertical;
+  resize: none;
   transition: border-color 0.2s;
 }
 .notas-textarea:focus {
@@ -228,8 +347,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 0.6rem;
-  font-size: 0.78rem;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
 }
 
 .notas-meta {
@@ -240,7 +359,7 @@ body {
   background: none;
   border: none;
   color: var(--color-error);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   cursor: pointer;
   text-decoration: underline;
   padding: 0.2rem;
@@ -249,12 +368,9 @@ body {
   opacity: 0.8;
 }
 
-/* Login Card */
-.login-wrapper {
-  max-width: 420px;
-  margin: 4rem auto;
-}
-
+/* ==========================================================================
+   Tarjetas y Formularios Generales
+   ========================================================================== */
 .card {
   background: var(--color-surface);
   border: 1px solid var(--color-line);
@@ -299,51 +415,9 @@ body {
   border-color: transparent;
 }
 
-.form-control-sm {
-  padding: 0.4rem 0.65rem;
-  font-size: 0.85rem;
-}
-
-/* Tabs */
-.tabs {
-  display: flex;
-  gap: 0.5rem;
-  border-bottom: 2px solid var(--color-line);
-  margin-bottom: 1.25rem;
-  overflow-x: auto;
-}
-
-.tab-btn {
-  background: none;
-  border: none;
-  padding: 0.75rem 1.25rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--color-text-muted);
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-  margin-bottom: -2px;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.tab-btn:hover {
-  color: var(--color-primary);
-}
-
-.tab-btn.active {
-  color: var(--color-primary);
-  border-bottom-color: var(--color-primary);
-}
-
-.tab-content {
-  display: none;
-}
-.tab-content.active {
-  display: block;
-}
-
-/* Horarios Editor */
+/* ==========================================================================
+   Tab 1: Horarios Editor
+   ========================================================================== */
 .horarios-editor {
   display: grid;
   gap: 0.8rem;
@@ -380,25 +454,35 @@ body {
   cursor: pointer;
 }
 
-/* Barra de Herramientas de Visitas */
+/* ==========================================================================
+   Tab 2: Visitas Escolares - Rediseño Total UX / UI
+   ========================================================================== */
 .visitas-toolbar {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
   margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-line);
+  padding-bottom: 1rem;
 }
 
 .visitas-filters {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.75rem;
   flex-wrap: wrap;
 }
 
-/* Tabla de Visitas Optimizada y Espaciosa */
+.visitas-filters .form-control {
+  padding: 0.45rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+/* Tabla 100% Fluida y sin Scroll Horizontal en Desktop */
 .table-responsive {
+  width: 100%;
   overflow-x: auto;
   background: var(--color-surface);
   border: 1px solid var(--color-line);
@@ -408,52 +492,85 @@ body {
 
 .visitas-table {
   width: 100%;
-  min-width: 860px;
   border-collapse: collapse;
-  font-size: 0.88rem;
+  font-size: 0.9rem;
+  table-layout: auto;
 }
 
 .visitas-table th {
   background-color: var(--color-bg-alt);
   font-weight: 700;
   color: var(--color-primary);
-  padding: 0.85rem 1rem;
+  padding: 0.9rem 1.1rem;
   text-align: left;
   border-bottom: 2px solid var(--color-line);
   white-space: nowrap;
 }
 
 .visitas-table td {
-  padding: 0.85rem 1rem;
-  border-bottom: 1px solid #f0e6d6;
+  padding: 0.95rem 1.1rem;
+  border-bottom: 1px solid #f2e9dc;
   vertical-align: middle;
 }
 
 .visitas-table tr:hover {
-  background-color: #fdfaf4;
+  background-color: #faf5ee;
 }
 
+/* Columna Fecha y Turno */
+.col-fecha {
+  white-space: nowrap;
+}
+.fecha-main {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  display: block;
+}
+.badge-turno {
+  display: inline-block;
+  font-size: 0.72rem;
+  padding: 0.15rem 0.45rem;
+  background-color: var(--color-bg-alt);
+  color: var(--color-text-muted);
+  border-radius: 4px;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+
+/* Columna Institución */
 .inst-title {
   font-weight: 700;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.inst-sub {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  display: block;
+  margin-top: 0.2rem;
+}
+
+/* Columna Docente y Contacto */
+.doc-name {
+  font-weight: 600;
   color: var(--color-text);
   font-size: 0.92rem;
 }
 
-.inst-sub {
-  font-size: 0.78rem;
-  color: var(--color-text-muted);
-  display: block;
-  margin-top: 0.15rem;
-}
-
-.doc-name {
-  font-weight: 600;
+.contact-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.8rem;
+  align-items: center;
+  margin-top: 0.2rem;
 }
 
 .contact-link {
   color: var(--color-primary);
   text-decoration: none;
-  display: block;
   font-size: 0.82rem;
 }
 .contact-link:hover {
@@ -461,60 +578,19 @@ body {
 }
 
 .contact-tel {
-  font-size: 0.8rem;
-  color: var(--color-text-muted);
-}
-
-.alumnos-badge {
-  display: inline-block;
-  padding: 0.2rem 0.55rem;
-  background: var(--color-bg-alt);
-  color: var(--color-text);
-  border-radius: 4px;
-  font-weight: 700;
-  font-size: 0.85rem;
-}
-
-.actions-group {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.select-estado {
-  width: 115px;
-  padding: 0.35rem 0.5rem;
   font-size: 0.82rem;
-  font-weight: 600;
-  border-radius: var(--radius);
-  border: 1px solid var(--color-line);
-  background-color: #fff;
-  cursor: pointer;
-}
-
-.btn-ver-obs {
-  background: none;
-  border: 1px solid var(--color-line);
-  border-radius: var(--radius);
-  padding: 0.32rem 0.5rem;
-  font-size: 0.78rem;
-  cursor: pointer;
-  color: var(--color-primary);
-  background-color: #fff;
-}
-.btn-ver-obs:hover {
-  background-color: var(--color-bg-alt);
+  color: var(--color-text-muted);
 }
 
 /* Badges de Estado */
 .badge {
   display: inline-block;
-  padding: 0.25rem 0.6rem;
+  padding: 0.3rem 0.65rem;
   font-size: 0.74rem;
   font-weight: 700;
   border-radius: 4px;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
   white-space: nowrap;
 }
 
@@ -539,7 +615,41 @@ body {
   border: 1px solid #d6d8db;
 }
 
-/* Novedades */
+/* Acciones */
+.actions-group {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
+.select-estado {
+  width: 120px;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-line);
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.btn-icon-action {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  padding: 0.32rem 0.5rem;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.btn-icon-action:hover {
+  background-color: var(--color-bg-alt);
+}
+
+/* ==========================================================================
+   Tab 3: Novedades
+   ========================================================================== */
 .novedades-grid {
   display: grid;
   gap: 1rem;
@@ -550,14 +660,16 @@ body {
   background: var(--color-surface);
   border: 1px solid var(--color-line);
   border-radius: var(--radius);
-  padding: 1rem 1.25rem;
+  padding: 1.1rem 1.35rem;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 1rem;
 }
 
-/* Modales */
+/* ==========================================================================
+   Modales (Perfil y Detalle Visita)
+   ========================================================================== */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -567,7 +679,7 @@ body {
   background-color: rgba(28, 16, 8, 0.55);
   display: none;
   place-items: center;
-  z-index: 1000;
+  z-index: 2000;
   padding: 1rem;
 }
 .modal-overlay.is-open {
@@ -582,7 +694,7 @@ body {
   width: 100%;
   padding: 1.75rem;
   position: relative;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   animation: modalFadeIn 0.2s ease-out;
 }
 

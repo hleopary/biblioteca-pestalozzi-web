@@ -289,7 +289,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (filtradas.length === 0) {
       visitasTableBody.innerHTML = `
-        <tr><td colspan="8" style="text-align: center; color: var(--color-text-muted); padding: 2.5rem;">
+        <tr><td colspan="6" style="text-align: center; color: var(--color-text-muted); padding: 2.5rem;">
           No se encontraron solicitudes con los filtros aplicados.
         </td></tr>
       `;
@@ -301,24 +301,26 @@ document.addEventListener("DOMContentLoaded", () => {
     filtradas.forEach((v) => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td style="font-weight: 700; white-space: nowrap;">${v.fecha_preferida}</td>
+        <td class="col-fecha">
+          <span class="fecha-main">${v.fecha_preferida}</span>
+          <span class="badge-turno">${v.turno}</span>
+        </td>
         <td>
           <div class="inst-title">${v.institucion}</div>
           <span class="inst-sub">Nivel: ${v.nivel}</span>
         </td>
         <td>
           <div class="doc-name">${v.responsable}</div>
-        </td>
-        <td>
-          <a href="mailto:${v.email}" class="contact-link">${v.email}</a>
-          <span class="contact-tel">📞 ${v.telefono}</span>
+          <div style="margin-top: 0.25rem;">
+            <a href="mailto:${v.email}" class="contact-link">${v.email}</a>
+            <span class="contact-tel">📞 ${v.telefono}</span>
+          </div>
         </td>
         <td style="text-align: center;">
           <span class="alumnos-badge">${v.alumnos_cant}</span>
         </td>
-        <td style="white-space: nowrap;">${v.turno}</td>
         <td>
-          <span class="badge badge-${v.estado}">${v.estado}</span>
+          <span class="badge badge-${v.estado}">${v.estado.toUpperCase()}</span>
         </td>
         <td>
           <div class="actions-group">
@@ -498,13 +500,68 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ------------------------------------------------------------------------
-     4. Bloc de Notas Lateral de Betsabé
+     4. Bloc de Notas Lateral de Betsabé (Drawer Flotante por arriba)
      ------------------------------------------------------------------------ */
   const notasTextarea = document.getElementById("admin-notas-textarea");
   const btnLimpiarNotas = document.getElementById("btn-limpiar-notas");
   const notasStatusPill = document.getElementById("notas-status-pill");
+  const notasMiniSync = document.getElementById("notas-mini-sync");
   const notasLastSaved = document.getElementById("notas-last-saved");
+  const btnToggleNotas = document.getElementById("btn-toggle-notas");
+  const btnCloseNotas = document.getElementById("btn-close-notas");
+  const drawerNotas = document.getElementById("drawer-notas");
+  const drawerOverlay = document.getElementById("drawer-notas-overlay");
   let autoSaveTimeout = null;
+
+  function abrirDrawerNotas() {
+    if (drawerNotas && drawerOverlay) {
+      drawerNotas.classList.add("is-open");
+      drawerOverlay.classList.add("is-open");
+      if (notasTextarea) {
+        setTimeout(() => notasTextarea.focus(), 150);
+      }
+    }
+  }
+
+  function cerrarDrawerNotas() {
+    if (drawerNotas && drawerOverlay) {
+      drawerNotas.classList.remove("is-open");
+      drawerOverlay.classList.remove("is-open");
+    }
+  }
+
+  if (btnToggleNotas) {
+    btnToggleNotas.addEventListener("click", abrirDrawerNotas);
+  }
+  if (btnCloseNotas) {
+    btnCloseNotas.addEventListener("click", cerrarDrawerNotas);
+  }
+  if (drawerOverlay) {
+    drawerOverlay.addEventListener("click", cerrarDrawerNotas);
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && drawerNotas && drawerNotas.classList.contains("is-open")) {
+      cerrarDrawerNotas();
+    }
+  });
+
+  function actualizarBadgesNotas(texto, clase = "") {
+    if (notasStatusPill) {
+      notasStatusPill.textContent = texto;
+      notasStatusPill.className = "notas-status-pill " + clase;
+    }
+    if (notasMiniSync) {
+      notasMiniSync.textContent = texto;
+      if (clase === "saving") {
+        notasMiniSync.style.backgroundColor = "#fff3e0";
+        notasMiniSync.style.color = "#e65100";
+      } else {
+        notasMiniSync.style.backgroundColor = "#e8f5e9";
+        notasMiniSync.style.color = "#2e7d32";
+      }
+    }
+  }
 
   async function loadNotas() {
     if (!notasTextarea) return;
@@ -535,17 +592,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const contenido = notasTextarea.value;
     localStorage.setItem(localNotasKey, contenido);
 
-    if (notasStatusPill) {
-      notasStatusPill.textContent = "Guardando...";
-      notasStatusPill.className = "notas-status-pill saving";
-    }
+    actualizarBadgesNotas("Guardando...", "saving");
 
     try {
-      const res = await PestalozziAPI.updateNotas(authToken, contenido);
-      if (notasStatusPill) {
-        notasStatusPill.textContent = "Sincronizado";
-        notasStatusPill.className = "notas-status-pill";
-      }
+      await PestalozziAPI.updateNotas(authToken, contenido);
+      actualizarBadgesNotas("Sincronizado");
       if (notasLastSaved) {
         const date = new Date();
         notasLastSaved.textContent = `Guardado: ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
@@ -554,19 +605,13 @@ document.addEventListener("DOMContentLoaded", () => {
         showAlert("Notas guardadas.");
       }
     } catch (err) {
-      if (notasStatusPill) {
-        notasStatusPill.textContent = "Guardado local";
-        notasStatusPill.className = "notas-status-pill";
-      }
+      actualizarBadgesNotas("Guardado local");
     }
   }
 
   if (notasTextarea) {
     notasTextarea.addEventListener("input", () => {
-      if (notasStatusPill) {
-        notasStatusPill.textContent = "Modificado...";
-        notasStatusPill.className = "notas-status-pill saving";
-      }
+      actualizarBadgesNotas("Modificado...", "saving");
       clearTimeout(autoSaveTimeout);
       autoSaveTimeout = setTimeout(() => {
         guardarNotas(false);
@@ -581,10 +626,7 @@ document.addEventListener("DOMContentLoaded", () => {
           await PestalozziAPI.deleteNotaById(authToken, 1);
           notasTextarea.value = "";
           localStorage.removeItem(localNotasKey);
-          if (notasStatusPill) {
-            notasStatusPill.textContent = "Limpio";
-            notasStatusPill.className = "notas-status-pill";
-          }
+          actualizarBadgesNotas("Limpio");
           if (notasLastSaved) {
             notasLastSaved.textContent = "Notas eliminadas";
           }

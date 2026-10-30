@@ -32,7 +32,8 @@ function seedDatabase() {
       { orden: 3, dia: "Miércoles", horario: "10:00 – 12:00", activo: 1 },
       { orden: 4, dia: "Jueves", horario: "Cerrado", activo: 0 },
       { orden: 5, dia: "Viernes", horario: "Cerrado", activo: 0 },
-      { orden: 6, dia: "Sábado", horario: "Cerrado", activo: 0 }
+      { orden: 6, dia: "Sábado", horario: "Cerrado", activo: 0 },
+      { orden: 7, dia: "Domingo", horario: "Cerrado", activo: 0}
     ];
 
     const insertHorario = db.prepare(`

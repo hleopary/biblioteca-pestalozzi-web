@@ -20,9 +20,11 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
   - Endpoints CRUD para novedades institucionales (`/api/novedades`).
   - Endpoints para guardado, recuperación y eliminación de notas de la bibliotecaria (`/api/notas` con soporte `DELETE /api/notas/:id`).
 - **Panel de Gestión Interna (`admin.html`)**:
-  - Incorporación de bloc lateral de **"Notas Rápidas"** para anotaciones de Betsabé con auto-guardado en base de datos SQLite, respaldo local y botón de limpieza con `deleteNotaById`.
+  - Incorporación de bloc lateral de **"Notas Rápidas"** en formato **Drawer Flotante Superpuesto** (panel desplegable por arriba con fondo oscurecido), accesible desde un botón comprimido al lado de la barra de pestañas, con auto-guardado en base de datos SQLite, respaldo local y botón de limpieza con `deleteNotaById`.
+  - Expansión de las vistas de contenidos (Horarios, Visitas y Novedades) al 100% de ancho del panel principal, eliminando restricciones de columnas fijas.
+  - Rediseño y optimización total de la tabla de **Solicitudes de Visitas Escolares**: 6 columnas fluidas y agrupadas (Fecha & Turno, Institución & Nivel, Docente & Contacto, Alumnos, Estado y Acciones), erradicando desplazamientos horizontales forzados en pantallas de escritorio.
+  - Supresión de barras de scroll y flechas no deseadas en la barra de navegación de pestañas (`.tabs`).
   - Reubicación de **"Perfil y Seguridad"** a un acceso directo en la barra de navegación superior (navbar) mediante modal interactivo.
-  - Rediseño y optimización de la tabla de **Solicitudes de Visitas Escolares**: estructura ancha y holgada, buscador en tiempo real, selector de estado con ancho óptimo, eliminación de solicitudes y modal para ver observaciones completas.
   - Estilos dedicados en `css/admin.css` y lógica interactiva en `js/admin.js`.
 - **Integración en Frontend**:
   - Cliente HTTP modular `js/api-client.js` con detección automática de entorno.
