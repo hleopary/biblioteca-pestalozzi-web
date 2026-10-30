@@ -42,19 +42,31 @@ Este documento define las directrices, convenciones, arquitectura y restriccione
    - **Nunca** se desarrolla directamente en `main` ni directamente en `dev`.
    - El flujo es: `dev` ➔ `feat/nombre-tarea` ➔ PR/Merge a `dev` ➔ `main` para releases consolidados.
 
+8. **Consulta y Explicación Previa ante Decisiones Técnicas o Dudas de Diseño**:
+   - Ante cualquier solicitud que añada endpoints, modifique esquemas de base de datos o impacte sobre un patrón arquitectónico ya establecido (por ejemplo, sincronización de estado, métodos HTTP o persistencia), el agente **debe explicar primero al desarrollador el por qué del diseño técnico actual y consultar antes de implementar a ciegas**. Nunca asumir ni ejecutar cambios estructurales sin validar previamente el criterio con el desarrollador.
+
 ---
 
 ## 3. Estructura de Archivos
 
 ```
 biblioteca-pestalozzi-web/
-├── index.html              # Estructura semántica completa (Landing)
+├── index.html              # Estructura semántica completa (Landing pública)
+├── admin.html              # Panel de gestión interna para la bibliotecaria
 ├── css/
-│   └── styles.css          # Variables CSS, diseño mobile-first y componentes
+│   ├── styles.css          # Variables CSS, diseño mobile-first y componentes
+│   └── admin.css           # Estilos dedicados para el panel de administración
 ├── js/
-│   └── main.js             # Modo estricto, menú móvil y validación de formulario
+│   ├── main.js             # Menú móvil, validación de formulario y carga dinámica
+│   ├── api-client.js       # Cliente HTTP REST modular para comunicación con la API
+│   └── admin.js            # Lógica interactiva del panel de gestión interna
 ├── assets/
 │   └── img/                # Fotografías e imágenes del acervo (.avif)
+├── backend/                # Servidor API REST Node.js + Express con SQLite
+│   ├── server.js           # Punto de entrada y configuración de Express
+│   ├── package.json        # Dependencias backend (sin afectar el frontend estático)
+│   ├── data/               # Directorio de la base de datos (pestalozzi.db)
+│   └── src/                # Controladores, rutas, servicios y configuración DB
 ├── adr/                    # Registro de Decisiones de Arquitectura (ADRs)
 │   ├── README.md           # Índice de decisiones arquitectónicas
 │   └── XXXX-titulo.md      # Registros individuales numerados
