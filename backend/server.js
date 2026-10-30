@@ -49,14 +49,16 @@ app.use(express.static(frontendPath));
 // Manejo centralizado de errores
 app.use(errorHandler);
 
-// Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`====================================================`);
-  console.log(`  Biblioteca Popular Pestalozzi - Servidor Activo`);
-  console.log(`  API disponible en: http://localhost:${PORT}/api/health`);
-  console.log(`  Sitio web público: http://localhost:${PORT}/index.html`);
-  console.log(`  Panel Betsabé:     http://localhost:${PORT}/admin.html`);
-  console.log(`====================================================`);
-});
+// Iniciar servidor solo si se ejecuta directamente
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`====================================================`);
+    console.log(`  Biblioteca Popular Pestalozzi - Servidor Activo`);
+    console.log(`  API disponible en: http://localhost:${PORT}/api/health`);
+    console.log(`  Sitio web público: http://localhost:${PORT}/index.html`);
+    console.log(`  Panel Betsabé:     http://localhost:${PORT}/admin.html`);
+    console.log(`====================================================`);
+  });
+}
 
 module.exports = app;

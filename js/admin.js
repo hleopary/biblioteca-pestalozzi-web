@@ -501,7 +501,6 @@ document.addEventListener("DOMContentLoaded", () => {
      4. Bloc de Notas Lateral de Betsabé
      ------------------------------------------------------------------------ */
   const notasTextarea = document.getElementById("admin-notas-textarea");
-  const btnGuardarNotas = document.getElementById("btn-guardar-notas");
   const btnLimpiarNotas = document.getElementById("btn-limpiar-notas");
   const notasStatusPill = document.getElementById("notas-status-pill");
   const notasLastSaved = document.getElementById("notas-last-saved");
@@ -573,10 +572,6 @@ document.addEventListener("DOMContentLoaded", () => {
         guardarNotas(false);
       }, 900);
     });
-  }
-
-  if (btnGuardarNotas) {
-    btnGuardarNotas.addEventListener("click", () => guardarNotas(true));
   }
 
   if (btnLimpiarNotas) {
