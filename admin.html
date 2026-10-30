@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión Interna — Biblioteca Popular Pestalozzi</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- Encabezado del Panel -->
+  <header class="admin-header">
+    <div class="admin-header-inner">
+      <div class="admin-brand">
+        <h1>Biblioteca Popular Pestalozzi</h1>
+        <span>Panel de Gestión Interna</span>
+      </div>
+      <div class="admin-actions">
+        <a href="index.html" class="btn btn-secondary btn-sm" target="_blank">Ver Sitio Público ↗</a>
+        <button id="btn-logout" class="btn btn-danger btn-sm" style="display: none;">Cerrar Sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-container">
+    <!-- Alertas globales -->
+    <div id="admin-alert" class="alert" role="alert"></div>
+
+    <!-- 1. Pantalla de Login (visible si no hay sesión) -->
+    <section id="login-section" class="login-wrapper">
+      <div class="card">
+        <h2 class="card-title">Acceso a Administración</h2>
+        <p class="card-lead">Ingresá tus credenciales para actualizar horarios, novedades y solicitudes.</p>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label for="username">Usuario</label>
+            <input type="text" id="username" class="form-control" placeholder="Ej: betsabe" required autofocus>
+          </div>
+          <div class="form-group">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 0.5rem;">
+            Ingresar al Panel
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 2. Panel Principal (visible tras autenticarse) -->
+    <section id="dashboard-section" style="display: none;">
+      <nav class="tabs" role="tablist">
+        <button class="tab-btn active" data-tab="tab-horarios" role="tab" aria-selected="true">
+          🗓️ Horarios Cuatrimestrales
+        </button>
+        <button class="tab-btn" data-tab="tab-visitas" role="tab" aria-selected="false">
+          🎒 Visitas Escolares (<span id="count-visitas-badge">0</span>)
+        </button>
+        <button class="tab-btn" data-tab="tab-novedades" role="tab" aria-selected="false">
+          📰 Novedades de la Biblioteca
+        </button>
+        <button class="tab-btn" data-tab="tab-seguridad" role="tab" aria-selected="false">
+          🔒 Seguridad / Clave
+        </button>
+      </nav>
+
+      <!-- Pestaña 1: Horarios Cuatrimestrales -->
+      <div id="tab-horarios" class="tab-content active" role="tabpanel">
+        <div class="card">
+          <h2 class="card-title">Actualizar Cartelera de Atención</h2>
+          <p class="card-lead">
+            Modificá los días y turnos de atención para el cuatrimestre vigente. Los cambios impactan de inmediato en la web pública.
+          </p>
+
+          <form id="horarios-form">
+            <div id="horarios-editor-container" class="horarios-editor">
+              <p>Cargando horarios actuales...</p>
+            </div>
+
+            <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+              <button type="submit" class="btn btn-primary">
+                Guardar Horarios Cuatrimestrales
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Pestaña 2: Visitas Escolares -->
+      <div id="tab-visitas" class="tab-content" role="tabpanel">
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+            <div>
+              <h2 class="card-title">Solicitudes de Visitas Escolares</h2>
+              <p class="card-lead" style="margin-bottom: 0;">Consultá y gestioná los turnos pedidos por docentes y escuelas.</p>
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <label for="filtro-estado-visitas" style="font-size: 0.85rem; font-weight: 600;">Filtrar:</label>
+              <select id="filtro-estado-visitas" class="form-control" style="width: auto; padding: 0.4rem 0.6rem;">
+                <option value="">Todas</option>
+                <option value="pendiente">Pendientes</option>
+                <option value="confirmada">Confirmadas</option>
+                <option value="realizada">Realizadas</option>
+                <option value="rechazada">Rechazadas</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table id="visitas-table">
+              <thead>
+                <tr>
+                  <th>Fecha Solicitada</th>
+                  <th>Institución</th>
+                  <th>Docente</th>
+                  <th>Contacto</th>
+                  <th>Alumnos</th>
+                  <th>Turno</th>
+                  <th>Estado</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="visitas-table-body">
+                <tr>
+                  <td colspan="8" style="text-align: center; color: var(--color-text-muted);">Cargando solicitudes...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pestaña 3: Novedades -->
+      <div id="tab-novedades" class="tab-content" role="tabpanel">
+        <div class="card" style="margin-bottom: 1.5rem;">
+          <h2 class="card-title">Publicar Nueva Novedad</h2>
+          <p class="card-lead">Se mostrarán en la página principal las 3 novedades activas más recientes.</p>
+
+          <form id="novedad-form">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+              <div class="form-group">
+                <label for="nov-categoria">Categoría (Etiqueta)</label>
+                <input type="text" id="nov-categoria" class="form-control" placeholder="Ej: Donación, Taller, Novedad" required>
+              </div>
+              <div class="form-group">
+                <label for="nov-color">Color de Etiqueta</label>
+                <select id="nov-color" class="form-control">
+                  <option value="#8b5e2b">Dorado Tostado (#8b5e2b)</option>
+                  <option value="#6b1d2b">Borravino (#6b1d2b)</option>
+                  <option value="#3d5a3e">Verde (#3d5a3e)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="nov-fecha">Mes / Año visible</label>
+                <input type="text" id="nov-fecha" class="form-control" placeholder="Ej: Noviembre 2026" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="nov-titulo">Título de la noticia</label>
+              <input type="text" id="nov-titulo" class="form-control" placeholder="Ej: Incorporación de 50 libros infantiles" required>
+            </div>
+
+            <div class="form-group">
+              <label for="nov-desc">Descripción o resumen</label>
+              <textarea id="nov-desc" class="form-control" rows="3" placeholder="Detalle informativo de la novedad..." required></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end;">
+              <button type="submit" class="btn btn-primary">Agregar Novedad</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title" style="font-size: 1.1rem;">Novedades Registradas</h3>
+          <div id="novedades-list-container" class="novedades-grid">
+            <p>Cargando novedades...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pestaña 4: Seguridad -->
+      <div id="tab-seguridad" class="tab-content" role="tabpanel">
+        <div class="card" style="max-width: 500px;">
+          <h2 class="card-title">Cambiar Contraseña de Acceso</h2>
+          <p class="card-lead">Actualizá la clave para el usuario administrador de Betsabé.</p>
+
+          <form id="password-form">
+            <div class="form-group">
+              <label for="pass-actual">Contraseña Actual</label>
+              <input type="password" id="pass-actual" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="pass-nueva">Nueva Contraseña (mínimo 6 caracteres)</label>
+              <input type="password" id="pass-nueva" class="form-control" minlength="6" required>
+            </div>
+            <div class="form-group">
+              <label for="pass-confirmar">Confirmar Nueva Contraseña</label>
+              <input type="password" id="pass-confirmar" class="form-control" minlength="6" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem;">
+              Actualizar Contraseña
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="admin-footer">
+    <p>Biblioteca Popular Pestalozzi &middot; Berisso, Buenos Aires &middot; Grupo Clouds (IFTS29)</p>
+  </footer>
+
+  <script src="js/api-client.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
