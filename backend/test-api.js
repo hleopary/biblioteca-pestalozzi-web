@@ -187,6 +187,33 @@ server.listen(PORT, async () => {
     if (!resDel.ok) throw new Error(`Error en DELETE HTTP ${resDel.status}`);
   });
 
+  // 11. Reordenar Novedades
+  await test("PUT /api/novedades/reordenar actualiza el orden de las publicaciones", async () => {
+    const resGet = await fetch(`${baseUrl}/novedades/admin`, {
+      headers: { Authorization: `Bearer ${authToken}` }
+    });
+    const { data: novs } = await resGet.json();
+    if (!novs || novs.length < 2) throw new Error("Se necesitan al menos 2 novedades para probar reordenar");
+
+    const nuevoOrden = [novs[1].id, novs[0].id, ...novs.slice(2).map(n => n.id)];
+
+    const resReorder = await fetch(`${baseUrl}/novedades/reordenar`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`
+      },
+      body: JSON.stringify({ ordenIds: nuevoOrden })
+    });
+
+    if (!resReorder.ok) throw new Error(`Error reordenar HTTP ${resReorder.status}`);
+    const resAfter = await fetch(`${baseUrl}/novedades/admin`, {
+      headers: { Authorization: `Bearer ${authToken}` }
+    });
+    const { data: novsAfter } = await resAfter.json();
+    if (novsAfter[0].id !== novs[1].id) throw new Error("El orden no se persistió correctamente");
+  });
+
   // 11. Bloc de Notas
   await test("PUT y GET /api/notas guardan y recuperan notas de Betsabé", async () => {
     const textoNota = "Llamar a la Escuela 12 el lunes a las 10hs para confirmar visita.";

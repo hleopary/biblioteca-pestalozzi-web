@@ -66,10 +66,29 @@
             📰 Novedades de la Biblioteca
           </button>
         </nav>
-        <button id="btn-toggle-notas" class="btn-notas-compact" type="button" title="Abrir bloc de notas personal">
-          <span>📝 Notas</span>
-          <span id="notas-mini-sync" class="badge-mini-sync">Sincronizado</span>
-        </button>
+        <div class="notas-dropdown-wrapper">
+          <button id="btn-toggle-notas" class="btn-notas-compact" type="button" aria-expanded="false" title="Abrir bloc de notas personal">
+            <span>📝 Notas</span>
+            <span id="notas-mini-sync" class="badge-mini-sync">Sincronizado</span>
+          </button>
+
+          <!-- Popover desplegado justo debajo del botón (coincide con el recuadro rojo) -->
+          <div id="notas-popover" class="notas-popover" aria-labelledby="notas-popover-title">
+            <div class="notas-header">
+              <div class="notas-title-group">
+                <h3 id="notas-popover-title" class="notas-title">📝 Notas Personales</h3>
+                <span id="notas-status-pill" class="notas-status-pill">Sincronizado</span>
+              </div>
+              <button id="btn-close-notas" class="modal-close" type="button" aria-label="Cerrar notas">&times;</button>
+            </div>
+            <p class="notas-caption">Bloc personal para recordatorios, llamadas o pendientes. Se autoguarda al escribir y sincroniza con el servidor.</p>
+            <textarea id="admin-notas-textarea" class="notas-textarea" placeholder="Escribí acá tus notas, pendientes o teléfonos..."></textarea>
+            <div class="notas-footer">
+              <span id="notas-last-saved" class="notas-meta">Última actualización: --</span>
+              <button id="btn-limpiar-notas" class="btn-clean-notas" type="button">Limpiar notas</button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Vistas de las Pestañas al 100% de Ancho -->
@@ -191,26 +210,26 @@
       </div>
     </section>
 
-    <!-- Drawer Flotante de Notas (QUEDA POR ARRIBA DE TODO) -->
-    <div id="drawer-notas-overlay" class="drawer-overlay"></div>
-    <aside id="drawer-notas" class="notas-drawer" aria-labelledby="drawer-notas-title">
-      <div class="notas-drawer-card">
-        <div class="notas-header">
-          <div class="notas-title-group">
-            <h3 id="drawer-notas-title" class="notas-title">📝 Notas Personales</h3>
-            <span id="notas-status-pill" class="notas-status-pill">Sincronizado</span>
-          </div>
-          <button id="btn-close-notas" class="modal-close" type="button" aria-label="Cerrar notas">&times;</button>
-        </div>
-        <p class="notas-caption">Bloc personal para recordatorios, llamadas a docentes o pendientes. Se autoguarda al escribir y sincroniza con el servidor.</p>
-        <textarea id="admin-notas-textarea" class="notas-textarea" placeholder="Escribí acá tus notas, pendientes o teléfonos..."></textarea>
-        <div class="notas-footer">
-          <span id="notas-last-saved" class="notas-meta">Última actualización: --</span>
-          <button id="btn-limpiar-notas" class="btn-clean-notas" type="button">Limpiar notas</button>
-        </div>
-      </div>
-    </aside>
   </main>
+
+  <!-- Modal Institucional: Confirmación de Eliminación -->
+  <div id="modal-confirm" class="modal-overlay" role="dialog" aria-labelledby="modal-confirm-title" aria-modal="true">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 id="modal-confirm-title" style="color: var(--color-error); display: flex; align-items: center; gap: 0.5rem; font-size: 1.15rem;">
+          ⚠️ Confirmar Eliminación
+        </h3>
+        <button id="btn-modal-confirm-close" class="modal-close" type="button" aria-label="Cerrar modal">&times;</button>
+      </div>
+      <p id="modal-confirm-msg" style="margin: 1.25rem 0; font-size: 0.95rem; color: var(--color-text); line-height: 1.5;">
+        ¿Estás seguro de que deseás eliminar este elemento? Esta acción no se puede deshacer.
+      </p>
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+        <button id="btn-modal-confirm-cancel" type="button" class="btn btn-secondary">Cancelar</button>
+        <button id="btn-modal-confirm-ok" type="button" class="btn btn-danger">Eliminar Definitivamente</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Modal: Mi Perfil / Seguridad -->
   <div id="modal-perfil" class="modal-overlay" role="dialog" aria-labelledby="modal-perfil-title" aria-modal="true">

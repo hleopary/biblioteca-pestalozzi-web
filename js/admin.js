@@ -25,6 +25,34 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnCloseModalVisita = document.getElementById("btn-close-modal-visita");
   const btnCerrarDetalle = document.getElementById("btn-cerrar-detalle");
 
+  // Modal Institucional de Confirmación de Eliminación
+  const modalConfirm = document.getElementById("modal-confirm");
+  const modalConfirmMsg = document.getElementById("modal-confirm-msg");
+  const btnModalConfirmOk = document.getElementById("btn-modal-confirm-ok");
+  const btnModalConfirmCancel = document.getElementById("btn-modal-confirm-cancel");
+  const btnModalConfirmClose = document.getElementById("btn-modal-confirm-close");
+  let confirmResolve = null;
+
+  function pedirConfirmacion(mensaje) {
+    return new Promise((resolve) => {
+      confirmResolve = resolve;
+      if (modalConfirmMsg) modalConfirmMsg.textContent = mensaje;
+      if (modalConfirm) modalConfirm.classList.add("is-open");
+    });
+  }
+
+  function cerrarModalConfirm(resultado) {
+    if (modalConfirm) modalConfirm.classList.remove("is-open");
+    if (confirmResolve) {
+      confirmResolve(resultado);
+      confirmResolve = null;
+    }
+  }
+
+  if (btnModalConfirmOk) btnModalConfirmOk.addEventListener("click", () => cerrarModalConfirm(true));
+  if (btnModalConfirmCancel) btnModalConfirmCancel.addEventListener("click", () => cerrarModalConfirm(false));
+  if (btnModalConfirmClose) btnModalConfirmClose.addEventListener("click", () => cerrarModalConfirm(false));
+
   function showAlert(message, isError = false) {
     if (!alertBox) return;
     alertBox.textContent = message;
@@ -331,7 +359,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <option value="rechazada" ${v.estado === "rechazada" ? "selected" : ""}>Rechazar</option>
             </select>
             <button class="btn-ver-obs" data-id="${v.id}" title="Ver observaciones y datos completos">👁️</button>
-            <button class="btn-ver-obs btn-del-visita" data-id="${v.id}" title="Eliminar solicitud" style="color: var(--color-error);">🗑️</button>
+            <button class="btn-eliminar-visita" data-id="${v.id}" title="Eliminar solicitud" style="color: var(--color-error);">🗑️</button>
           </div>
         </td>
       `;
@@ -356,19 +384,20 @@ document.addEventListener("DOMContentLoaded", () => {
         abrirModalDetalleVisita(v);
       });
 
-      // Evento de eliminar visita
-      const btnDel = tr.querySelector(".btn-del-visita");
+      // Evento de eliminar visita con confirmación institucional
+      const btnDel = tr.querySelector(".btn-eliminar-visita");
       btnDel.addEventListener("click", async () => {
-        if (confirm(`¿Seguro que deseás eliminar la solicitud de "${v.institucion}"?`)) {
-          try {
-            await PestalozziAPI.deleteVisita(authToken, v.id);
-            showAlert("Solicitud eliminada correctamente.");
-            allVisitas = allVisitas.filter(item => item.id !== v.id);
-            if (badgeCountVisitas) badgeCountVisitas.textContent = allVisitas.length;
-            renderVisitas();
-          } catch (err) {
-            showAlert("Error al eliminar solicitud: " + err.message, true);
-          }
+        const confirmed = await pedirConfirmacion(`¿Seguro que deseás eliminar la solicitud de "${v.institucion}" (${v.fecha_preferida})?`);
+        if (!confirmed) return;
+
+        try {
+          await PestalozziAPI.deleteVisita(authToken, v.id);
+          showAlert("Solicitud eliminada correctamente.");
+          allVisitas = allVisitas.filter(item => item.id !== v.id);
+          if (badgeCountVisitas) badgeCountVisitas.textContent = allVisitas.length;
+          renderVisitas();
+        } catch (err) {
+          showAlert("Error al eliminar solicitud: " + err.message, true);
         }
       });
 
@@ -428,6 +457,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const novedadForm = document.getElementById("novedad-form");
   const novedadesContainer = document.getElementById("novedades-list-container");
 
+  let draggedNovedadItem = null;
+
   async function loadNovedades() {
     if (!novedadesContainer) return;
     try {
@@ -444,29 +475,92 @@ document.addEventListener("DOMContentLoaded", () => {
       novedades.forEach((n) => {
         const item = document.createElement("div");
         item.className = "novedad-item";
+        item.setAttribute("draggable", "true");
+        item.setAttribute("data-id", n.id);
         item.innerHTML = `
-          <div>
-            <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.35rem;">
-              <span class="badge" style="background-color: ${n.categoria_color}; color: #fff;">${n.categoria}</span>
-              <small style="color: var(--color-text-muted);">${n.fecha_texto}</small>
+          <div style="display: flex; align-items: center; gap: 0.75rem; flex: 1;">
+            <span class="drag-handle" title="Arrastrar para reordenar novedades">⠿</span>
+            <div style="flex: 1;">
+              <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.35rem;">
+                <span class="badge" style="background-color: ${n.categoria_color}; color: #fff;">${n.categoria}</span>
+                <small style="color: var(--color-text-muted);">${n.fecha_texto}</small>
+              </div>
+              <h4 style="font-size: 1.05rem; color: var(--color-primary);">${n.titulo}</h4>
+              <p style="font-size: 0.9rem; color: var(--color-text-muted); margin-top: 0.25rem;">${n.descripcion}</p>
             </div>
-            <h4 style="font-size: 1.05rem; color: var(--color-primary);">${n.titulo}</h4>
-            <p style="font-size: 0.9rem; color: var(--color-text-muted); margin-top: 0.25rem;">${n.descripcion}</p>
           </div>
           <div>
             <button class="btn btn-danger btn-sm btn-del-novedad" data-id="${n.id}">Eliminar</button>
           </div>
         `;
 
+        // Eventos Drag & Drop
+        item.addEventListener("dragstart", (e) => {
+          draggedNovedadItem = item;
+          item.classList.add("dragging");
+          e.dataTransfer.effectAllowed = "move";
+          e.dataTransfer.setData("text/plain", n.id);
+        });
+
+        item.addEventListener("dragend", () => {
+          item.classList.remove("dragging");
+          document.querySelectorAll(".novedad-item").forEach(el => el.classList.remove("drag-over"));
+          draggedNovedadItem = null;
+        });
+
+        item.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = "move";
+          if (draggedNovedadItem && draggedNovedadItem !== item) {
+            item.classList.add("drag-over");
+          }
+        });
+
+        item.addEventListener("dragleave", () => {
+          item.classList.remove("drag-over");
+        });
+
+        item.addEventListener("drop", async (e) => {
+          e.preventDefault();
+          item.classList.remove("drag-over");
+
+          if (!draggedNovedadItem || draggedNovedadItem === item) return;
+
+          // Reubicar elemento en el DOM
+          const allItems = Array.from(novedadesContainer.querySelectorAll(".novedad-item"));
+          const draggedIndex = allItems.indexOf(draggedNovedadItem);
+          const targetIndex = allItems.indexOf(item);
+
+          if (draggedIndex < targetIndex) {
+            item.after(draggedNovedadItem);
+          } else {
+            item.before(draggedNovedadItem);
+          }
+
+          // Recopilar nuevo orden de IDs
+          const updatedItems = Array.from(novedadesContainer.querySelectorAll(".novedad-item"));
+          const nuevoOrdenIds = updatedItems.map(el => parseInt(el.getAttribute("data-id"), 10));
+
+          try {
+            await PestalozziAPI.reordenarNovedades(authToken, nuevoOrdenIds);
+            showAlert("Orden de novedades actualizado y publicado.");
+          } catch (err) {
+            showAlert("Error al guardar nuevo orden: " + err.message, true);
+            loadNovedades();
+          }
+        });
+
+        // Evento Eliminar con confirmación institucional
         item.querySelector(".btn-del-novedad").addEventListener("click", async () => {
-          if (confirm(`¿Seguro que deseás eliminar "${n.titulo}"?`)) {
-            try {
-              await PestalozziAPI.deleteNovedad(authToken, n.id);
-              showAlert("Novedad eliminada.");
-              loadNovedades();
-            } catch (err) {
-              showAlert("Error al eliminar novedad: " + err.message, true);
-            }
+          const confirmed = await pedirConfirmacion(`¿Seguro que deseás eliminar la novedad "${n.titulo}"?`);
+          if (!confirmed) return;
+
+          try {
+            await PestalozziAPI.deleteNovedad(authToken, n.id);
+            showAlert("Novedad eliminada.");
+            loadNovedades();
+          } catch (err) {
+            showAlert("Error al eliminar novedad: " + err.message, true);
           }
         });
 
@@ -500,7 +594,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ------------------------------------------------------------------------
-     4. Bloc de Notas Lateral de Betsabé (Drawer Flotante por arriba)
+     4. Bloc de Notas Popover de Betsabé (Debajo del botón)
      ------------------------------------------------------------------------ */
   const notasTextarea = document.getElementById("admin-notas-textarea");
   const btnLimpiarNotas = document.getElementById("btn-limpiar-notas");
@@ -509,40 +603,68 @@ document.addEventListener("DOMContentLoaded", () => {
   const notasLastSaved = document.getElementById("notas-last-saved");
   const btnToggleNotas = document.getElementById("btn-toggle-notas");
   const btnCloseNotas = document.getElementById("btn-close-notas");
-  const drawerNotas = document.getElementById("drawer-notas");
-  const drawerOverlay = document.getElementById("drawer-notas-overlay");
+  const notasPopover = document.getElementById("notas-popover");
+  const notasDropdownWrapper = document.querySelector(".notas-dropdown-wrapper");
   let autoSaveTimeout = null;
 
-  function abrirDrawerNotas() {
-    if (drawerNotas && drawerOverlay) {
-      drawerNotas.classList.add("is-open");
-      drawerOverlay.classList.add("is-open");
+  function toggleNotasPopover() {
+    if (!notasPopover) return;
+    const estaAbierto = notasPopover.classList.contains("is-open");
+    if (estaAbierto) {
+      cerrarNotasPopover();
+    } else {
+      abrirNotasPopover();
+    }
+  }
+
+  function abrirNotasPopover() {
+    if (notasPopover) {
+      notasPopover.classList.add("is-open");
+      if (btnToggleNotas) {
+        btnToggleNotas.classList.add("active");
+        btnToggleNotas.setAttribute("aria-expanded", "true");
+      }
       if (notasTextarea) {
-        setTimeout(() => notasTextarea.focus(), 150);
+        setTimeout(() => notasTextarea.focus(), 100);
       }
     }
   }
 
-  function cerrarDrawerNotas() {
-    if (drawerNotas && drawerOverlay) {
-      drawerNotas.classList.remove("is-open");
-      drawerOverlay.classList.remove("is-open");
+  function cerrarNotasPopover() {
+    if (notasPopover) {
+      notasPopover.classList.remove("is-open");
+      if (btnToggleNotas) {
+        btnToggleNotas.classList.remove("active");
+        btnToggleNotas.setAttribute("aria-expanded", "false");
+      }
     }
   }
 
   if (btnToggleNotas) {
-    btnToggleNotas.addEventListener("click", abrirDrawerNotas);
-  }
-  if (btnCloseNotas) {
-    btnCloseNotas.addEventListener("click", cerrarDrawerNotas);
-  }
-  if (drawerOverlay) {
-    drawerOverlay.addEventListener("click", cerrarDrawerNotas);
+    btnToggleNotas.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleNotasPopover();
+    });
   }
 
+  if (btnCloseNotas) {
+    btnCloseNotas.addEventListener("click", (e) => {
+      e.stopPropagation();
+      cerrarNotasPopover();
+    });
+  }
+
+  // Cerrar al hacer clic fuera del popover de notas
+  document.addEventListener("click", (e) => {
+    if (notasDropdownWrapper && !notasDropdownWrapper.contains(e.target)) {
+      cerrarNotasPopover();
+    }
+  });
+
+  // Cerrar con Escape
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && drawerNotas && drawerNotas.classList.contains("is-open")) {
-      cerrarDrawerNotas();
+    if (e.key === "Escape" && notasPopover && notasPopover.classList.contains("is-open")) {
+      cerrarNotasPopover();
     }
   });
 

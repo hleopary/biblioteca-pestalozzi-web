@@ -20,20 +20,17 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
   - Endpoints CRUD para novedades institucionales (`/api/novedades`).
   - Endpoints para guardado, recuperación y eliminación de notas de la bibliotecaria (`/api/notas` con soporte `DELETE /api/notas/:id`).
 - **Panel de Gestión Interna (`admin.html`)**:
-  - Incorporación de bloc lateral de **"Notas Rápidas"** en formato **Drawer Flotante Superpuesto** (panel desplegable por arriba con fondo oscurecido), accesible desde un botón comprimido al lado de la barra de pestañas, con auto-guardado en base de datos SQLite, respaldo local y botón de limpieza con `deleteNotaById`.
-  - Expansión de las vistas de contenidos (Horarios, Visitas y Novedades) al 100% de ancho del panel principal, eliminando restricciones de columnas fijas.
-  - Rediseño y optimización total de la tabla de **Solicitudes de Visitas Escolares**: 6 columnas fluidas y agrupadas (Fecha & Turno, Institución & Nivel, Docente & Contacto, Alumnos, Estado y Acciones), erradicando desplazamientos horizontales forzados en pantallas de escritorio.
-  - Supresión de barras de scroll y flechas no deseadas en la barra de navegación de pestañas (`.tabs`).
-  - Reubicación de **"Perfil y Seguridad"** a un acceso directo en la barra de navegación superior (navbar) mediante modal interactivo.
-  - Estilos dedicados en `css/admin.css` y lógica interactiva en `js/admin.js`.
-- **Integración en Frontend**:
-  - Cliente HTTP modular `js/api-client.js` con detección automática de entorno.
-  - Carga dinámica resiliente de horarios y novedades en `js/main.js` con preservación del HTML estático como fallback.
-  - Conexión del formulario de visitas escolares con feedback en tiempo real.
-  - Campo selector de turno en el formulario y enlace discreto a "Gestión Interna" en el footer de `index.html`.
+  - Transformación del bloc de notas en un **Popover Flotante Desplegable** ubicado justo debajo del botón `📝 Notas` en la barra superior (con elevación, animación suave, foco automático y cierre por clic externo o `Escape`).
+  - Implementación de **Modal Institucional de Confirmación (`#modal-confirm`)** que reemplaza el `window.confirm()` nativo del navegador, garantizando que la eliminación de solicitudes de visitas y de novedades funcione de forma 100% fiable en cualquier navegador.
+  - Soporte nativo de **Drag & Drop** en la lista de Novedades Registradas con agarrador visual (`⠿`), permitiendo a la bibliotecaria reordenar las publicaciones arrastrándolas con persistencia inmediata en la base de datos vía `PUT /api/novedades/reordenar`.
+  - Expansión de las vistas de contenidos (Horarios, Visitas y Novedades) al 100% de ancho del panel principal.
+  - Rediseño de la tabla de Solicitudes de Visitas Escolares en 6 columnas integradas y optimizadas.
+- **Frontend Público (`index.html`)**:
+  - Implementación de **Scroll Horizontal Fluido (Carrusel)** en la sección de Novedades (`.section-novedades .card-grid-3`) con *scroll-snap* y barra de desplazamiento dorada institucional, permitiendo visualizar todas las novedades activas ordenadas según la prioridad definida en el admin.
 - **Decisiones de Arquitectura y Reglas**:
-  - Creación de `ADR-0010: Incorporación de Backend Node.js / Express para Gestión Dinámica y Persistencia` y actualización de `adr/README.md`.
-  - Nueva regla en `AGENTS.md`: toda nueva tarea o funcionalidad debe partir obligatoriamente de la rama `dev`.
+  - Creación de `ADR-0010: Incorporación de Backend Node.js / Express para Gestión Dinámica y Persistencia`.
+  - Creación de `ADR-0011: Popover de Notas Flotante, Modal Institucional de Confirmación y Drag & Drop con Scroll en Novedades`.
+  - Actualización de `adr/README.md`.
 
 ### Pendiente
 - Incorporación de favicon e isotipos definitivos en el encabezado.

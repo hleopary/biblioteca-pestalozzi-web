@@ -8,7 +8,6 @@ function getNovedadesPublicas(req, res, next) {
       SELECT * FROM novedades
       WHERE activa = 1
       ORDER BY orden ASC, created_at DESC
-      LIMIT 3
     `).all();
 
     res.json({
@@ -127,10 +126,38 @@ function deleteNovedad(req, res, next) {
   }
 }
 
+function reordenarNovedades(req, res, next) {
+  try {
+    const { ordenIds } = req.body;
+    if (!Array.isArray(ordenIds) || ordenIds.length === 0) {
+      return res.status(400).json({
+        ok: false,
+        error: "Se requiere un array 'ordenIds' con los identificadores en el nuevo orden."
+      });
+    }
+
+    const stmt = db.prepare("UPDATE novedades SET orden = ? WHERE id = ?");
+    ordenIds.forEach((id, index) => {
+      stmt.run(index + 1, parseInt(id, 10));
+    });
+
+    const novedadesActualizadas = db.prepare("SELECT * FROM novedades ORDER BY orden ASC, created_at DESC").all();
+
+    res.json({
+      ok: true,
+      mensaje: "Novedades reordenadas exitosamente.",
+      data: novedadesActualizadas
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   getNovedadesPublicas,
   getNovedadesAdmin,
   crearNovedad,
   updateNovedad,
+  reordenarNovedades,
   deleteNovedad
 };

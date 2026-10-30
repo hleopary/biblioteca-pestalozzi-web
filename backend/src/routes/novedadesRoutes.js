@@ -10,6 +10,7 @@ router.get("/", novedadesController.getNovedadesPublicas);
 
 // Rutas protegidas para administración de novedades
 router.get("/admin", authenticateToken, novedadesController.getNovedadesAdmin);
+router.put("/reordenar", authenticateToken, novedadesController.reordenarNovedades);
 router.post("/", authenticateToken, novedadesController.crearNovedad);
 router.put("/:id", authenticateToken, novedadesController.updateNovedad);
 router.delete("/:id", authenticateToken, novedadesController.deleteNovedad);

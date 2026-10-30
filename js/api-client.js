@@ -142,6 +142,14 @@ const PestalozziAPI = (function () {
       });
     },
 
+    async reordenarNovedades(token, ordenIds) {
+      return request("/novedades/reordenar", {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ ordenIds })
+      });
+    },
+
     async deleteNovedad(token, id) {
       return request(`/novedades/${id}`, {
         method: "DELETE",

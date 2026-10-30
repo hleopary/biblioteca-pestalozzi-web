@@ -223,50 +223,43 @@ body {
 }
 
 /* ==========================================================================
-   Drawer / Panel Lateral Desplegable de Notas (QUEDA POR ARRIBA)
+   Popover Flotante de Notas (Se abre justo DEBAJO del botón de Notas)
    ========================================================================== */
-.drawer-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(28, 16, 8, 0.45);
-  z-index: 1040;
-  display: none;
-  backdrop-filter: blur(1px);
-}
-.drawer-overlay.is-open {
-  display: block;
+.notas-dropdown-wrapper {
+  position: relative;
+  display: inline-flex;
 }
 
-.notas-drawer {
-  position: fixed;
-  top: 0;
-  right: -420px;
-  width: 390px;
-  max-width: 92vw;
-  height: 100vh;
-  background-color: var(--color-surface);
-  border-left: 3px solid var(--color-accent);
-  box-shadow: -8px 0 25px rgba(0, 0, 0, 0.2);
-  z-index: 1050;
-  display: flex;
-  flex-direction: column;
-  transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
-  padding: 1.5rem;
-  visibility: hidden;
-}
-
-.notas-drawer.is-open {
+.notas-popover {
+  position: absolute;
+  top: calc(100% + 4px);
   right: 0;
-  visibility: visible;
+  width: 380px;
+  max-width: 90vw;
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius);
+  box-shadow: 0 14px 35px rgba(28, 16, 8, 0.22);
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+  padding: 1.25rem;
+  animation: popoverFadeIn 0.2s ease forwards;
 }
 
-.notas-drawer-card {
+.notas-popover.is-open {
   display: flex;
-  flex-direction: column;
-  height: 100%;
+}
+
+@keyframes popoverFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .notas-header {
@@ -634,21 +627,27 @@ body {
   cursor: pointer;
 }
 
-.btn-icon-action {
+.btn-ver-obs,
+.btn-eliminar-visita {
   background: var(--color-surface);
   border: 1px solid var(--color-line);
   border-radius: var(--radius);
-  padding: 0.32rem 0.5rem;
-  font-size: 0.82rem;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.88rem;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+  line-height: 1;
 }
-.btn-icon-action:hover {
+.btn-ver-obs:hover {
   background-color: var(--color-bg-alt);
+}
+.btn-eliminar-visita:hover {
+  background-color: #fce8e6;
+  border-color: var(--color-error);
 }
 
 /* ==========================================================================
-   Tab 3: Novedades
+   Tab 3: Novedades con Drag & Drop
    ========================================================================== */
 .novedades-grid {
   display: grid;
@@ -663,8 +662,40 @@ body {
   padding: 1.1rem 1.35rem;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
+  cursor: grab;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  user-select: none;
+}
+.novedad-item:hover {
+  box-shadow: 0 4px 12px rgba(28, 16, 8, 0.08);
+  border-color: var(--color-accent);
+}
+.novedad-item.dragging {
+  opacity: 0.45;
+  border: 2px dashed var(--color-accent);
+  background-color: var(--color-bg);
+  cursor: grabbing;
+}
+.novedad-item.drag-over {
+  border-top: 3px solid var(--color-primary);
+  transform: translateY(2px);
+}
+
+.drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-line);
+  font-size: 1.4rem;
+  cursor: grab;
+  padding: 0.2rem 0.4rem;
+  margin-right: 0.5rem;
+  transition: color 0.2s ease;
+}
+.novedad-item:hover .drag-handle {
+  color: var(--color-accent);
 }
 
 /* ==========================================================================
