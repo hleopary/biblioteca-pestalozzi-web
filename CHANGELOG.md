@@ -16,6 +16,19 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
 - **Reglas operativas en `AGENTS.md`**:
   - Incorporación como principio innegociable de la obligación de redactar el ADR y actualizar `CHANGELOG.md` al finalizar cada implementación.
 
+
+### Cambiado
+   Publicación de canales de contacto reales en lugar de valores de relleno (`Feat #6`)**:
+  - **Pie de Página (Footer)**:
+    - Reemplazo de dirección ficticia por ubicación real en Berisso vinculada a Google Maps (`data-contact="direccion"`).
+    - Actualización de teléfono fijo real con esquema `tel:` (`data-contact="telefono"`) y correo electrónico institucional monitoreado con esquema `mailto:` (`data-contact="email"`).
+    - Vinculación de los íconos de Instagram y Facebook a los perfiles oficiales de la biblioteca (`data-contact="instagram"` y `data-contact="facebook"`).
+  - **Llamados a la Acción (CTA de WhatsApp)**:
+    - Unificación de los enlaces de WhatsApp en los bloques "Horarios vigentes" y "Visitas escolares" hacia el número real de la biblioteca con mensaje precargado (`data-contact="whatsapp"`).
+   - **Sección Hero**:
+     - Corrección de la estadística del acervo bibliográfico a `43.000+` volúmenes según datos reales relevados con la biblioteca.
+
+
 ### Pendiente
 - Conexión del formulario de visita escolar a servicio externo funcional (FormSubmit o Formspree).
 - Incorporación de favicon e isotipo definitivo en el encabezado.

@@ -69,11 +69,10 @@ git checkout leopary_prueba3
 
 | Rama | Propósito |
 |------|-----------|
-| `main` | **Limpia / vacía** (solo README mínimo). Nunca se desarrolla acá. |
-| `leopary_prueba2` | **Rama publicada en GitHub Pages** (estable). Es la que ve el equipo en la URL. No recibe pushes directos. |
-| `leopary_prueba3` | **Rama de trabajo actual** (14/10/2026). Nace de `leopary_prueba2`; acá se hacen los cambios nuevos. |
-| `feature/*` | Ramas temporales para features grandes (opcional, salen de la rama de trabajo). |
-
+| `main` | **Rama principal del proyecto** (producción / entregas formales vía PR). |
+| `dev` | **Rama de integración de desarrollo**. Todas las ramas temáticas nuevas nacen a partir de `dev`. |
+| `leopary_prueba2` | **Rama de despliegue activa en GitHub Pages** (estable). No recibe pushes directos. |
+| `leopary_prueba3` / ramas temáticas (`feat/*`) | **Ramas de trabajo** para ajustes y nuevas funcionalidades. |
 > **Rama `leopary_prueba1` (eliminada el 14/10/2026):** era la primera landing institucional (02/10/2026). No se perdió historial: su commit `de32831` quedó dentro de la historia de `leopary_prueba2` y se puede recuperar con `git show de32831:index.html`.
 
 **Deploy (GitHub Pages)**: publica la rama `leopary_prueba2` / `(root)` → https://hleopary.github.io/biblioteca-pestalozzi-web/ · la rama `leopary_prueba3` **no** se publica: sus avances llegan a la web solo por merge a `leopary_prueba2`
@@ -87,7 +86,7 @@ git checkout leopary_prueba3
 La versión de `leopary_prueba2` reimplementa el sitio según la **maqueta entregada por la Biblioteca**. Secciones, de arriba hacia abajo:
 
 - [x] Header: logo, nombre y navegación (Inicio, Colecciones, Visitas Escolares, Catálogos y Trámites)
-- [x] Hero: antetítulo, título, descripción y estadísticas (`12.000+` / `70+`)
+- [x] Hero: antetítulo, título, descripción y estadísticas (`43.000+` / `70+`)
 - [x] Atención al público: grilla de horarios 3×2 y enlace de WhatsApp (texto bordó)
 - [x] Noticias e incorporaciones: 3 tarjetas de novedades
 - [x] Patrimonio bibliográfico: 2 tarjetas de colecciones especiales
@@ -104,6 +103,14 @@ La versión de `leopary_prueba2` reimplementa el sitio según la **maqueta entre
 > **Nota:** los bloques `.media` conservan un degradado como respaldo por si falta el archivo; las imágenes se asignan por CSS (`background-image`) en `css/styles.css`, con rutas relativas a la carpeta `css/` (`../assets/img/...`). Se aceptan `.avif`.
 
 ---
+## Datos de contacto institucionales 
+Todos los datos de contacto de la biblioteca (dirección postal, enlace a Google Maps, teléfono fijo, número de WhatsApp para los CTA, correo electrónico y perfiles de Instagram y Facebook) viven en un único lugar para evitar valores duplicados o desactualizados en el marcado:
+
+Dónde viven: en js/main.js, dentro del objeto constante DATOS_CONTACTO.
+
+Cómo se consumen: al cargar el documento (DOMContentLoaded), la función inicializarDatosContacto() busca en index.html todos los elementos con el atributo data-contact (whatsapp, direccion, telefono, email, instagram, facebook) y actualiza sus textos y atributos href.
+
+Cómo actualizarlos: editar únicamente el valor deseado en DATOS_CONTACTO dentro de js/main.js. El cambio impactará automáticamente en el footer, en el bloque de Horarios vigentes y en la sección de Visitas escolares.
 
 ## Paleta y ajustes de la maqueta 2
 
