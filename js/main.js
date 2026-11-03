@@ -116,8 +116,84 @@ function initVisitaForm() {
   });
 }
 
+// ============================================================================
+// CONFIGURACIÓN CENTRALIZADA DE DATOS DE CONTACTO (Feat #6)
+// Cambiar un valor aquí actualiza automáticamente el Footer y todos los CTA.
+// ============================================================================
+const DATOS_CONTACTO = {
+  direccionTexto: "Calle 8 N° 3656 (entre 158 y 159), Berisso, Buenos Aires", 
+  direccionMapaUrl: "https://maps.google.com/?q=Biblioteca+Popular+Pestalozzi+Berisso",
+  telefonoVisible: "(0221) 461-1851", 
+  telefonoHref: "tel:+542214611851",
+  whatsappNumero: "5492210000000", 
+  whatsappMensaje: "Hola Biblioteca Pestalozzi, quería realizar una consulta desde el sitio web.",
+  email: "bibliotecapestalozziberisso@gmail.com", 
+  redes: {
+    instagram: "https://www.instagram.com/bibliopestalozzi/", 
+    facebook: "https://www.facebook.com/bibliotecapopularpestalozzi/" 
+  }
+};
+
+/**
+ * Inyecta los datos de contacto centralizados en los CTA de WhatsApp,
+ * enlaces del footer y redes sociales.
+ */
+function initDatosContacto() {
+  const whatsappUrl = `https://wa.me/${DATOS_CONTACTO.whatsappNumero}?text=${encodeURIComponent(DATOS_CONTACTO.whatsappMensaje)}`;
+
+  // 1. Actualizar TODOS los botones/enlaces de WhatsApp (Horarios, Visitas y Footer)
+  document.querySelectorAll('[data-contact="whatsapp"]').forEach((el) => {
+    el.href = whatsappUrl;
+    el.target = "_blank";
+    el.rel = "noopener noreferrer";
+  });
+
+  // 2. Actualizar Dirección en el Footer (con enlace a Google Maps)
+  const dirEl = document.querySelector('[data-contact="direccion"]');
+  if (dirEl) {
+    dirEl.textContent = DATOS_CONTACTO.direccionTexto;
+    if (dirEl.tagName === "A") {
+      dirEl.href = DATOS_CONTACTO.direccionMapaUrl;
+      dirEl.target = "_blank";
+      dirEl.rel = "noopener noreferrer";
+    }
+  }
+
+  // 3. Actualizar Teléfono en el Footer (enlace tel:)
+  const telEl = document.querySelector('[data-contact="telefono"]');
+  if (telEl) {
+    telEl.textContent = DATOS_CONTACTO.telefonoVisible;
+    telEl.href = DATOS_CONTACTO.telefonoHref;
+  }
+
+  // 4. Actualizar Email en el Footer (enlace mailto:)
+  const emailEl = document.querySelector('[data-contact="email"]');
+  if (emailEl) {
+    emailEl.textContent = DATOS_CONTACTO.email;
+    emailEl.href = `mailto:${DATOS_CONTACTO.email}`;
+  }
+
+  // 5. Actualizar Redes Sociales (Instagram y Facebook)
+  const igEl = document.querySelector('[data-contact="instagram"]');
+  if (igEl && DATOS_CONTACTO.redes.instagram) {
+    igEl.href = DATOS_CONTACTO.redes.instagram;
+    igEl.target = "_blank";
+    igEl.rel = "noopener noreferrer";
+  }
+
+  const fbEl = document.querySelector('[data-contact="facebook"]');
+  if (fbEl && DATOS_CONTACTO.redes.facebook) {
+    fbEl.href = DATOS_CONTACTO.redes.facebook;
+    fbEl.target = "_blank";
+    fbEl.rel = "noopener noreferrer";
+  }
+}
+
+
+
 document.addEventListener("DOMContentLoaded", function () {
   initNavToggle();
   initCurrentYear();
   initVisitaForm();
+  initDatosContacto();
 });

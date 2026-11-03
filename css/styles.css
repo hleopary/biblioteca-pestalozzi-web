@@ -899,6 +899,17 @@ textarea:focus-visible {
 }
 
 .footer-contact a { color: rgba(255, 255, 255, 0.85); }
+
+.footer-contact p a {
+  text-decoration: none; /* Elimina el subrayado por defecto */
+  color: inherit;        /* Hereda el color del texto contenedor o mantiene la paleta */
+  transition: color 0.2s ease;
+}
+
+.footer-contact p a:hover {
+  color: var(--color-accent-light); /* Se ilumina con el dorado claro institucional */
+}
+
 .footer-contact .icon { color: var(--color-accent-light); margin-top: 0.15rem; }
 
 .footer-bottom {
