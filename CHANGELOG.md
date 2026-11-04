@@ -15,6 +15,7 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
   - Creación de 9 registros arquitectónicos oficiales (`ADR-0001` a `ADR-0009`) basados en las decisiones del Grupo Clouds (Jamstack, hosting $0, serverless forms, integración con Koha/Greenstone, exclusión de login obligatorio, horarios dinámicos, diseño flat editorial, optimización AVIF y flujo de ramas en GitHub Pages).
 - **Reglas operativas en `AGENTS.md`**:
   - Incorporación como principio innegociable de la obligación de redactar el ADR y actualizar `CHANGELOG.md` al finalizar cada implementación.
+<<<<<<< HEAD
  - **Centralización y enrutamiento de trámites de asociación y préstamos (`Feat #5`)**:
    - Configuración de las constantes `DATOS_TRAMITES` en `js/main.js` para los botones de asociación, solicitud y renovación de préstamos.
    - Incorporación de atributos accesibles y apertura en pestaña nueva (`rel="noopener noreferrer"`).
@@ -37,7 +38,9 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
    - **Sección Hero**:
      - Corrección de la estadística del acervo bibliográfico a `43.000+` volúmenes según datos reales relevados con la biblioteca.
 
-
+- **Estructura y centralización de catálogos externos (`Feat #3`)**:
+  - Configuración de las constantes `DATOS_CATALOGOS` en `js/main.js` preparadas para recibir las URLs institucionales oficiales sin recurrir a enlaces ficticios.
+  - Incorporación de control preventivo de clics y atributos accesibles para lectores de pantalla.
 
 ### Pendiente
 - Conexión del formulario de visita escolar a servicio externo funcional (FormSubmit o Formspree).

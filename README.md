@@ -86,7 +86,11 @@ git checkout leopary_prueba3
 La versión de `leopary_prueba2` reimplementa el sitio según la **maqueta entregada por la Biblioteca**. Secciones, de arriba hacia abajo:
 
 - [x] Header: logo, nombre y navegación (Inicio, Colecciones, Visitas Escolares, Catálogos y Trámites)
+<<<<<<< HEAD
 - [x] Hero: antetítulo, título, descripción y estadísticas (`43.000+` / `70+`)
+=======
+- [x] Hero: antetítulo, título, descripción y estadísticas (`1.000+` / `70+`)
+>>>>>>> 766d124 (docs(catalogos): documentar estado pendiente de URLs institucionales de Koha y Greenstone (#3))
 - [x] Atención al público: grilla de horarios 3×2 y enlace de WhatsApp (texto bordó)
 - [x] Noticias e incorporaciones: 3 tarjetas de novedades
 - [x] Patrimonio bibliográfico: 2 tarjetas de colecciones especiales
@@ -101,6 +105,9 @@ La versión de `leopary_prueba2` reimplementa el sitio según la **maqueta entre
 - [ ] Favicon e íconos definitivos
 
 > **Nota:** los bloques `.media` conservan un degradado como respaldo por si falta el archivo; las imágenes se asignan por CSS (`background-image`) en `css/styles.css`, con rutas relativas a la carpeta `css/` (`../assets/img/...`). Se aceptan `.avif`.
+
+## Catálogos externos (Koha y Greenstone - Feat #3):
+Centralizados en `js/main.js` bajo el objeto `DATOS_CATALOGOS`. A la espera de la provisión de URLs institucionales definitivas por parte de la biblioteca, los enlaces cuentan con un manejador preventivo.
 
 ## Trámites de Asociación y Préstamos (Feat #5): 
 Las URLs de los formularios externos y la planilla de asociación están centralizadas en js/main.js bajo el objeto DATOS_TRAMITES. A la espera de la provisión de los links de los formularios definitivos por parte de la biblioteca, los enlaces cuentan con un manejador preventivo.
@@ -119,8 +126,7 @@ Todos los datos de contacto de la biblioteca (dirección postal, enlace a Google
 Dónde viven: en js/main.js, dentro del objeto constante DATOS_CONTACTO.
 
 Cómo se consumen: al cargar el documento (DOMContentLoaded), la función inicializarDatosContacto() busca en index.html todos los elementos con el atributo data-contact (whatsapp, direccion, telefono, email, instagram, facebook) y actualiza sus textos y atributos href.
-
-Cómo actualizarlos: editar únicamente el valor deseado en DATOS_CONTACTO dentro de js/main.js. El cambio impactará automáticamente en el footer, en el bloque de Horarios vigentes y en la sección de Visitas escolares.
+Como actualizarlos: editar únicamente el valor deseado en DATOS_CONTACTO dentro de js/main.js. El cambio impactará automáticamente en el footer, en el bloque de Horarios vigentes y en la sección de Visitas escolares.
 
 
 ## Paleta y ajustes de la maqueta 2
