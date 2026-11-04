@@ -116,6 +116,48 @@ function initVisitaForm() {
   });
 }
 
+
+// ============================================================================
+// CONFIGURACIÓN CENTRALIZADA DE CATÁLOGOS EXTERNOS (Feat #3)
+// Nota: Pendiente de recepción de URLs definitivas por parte de la biblioteca.
+// ============================================================================
+const DATOS_CATALOGOS = {
+  kohaUrl: "",         // Reemplazar por la URL real del OPAC de Koha
+  greenstoneUrl: "" // Reemplazar por la URL real de Greenstone
+};
+
+function initCatalogosExternos() {
+  const kohaEl = document.querySelector('[data-catalog="koha"]');
+  if (kohaEl) {
+    if (DATOS_CATALOGOS.kohaUrl) {
+      kohaEl.href = DATOS_CATALOGOS.kohaUrl;
+      kohaEl.target = "_blank";
+      kohaEl.rel = "noopener noreferrer";
+    } else {
+      kohaEl.href = "#";
+      kohaEl.addEventListener("click", (e) => {
+        e.preventDefault();
+        alert("El catálogo físico Koha estará disponible próximamente con el enlace oficial de la biblioteca.");
+      });
+    }
+  }
+
+    const greenstoneEl = document.querySelector('[data-catalog="greenstone"]');
+  if (greenstoneEl) {
+    if (DATOS_CATALOGOS.greenstoneUrl) {
+      greenstoneEl.href = DATOS_CATALOGOS.greenstoneUrl;
+      greenstoneEl.target = "_blank";
+      greenstoneEl.rel = "noopener noreferrer";
+    } else {
+      greenstoneEl.href = "#";
+      greenstoneEl.addEventListener("click", (e) => {
+        e.preventDefault();
+        alert("El repositorio digital Greenstone estará disponible próximamente con el enlace oficial de la biblioteca.");
+      });
+    }
+  }
+}
+
 // ============================================================================
 // CONFIGURACIÓN CENTRALIZADA DE TRÁMITES Y ASOCIACIÓN (Feat #5)
 // Nota: Pendiente de recepción de links definitivos por parte de la biblioteca
@@ -139,10 +181,10 @@ function initTramites() {
       asociacionEl.addEventListener("click", (e) => {
         e.preventDefault();
         alert("El formulario para asociarse a la biblioteca estará disponible próximamente con el enlace oficial de la biblioteca.");
-      });
+        });
+      }
     }
-  }
-
+      
 
   // 2. Botón para Pedir Préstamo
   const pedirPrestamoEl = document.querySelector('[data-tramite="pedir-prestamo"]');
@@ -176,7 +218,7 @@ function initTramites() {
     }
   }
 }
-
+  
 
 // ============================================================================
 // CONFIGURACIÓN CENTRALIZADA DE DATOS DE CONTACTO (Feat #6)
@@ -252,7 +294,7 @@ function initDatosContacto() {
 
 
   
-  const correoBtn = document.querySelector('[data-contacto="correo-consulta"]');
+  const correoBtn = document.querySelector('[data-contact="correo-consulta"]');
   if (correoBtn && DATOS_CONTACTO.email) {
     correoBtn.href = `mailto:${DATOS_CONTACTO.email}?subject=${encodeURIComponent("Consulta general - Biblioteca Pestalozzi")}`;
   }
@@ -260,11 +302,14 @@ function initDatosContacto() {
 }
 
 
+
 document.addEventListener("DOMContentLoaded", function () {
   initNavToggle();
   initCurrentYear();
   initVisitaForm();
+  initCatalogosExternos();
   initTramites();
   initDatosContacto();
 
 });
+
