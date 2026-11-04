@@ -102,8 +102,18 @@ La versión de `leopary_prueba2` reimplementa el sitio según la **maqueta entre
 
 > **Nota:** los bloques `.media` conservan un degradado como respaldo por si falta el archivo; las imágenes se asignan por CSS (`background-image`) en `css/styles.css`, con rutas relativas a la carpeta `css/` (`../assets/img/...`). Se aceptan `.avif`.
 
+## Trámites de Asociación y Préstamos (Feat #5): 
+Las URLs de los formularios externos y la planilla de asociación están centralizadas en js/main.js bajo el objeto DATOS_TRAMITES. A la espera de la provisión de los links de los formularios definitivos por parte de la biblioteca, los enlaces cuentan con un manejador preventivo.
+
+### Bloque de Consultas Rápidas (Sección Trámites)
+* **Ubicación:** `index.html` (bloque `.consulta`) y lógica en `js/main.js`.
+* **Canales integrados:**
+  - **Correo electrónico:** El botón "Enviar correo" abre automáticamente el cliente de correo predeterminado apuntando a `bibliotecapestalozziberisso@gmail.com` con el asunto institucional precargado.
+  - **WhatsApp:** El botón abre el canal de mensajería directa configurado en las constantes globales con el texto predefinido de consulta.
+
+
 ---
-## Datos de contacto institucionales 
+## Datos de contacto institucionales (Feat #6):
 Todos los datos de contacto de la biblioteca (dirección postal, enlace a Google Maps, teléfono fijo, número de WhatsApp para los CTA, correo electrónico y perfiles de Instagram y Facebook) viven en un único lugar para evitar valores duplicados o desactualizados en el marcado:
 
 Dónde viven: en js/main.js, dentro del objeto constante DATOS_CONTACTO.
@@ -112,11 +122,6 @@ Cómo se consumen: al cargar el documento (DOMContentLoaded), la función inicia
 
 Cómo actualizarlos: editar únicamente el valor deseado en DATOS_CONTACTO dentro de js/main.js. El cambio impactará automáticamente en el footer, en el bloque de Horarios vigentes y en la sección de Visitas escolares.
 
-### Bloque de Consultas Rápidas (Sección Trámites)
-* **Ubicación:** `index.html` (bloque `.consulta`) y lógica en `js/main.js`.
-* **Canales integrados:**
-  - **Correo electrónico:** El botón "Enviar correo" abre automáticamente el cliente de correo predeterminado apuntando a `bibliotecapestalozziberisso@gmail.com` con el asunto institucional precargado.
-  - **WhatsApp:** El botón abre el canal de mensajería directa configurado en las constantes globales con el texto predefinido de consulta.
 
 ## Paleta y ajustes de la maqueta 2
 

@@ -15,7 +15,11 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
   - Creación de 9 registros arquitectónicos oficiales (`ADR-0001` a `ADR-0009`) basados en las decisiones del Grupo Clouds (Jamstack, hosting $0, serverless forms, integración con Koha/Greenstone, exclusión de login obligatorio, horarios dinámicos, diseño flat editorial, optimización AVIF y flujo de ramas en GitHub Pages).
 - **Reglas operativas en `AGENTS.md`**:
   - Incorporación como principio innegociable de la obligación de redactar el ADR y actualizar `CHANGELOG.md` al finalizar cada implementación.
-  - ### Añadido
+ - **Centralización y enrutamiento de trámites de asociación y préstamos (`Feat #5`)**:
+   - Configuración de las constantes `DATOS_TRAMITES` en `js/main.js` para los botones de asociación, solicitud y renovación de préstamos.
+   - Incorporación de atributos accesibles y apertura en pestaña nueva (`rel="noopener noreferrer"`).
+   - Incorporación del botón de WhatsApp faltante y activación del enlace de correo (`mailto:`) en el bloque de consulta de la sección.
+
 - **Optimización del bloque de consultas de trámites (`Feat #5`, `Feat #6`)**:
   - Incorporación del botón interactivo de WhatsApp en la sección "¿Tenés alguna consulta?".
   - Contenedor `.consulta-actions` en CSS con separación y alineación flexible (`flex-wrap`, `gap: var(--space-sm)`).
@@ -32,6 +36,7 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
     - Unificación de los enlaces de WhatsApp en los bloques "Horarios vigentes" y "Visitas escolares" hacia el número real de la biblioteca con mensaje precargado (`data-contact="whatsapp"`).
    - **Sección Hero**:
      - Corrección de la estadística del acervo bibliográfico a `43.000+` volúmenes según datos reales relevados con la biblioteca.
+
 
 
 ### Pendiente
