@@ -116,6 +116,67 @@ function initVisitaForm() {
   });
 }
 
+// ============================================================================
+// CONFIGURACIÓN CENTRALIZADA DE TRÁMITES Y ASOCIACIÓN (Feat #5)
+// Nota: Pendiente de recepción de links definitivos por parte de la biblioteca
+// ============================================================================
+const DATOS_TRAMITES = {
+  asociacionUrl: "", // Pendiente la Ruta al PDF de la planilla o sección presencial
+  pedirPrestamoUrl: "", // Pendiente Enlace al formulario o canal de solicitud
+  renovarPrestamoUrl: "", // Pendiente Enlace al formulario de renovación
+};
+
+function initTramites() {
+  // 1. Botón de Formulario / Trámite de Asociación
+  const asociacionEl = document.querySelector('[data-tramite="asociacion"]');
+  if (asociacionEl) {
+    if (DATOS_TRAMITES.asociacionUrl){
+    asociacionEl.href = DATOS_TRAMITES.asociacionUrl;
+    asociacionEl.target = "_blank";
+    asociacionEl.rel = "noopener noreferrer";
+    } else {
+      asociacionEl.href = "#";
+      asociacionEl.addEventListener("click", (e) => {
+        e.preventDefault();
+        alert("El formulario para asociarse a la biblioteca estará disponible próximamente con el enlace oficial de la biblioteca.");
+      });
+    }
+  }
+
+
+  // 2. Botón para Pedir Préstamo
+  const pedirPrestamoEl = document.querySelector('[data-tramite="pedir-prestamo"]');
+  if (pedirPrestamoEl) {
+    if (DATOS_TRAMITES.pedirPrestamoUrl){
+    pedirPrestamoEl.href = DATOS_TRAMITES.pedirPrestamoUrl;
+    pedirPrestamoEl.target = "_blank";
+    pedirPrestamoEl.rel = "noopener noreferrer";
+    } else {
+      pedirPrestamoEl.href = "#";
+      pedirPrestamoEl.addEventListener("click", (e) => {
+        e.preventDefault();
+        alert("El formulario para solicitar un préstamo mensual estará disponible próximamente con el enlace oficial de la biblioteca.");
+      });
+    }
+  }
+
+  // 3. Botón para Renovar Préstamo
+  const renovarEl = document.querySelector('[data-tramite="renovar-prestamo"]');
+  if (renovarEl) {
+    if (DATOS_TRAMITES.renovarPrestamoUrl){
+    renovarEl.href = DATOS_TRAMITES.renovarPrestamoUrl;
+    renovarEl.target = "_blank";
+    renovarEl.rel = "noopener noreferrer";
+    } else {
+      renovarEl.href = "#";
+      renovarEl.addEventListener("click", (e) => {
+        e.preventDefault();
+        alert("El formulario para renovar su préstamo estará disponible próximamente con el enlace oficial de la biblioteca.");
+      });
+    }
+  }
+}
+
 
 // ============================================================================
 // CONFIGURACIÓN CENTRALIZADA DE DATOS DE CONTACTO (Feat #6)
@@ -199,10 +260,11 @@ function initDatosContacto() {
 }
 
 
-
 document.addEventListener("DOMContentLoaded", function () {
   initNavToggle();
   initCurrentYear();
   initVisitaForm();
+  initTramites();
   initDatosContacto();
+
 });
