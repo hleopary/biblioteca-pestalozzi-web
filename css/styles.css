@@ -23,6 +23,7 @@
   --color-text-muted: #6b5a48;
   --color-error: #b3261e;
   --color-success: #1b5e20;
+  --color-focus: var(--color-accent); /* ~5:1 sobre fondo claro */
 
   --font-base: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-heading: Georgia, "Times New Roman", serif;
@@ -74,11 +75,18 @@ p { margin: 0 0 var(--space-md); }
 
 a { color: var(--color-primary); }
 
+.site-header,
+.section-band,
+.hero,
+.site-footer {
+  --color-focus: var(--color-accent-light); /* > 4.5:1 sobre fondo borravino/oscuro */
+}
+
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid var(--color-accent);
+  outline: 3px solid var(--color-focus);
   outline-offset: 2px;
 }
 
@@ -290,6 +298,15 @@ textarea:focus-visible {
 
 .hero .eyebrow { color: var(--color-accent-light); }
 
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.875rem; 
+  font-weight: 700;
+  color: var(--color-accent-dark);
+  margin: 0 0 0.5rem;
+}
+
 .hero h1 {
   color: #fff;
   margin-bottom: var(--space-md);
@@ -336,8 +353,8 @@ textarea:focus-visible {
 }
 
 .stat-label {
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* --------------------------------------------------------------------------
@@ -524,7 +541,7 @@ textarea:focus-visible {
   background-color: var(--color-surface);
   border: 1px solid var(--color-line);
   border-radius: var(--radius);
-  overflow: hidden;
+  overflow: visible;
   box-shadow: var(--shadow);
 }
 
@@ -547,7 +564,7 @@ textarea:focus-visible {
 .tag {
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: var(--color-accent-dark);
 }
@@ -572,7 +589,7 @@ textarea:focus-visible {
   margin-top: auto;
   padding-top: 0.6rem;
   border-top: 1px solid var(--color-line);
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   color: var(--color-text-muted);
 }
 
@@ -587,6 +604,9 @@ textarea:focus-visible {
   background-image: linear-gradient(140deg, #8b5e2b, #4a121c);
   background-size: cover;
   background-position: center;
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+  overflow: hidden; /* Mantiene la curvatura de la imagen */
 }
 
 .media--berisso {
@@ -615,11 +635,11 @@ textarea:focus-visible {
   right: 0.75rem;
   background-color: var(--color-accent);
   color: var(--color-bg);
-  font-size: 0.72rem;
+  font-size: 0.875rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 0.25rem 0.65rem;
+  padding: 0.35rem 0.75rem;
   border-radius: 4px;
 }
 
@@ -663,7 +683,7 @@ textarea:focus-visible {
 
 .bebeteca-card p {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: var(--color-text-muted);
 }
 
@@ -741,7 +761,7 @@ textarea:focus-visible {
 
 .form-field label {
   display: block;
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 600;
   margin-bottom: 0.35rem;
 }
@@ -766,7 +786,7 @@ textarea:focus-visible {
 
 .field-error {
   margin: 0.35rem 0 0;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   color: var(--color-error);
 }
 
@@ -892,9 +912,9 @@ textarea:focus-visible {
 .footer-heading {
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  font-size: 0.72rem;
+  font-size: 0.8752rem;
   font-weight: 700;
-  color: var(--color-accent);
+  color: var(--color-accent-light);
   margin-bottom: var(--space-sm);
 }
 
@@ -927,7 +947,7 @@ textarea:focus-visible {
   justify-content: space-between;
   gap: var(--space-md);
   flex-wrap: wrap;
-  font-size: 0.82rem;
+  font-size: 0.875rem;
 }
 
 .footer-bottom p { margin: 0; }

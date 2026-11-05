@@ -6,6 +6,7 @@
 function initNavToggle() {
   const toggle = document.querySelector(".nav-toggle");
   const nav = document.getElementById("main-nav");
+  const srText = toggle ? toggle.querySelector(".sr-only") : null;
 
   if (!toggle || !nav) {
     return;
@@ -14,12 +15,24 @@ function initNavToggle() {
   toggle.addEventListener("click", function () {
     const isOpen = nav.classList.toggle("is-open");
     toggle.setAttribute("aria-expanded", String(isOpen));
+
+   // Actualiza el nombre accesible para lectores de pantalla
+    if (srText) {
+      srText.textContent = isOpen
+        ? "Cerrar menú de navegación"
+        : "Abrir menú de navegación";
+    } 
   });
 
   nav.addEventListener("click", function (event) {
     if (event.target.tagName === "A") {
       nav.classList.remove("is-open");
       toggle.setAttribute("aria-expanded", "false");
+
+      // Restaura el texto accesible cuando se cierra por navegación
+      if (srText) {
+        srText.textContent = "Abrir menú de navegación";
+      }
     }
   });
 }
