@@ -834,6 +834,13 @@ textarea:focus-visible {
 
 .consulta .muted { margin: 0; }
 
+.consulta-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm, 0.75rem); /* Distancia corta entre ambos botones */
+  flex-wrap: wrap;
+}
+
 /* --------------------------------------------------------------------------
    Footer
    -------------------------------------------------------------------------- */

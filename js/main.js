@@ -116,6 +116,7 @@ function initVisitaForm() {
   });
 }
 
+
 // ============================================================================
 // CONFIGURACIÓN CENTRALIZADA DE DATOS DE CONTACTO (Feat #6)
 // Cambiar un valor aquí actualiza automáticamente el Footer y todos los CTA.
@@ -187,6 +188,14 @@ function initDatosContacto() {
     fbEl.target = "_blank";
     fbEl.rel = "noopener noreferrer";
   }
+
+
+  
+  const correoBtn = document.querySelector('[data-contacto="correo-consulta"]');
+  if (correoBtn && DATOS_CONTACTO.email) {
+    correoBtn.href = `mailto:${DATOS_CONTACTO.email}?subject=${encodeURIComponent("Consulta general - Biblioteca Pestalozzi")}`;
+  }
+
 }
 
 

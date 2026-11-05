@@ -91,7 +91,7 @@
           <p class="eyebrow">Atención al público</p>
           <h2>Horarios vigentes</h2>
           <p class="muted">Actualizados para el cuatrimestre en curso. Ante dudas, consultá por WhatsApp.</p>
-          <a class="link-chat" "https://wa.me/5492214611851" data-contact="whatsapp" target="_blank" rel="noopener noreferrer">
+          <a class="link-chat" href="https://wa.me/5492214611851" data-contact="whatsapp" target="_blank" rel="noopener noreferrer">
             <svg class="icon" aria-hidden="true"><use href="#i-chat"></use></svg>
             Consultar por WhatsApp
           </a>
@@ -237,7 +237,7 @@
               <li>¡La visita guiada está lista para tu escuela!</li>
             </ol>
             <p class="urgencia">¿Tenés urgencia?</p>
-            <a class="link-chat" "https://wa.me/5492214611851" data-contact="whatsapp" target="_blank" rel="noopener noreferrer">
+            <a class="link-chat" href="https://wa.me/5492214611851" data-contact="whatsapp" target="_blank" rel="noopener noreferrer">
               <svg class="icon" aria-hidden="true"><use href="#i-chat"></use></svg>
               Escribinos al WhatsApp
             </a>
@@ -380,10 +380,17 @@
             <p class="consulta-title">¿Tenés alguna consulta?</p>
             <p class="muted">Escribinos por correo o WhatsApp y te respondemos.</p>
           </div>
-          <a class="btn btn-secondary" href="#contacto">
+        <div class="consulta-actions">  
+          <!-- Botón Correo -->
+          <a class="btn btn-secondary" href="mailto:bibliotecapestalozziberisso@gmail.com" data-contact="correo-consulta">
             <svg class="icon" aria-hidden="true"><use href="#i-mail"></use></svg>
             Enviar correo
           </a>
+          <!-- Botón WhatsApp que faltaba -->
+          <a href="https://wa.me/5492214611851" class="btn btn-secondary" data-contact="whatsapp" target="_blank" rel="noopener noreferrer" aria-label="Escribir por WhatsApp a la biblioteca">
+            <svg class="icon" aria-hidden="true"><use href="#i-chat"></use></svg> WhatsApp
+          </a>
+        </div>
         </div>
       </div>
     </section>
