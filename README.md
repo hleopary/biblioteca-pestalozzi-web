@@ -112,6 +112,12 @@ Cómo se consumen: al cargar el documento (DOMContentLoaded), la función inicia
 
 Cómo actualizarlos: editar únicamente el valor deseado en DATOS_CONTACTO dentro de js/main.js. El cambio impactará automáticamente en el footer, en el bloque de Horarios vigentes y en la sección de Visitas escolares.
 
+### Bloque de Consultas Rápidas (Sección Trámites)
+* **Ubicación:** `index.html` (bloque `.consulta`) y lógica en `js/main.js`.
+* **Canales integrados:**
+  - **Correo electrónico:** El botón "Enviar correo" abre automáticamente el cliente de correo predeterminado apuntando a `bibliotecapestalozziberisso@gmail.com` con el asunto institucional precargado.
+  - **WhatsApp:** El botón abre el canal de mensajería directa configurado en las constantes globales con el texto predefinido de consulta.
+
 ## Paleta y ajustes de la maqueta 2
 
 Los colores se **midieron por píxel** sobre `practica_profesionalizante/apuntes/maqueta_web2.png` (la maqueta de la cliente) y se centralizan en `css/styles.css`.

@@ -15,6 +15,11 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
   - Creación de 9 registros arquitectónicos oficiales (`ADR-0001` a `ADR-0009`) basados en las decisiones del Grupo Clouds (Jamstack, hosting $0, serverless forms, integración con Koha/Greenstone, exclusión de login obligatorio, horarios dinámicos, diseño flat editorial, optimización AVIF y flujo de ramas en GitHub Pages).
 - **Reglas operativas en `AGENTS.md`**:
   - Incorporación como principio innegociable de la obligación de redactar el ADR y actualizar `CHANGELOG.md` al finalizar cada implementación.
+  - ### Añadido
+- **Optimización del bloque de consultas de trámites (`Feat #5`, `Feat #6`)**:
+  - Incorporación del botón interactivo de WhatsApp en la sección "¿Tenés alguna consulta?".
+  - Contenedor `.consulta-actions` en CSS con separación y alineación flexible (`flex-wrap`, `gap: var(--space-sm)`).
+  - Vinculación dinámica del botón "Enviar correo" al correo institucional (`DATOS_CONTACTO.email`) con asunto precargado.
 
 
 ### Cambiado
