@@ -136,6 +136,9 @@ El desarrollo incorpora criterios de diseño accesible alineados con las pautas 
 * **Contraste de foco dinámico:** El contorno de foco `:focus-visible` adapta su contraste visual ($\ge 3:1$) según el fondo del componente: dorado claro institucional (`--color-accent-light`) en áreas oscuras (cabecera, hero y pie) y tono acento sobre contenedores claros.
 * **Navegación asistida y controles:** El botón hamburguesa móvil (`.nav-toggle`) actualiza dinámicamente su texto accesible (`.sr-only`) sincronizado con el atributo `aria-expanded` para lectores de pantalla.
 
+### Navegación y retorno accesible (Pie de página)
+* **Área de interacción controlada:** El enlace institucional a `#inicio` en el pie de página está delimitado estrictamente al isotipo y al texto (`width: fit-content`), previniendo saltos no deseados al interactuar con el espacio libre.
+* **Indicador visual de retorno:** Se incorporó el llamado explícito *"Volver al inicio ↑"* con escala tipográfica accesible ($\ge 14\text{px}$) y atributo semántico `aria-label` para facilitar la navegación a adultos mayores.
 
 ## Paleta y ajustes de la maqueta 2
 
