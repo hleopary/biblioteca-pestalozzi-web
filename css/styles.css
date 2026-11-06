@@ -879,8 +879,27 @@ textarea:focus-visible {
   padding-bottom: var(--space-lg);
 }
 
-.brand-footer { margin-bottom: var(--space-md); }
+.brand-footer {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: var(--space-md); 
+  text-decoration: none;
+}
 .brand-footer .brand-text strong { color: #fff; font-size: 1.3rem; }
+
+/* Indicador visual "Volver al inicio ↑" */
+.brand-footer .volver-arriba {
+  font-size: 0.875rem; /* Mínimo 14px accesible */
+  color: var(--color-accent-light);
+  margin-top: 0.2rem;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.brand-footer:hover .volver-arriba {
+  transform: translateY(-2px);
+}
 
 .footer-brand p {
   color: rgba(255, 255, 255, 0.7);
