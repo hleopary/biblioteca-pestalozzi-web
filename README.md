@@ -128,6 +128,14 @@ Dónde viven: en js/main.js, dentro del objeto constante DATOS_CONTACTO.
 Cómo se consumen: al cargar el documento (DOMContentLoaded), la función inicializarDatosContacto() busca en index.html todos los elementos con el atributo data-contact (whatsapp, direccion, telefono, email, instagram, facebook) y actualiza sus textos y atributos href.
 Como actualizarlos: editar únicamente el valor deseado en DATOS_CONTACTO dentro de js/main.js. El cambio impactará automáticamente en el footer, en el bloque de Horarios vigentes y en la sección de Visitas escolares.
 
+## Accesibilidad y Experiencia de Usuario (RNF01 - Feat #7)
+
+El desarrollo incorpora criterios de diseño accesible alineados con las pautas WCAG 2.1 (Nivel AA) orientados a adultos mayores y docentes:
+
+* **Escala tipográfica accesible:** Se fijó un umbral base mínimo de 14px (`0.875rem`) para textos secundarios, fechas, estados de validación y etiquetas auxiliares, asegurando 16px (`1rem`) para etiquetas de campos y cuerpo principal.
+* **Contraste de foco dinámico:** El contorno de foco `:focus-visible` adapta su contraste visual ($\ge 3:1$) según el fondo del componente: dorado claro institucional (`--color-accent-light`) en áreas oscuras (cabecera, hero y pie) y tono acento sobre contenedores claros.
+* **Navegación asistida y controles:** El botón hamburguesa móvil (`.nav-toggle`) actualiza dinámicamente su texto accesible (`.sr-only`) sincronizado con el atributo `aria-expanded` para lectores de pantalla.
+
 
 ## Paleta y ajustes de la maqueta 2
 

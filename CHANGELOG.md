@@ -25,6 +25,9 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
   - Incorporación del botón interactivo de WhatsApp en la sección "¿Tenés alguna consulta?".
   - Contenedor `.consulta-actions` en CSS con separación y alineación flexible (`flex-wrap`, `gap: var(--space-sm)`).
   - Vinculación dinámica del botón "Enviar correo" al correo institucional (`DATOS_CONTACTO.email`) con asunto precargado.
+ - **Indicador de foco accesible (`Feat #7` - RNF01)**:
+   - Definición de la variable CSS `--color-focus` con contraste adaptativo mayor a 3:1 (WCAG 2.1 SC 1.4.11 / WCAG 2.2 SC 2.4.7) utilizando tono claro sobre fondos oscuros (header, hero, pie de página y franjas institucionales) y acento terracota sobre superficies claras.
+   - Ajuste de contornos visibles en tarjetas con `overflow: visible` para evitar recortes del anillo de navegación por teclado.
 
 
 ### Cambiado
@@ -41,6 +44,11 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
 - **Estructura y centralización de catálogos externos (`Feat #3`)**:
   - Configuración de las constantes `DATOS_CATALOGOS` en `js/main.js` preparadas para recibir las URLs institucionales oficiales sin recurrir a enlaces ficticios.
   - Incorporación de control preventivo de clics y atributos accesibles para lectores de pantalla.
+- **Escala tipográfica y accesibilidad móvil (`Feat #7` - RNF01)**:
+  - Elevación de tamaños tipográficos mínimos a 14px (0.875rem) en textos secundarios (`.eyebrow`, `.tag`, `.card-date`, `.badge`, `.field-error`, `.stat-label` y `.footer-bottom`).
+  - Ajuste del tamaño de etiquetas de formularios (`.form-field label`) a 16px (1rem) para facilitar la lectura a adultos mayores y docentes.
+  - Actualización dinámica del nombre accesible en el botón de navegación móvil (`.nav-toggle`), alternando entre *"Abrir menú de navegación"* y *"Cerrar menú de navegación"*.
+ 
 
 ### Pendiente
 - Conexión del formulario de visita escolar a servicio externo funcional (FormSubmit o Formspree).
