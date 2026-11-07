@@ -1,0 +1,78 @@
+===== CORRIDA 1 =====
+
+> biblioteca-pestalozzi-backend@1.0.0 test
+> node --test tests/*.test.js
+
+Iniciando sembrado de datos en la base de datos Pestalozzi...
+✓ Usuario admin inicial creado: "betsabe" con contraseña por defecto.
+✓ Grilla de horarios inicial cargada con éxito.
+✓ Novedades iniciales de la biblioteca cargadas.
+Base de datos lista y sincronizada.
+(node:24673) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ GET /api/health responde con estado activo (35.734848ms)
+✔ POST /api/auth/login entrega un token con las credenciales del seed (88.1215ms)
+✔ POST /api/auth/login rechaza una contraseña incorrecta (76.477738ms)
+✔ CRUD de novedades: crear, leer, actualizar y eliminar (10.216966ms)
+✔ La lectura pública de horarios refleja una escritura autenticada (7.910555ms)
+✔ POST /api/visitas rechaza una solicitud sin campos obligatorios (1.896957ms)
+✔ POST /api/visitas rechaza un correo con formato inválido (1.76862ms)
+✔ esTextoNoVacio: distingue contenido real de vacío o solo espacios (0.915765ms)
+✔ validarCamposObligatorios: acepta cuando todos los campos tienen contenido (0.545558ms)
+✔ validarCamposObligatorios: rechaza vacíos y nombra cada campo faltante (1.032221ms)
+✔ validarCamposObligatorios: acepta valores numéricos como campo presente (0.199596ms)
+✔ validarEmail: acepta formatos válidos y rechaza los inválidos (0.3036ms)
+✔ parseRangoHorario: convierte el rango a minutos desde las 00:00 (0.388456ms)
+✔ validarRangoHorario: acepta rangos bien formados y con apertura anterior al cierre (0.521469ms)
+✔ validarRangoHorario: rechaza un rango invertido con un mensaje explicativo (0.136977ms)
+✔ validarRangoHorario: rechaza formatos inválidos y horas fuera de rango (0.268781ms)
+✔ esDuplicado: detecta la misma combinación ignorando mayúsculas y espacios (0.307483ms)
+✔ esDuplicado: acepta el mismo rango en otro cuatrimestre (0.119027ms)
+✔ esDuplicado: devuelve false con una lista vacía (0.090581ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 445.504571
+===== CORRIDA 2 (determinismo) =====
+
+> biblioteca-pestalozzi-backend@1.0.0 test
+> node --test tests/*.test.js
+
+Iniciando sembrado de datos en la base de datos Pestalozzi...
+✓ Usuario admin inicial creado: "betsabe" con contraseña por defecto.
+✓ Grilla de horarios inicial cargada con éxito.
+✓ Novedades iniciales de la biblioteca cargadas.
+Base de datos lista y sincronizada.
+(node:24715) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ GET /api/health responde con estado activo (33.566049ms)
+✔ POST /api/auth/login entrega un token con las credenciales del seed (90.8865ms)
+✔ POST /api/auth/login rechaza una contraseña incorrecta (78.578778ms)
+✔ CRUD de novedades: crear, leer, actualizar y eliminar (18.066578ms)
+✔ La lectura pública de horarios refleja una escritura autenticada (12.029497ms)
+✔ POST /api/visitas rechaza una solicitud sin campos obligatorios (4.212809ms)
+✔ POST /api/visitas rechaza un correo con formato inválido (3.662714ms)
+✔ esTextoNoVacio: distingue contenido real de vacío o solo espacios (1.058726ms)
+✔ validarCamposObligatorios: acepta cuando todos los campos tienen contenido (1.527762ms)
+✔ validarCamposObligatorios: rechaza vacíos y nombra cada campo faltante (1.912067ms)
+✔ validarCamposObligatorios: acepta valores numéricos como campo presente (0.521005ms)
+✔ validarEmail: acepta formatos válidos y rechaza los inválidos (0.411602ms)
+✔ parseRangoHorario: convierte el rango a minutos desde las 00:00 (0.65233ms)
+✔ validarRangoHorario: acepta rangos bien formados y con apertura anterior al cierre (0.387414ms)
+✔ validarRangoHorario: rechaza un rango invertido con un mensaje explicativo (0.198176ms)
+✔ validarRangoHorario: rechaza formatos inválidos y horas fuera de rango (0.286427ms)
+✔ esDuplicado: detecta la misma combinación ignorando mayúsculas y espacios (0.377665ms)
+✔ esDuplicado: acepta el mismo rango en otro cuatrimestre (0.225566ms)
+✔ esDuplicado: devuelve false con una lista vacía (0.105213ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 482.44433

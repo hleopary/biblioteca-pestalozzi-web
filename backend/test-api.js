@@ -34,12 +34,12 @@ server.listen(PORT, async () => {
   });
 
   // 2. Horarios públicos
-  await test("GET /api/horarios devuelve los 6 días de la semana", async () => {
+  await test("GET /api/horarios devuelve los 7 días de la semana", async () => {
     const res = await fetch(`${baseUrl}/horarios`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
-    if (!data.ok || !Array.isArray(data.data) || data.data.length !== 6) {
-      throw new Error(`Se esperaban 6 días, recibidos: ${data.data?.length}`);
+    if (!data.ok || !Array.isArray(data.data) || data.data.length !== 7) {
+      throw new Error(`Se esperaban 7 días, recibidos: ${data.data?.length}`);
     }
   });
 
