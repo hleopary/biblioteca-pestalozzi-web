@@ -2,6 +2,9 @@
 hide circle
 skinparam shadowing false
 skinparam linetype ortho
+skinparam defaultFontSize 14
+skinparam nodesep 45
+skinparam ranksep 45
 title Modelo entidad-relación implementado\nSistema Web Biblioteca Pestalozzi
 
 entity "USUARIOS" as usuarios {
@@ -59,16 +62,5 @@ entity "NOTAS" as notas {
   * contenido: TEXT
   updated_at: DATETIME
 }
-
-note bottom of visitas
-  Sin claves foráneas: la aplicación no necesita
-  uniones entre tablas. Las entidades son independientes.
-end note
-
-note bottom of novedades
-  En el DER de Etapa 2 esta entidad tenía una FK
-  hacia HORARIOS. La versión implementada no la usa:
-  las novedades no dependen de un día de atención.
-end note
 
 @enduml

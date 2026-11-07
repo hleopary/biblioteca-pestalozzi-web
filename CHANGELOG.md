@@ -104,6 +104,7 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
   - `db/schema.sql` como fuente única del esquema y `db/seed.sql` con el contenido inicial.
   - Comandos `db:migrate`, `db:seed`, `db:reset`, `db:dump`, `db:restore` y `db:count`.
 - **DER reconciliado** en `docs/der/der-implementado.puml` y ADR-0012, que documenta la correspondencia con el DER de Etapa 2.
+- **Manual Técnico** en `docs/manual-tecnico.md` y su PDF (16 páginas): arquitectura, estructura, DER, instalación, componentes, validaciones, pruebas y despliegue.
 
 ### Pendiente
 - Incorporación de favicon e isotipos definitivos en el encabezado.
