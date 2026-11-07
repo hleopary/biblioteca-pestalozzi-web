@@ -50,15 +50,63 @@ function initCurrentYear() {
 /* --------------------------------------------------------------------------
    Carga dinámica de Horarios (con fallback a contenido estático)
    -------------------------------------------------------------------------- */
+/**
+ * Muestra la cartelera, el estado de carga o un fallo explícito.
+ * Nunca deja una tabla vacía que se lea como "cerrado toda la semana".
+ */
+function mostrarEstadoHorarios(estado, mensaje) {
+  const lista = document.querySelector(".schedule");
+  const status = document.querySelector("#horarios-status");
+  if (!lista || !status) return;
+
+  if (estado === "ok") {
+    lista.hidden = false;
+    status.hidden = true;
+    return;
+  }
+
+  lista.hidden = true;
+  status.hidden = false;
+  status.textContent = "";
+
+  status.appendChild(document.createTextNode(`${mensaje} `));
+
+  if (estado === "error") {
+    const whatsapp = document.createElement("a");
+    whatsapp.href = `https://wa.me/${DATOS_CONTACTO.whatsappNumero}?text=${encodeURIComponent(
+      "Hola, quería consultar por los horarios de atención."
+    )}`;
+    whatsapp.target = "_blank";
+    whatsapp.rel = "noopener noreferrer";
+    whatsapp.textContent = "Consultar por WhatsApp";
+    status.appendChild(whatsapp);
+
+    status.appendChild(document.createTextNode(" o "));
+
+    const reintentar = document.createElement("button");
+    reintentar.type = "button";
+    reintentar.className = "link-button";
+    reintentar.textContent = "reintentar";
+    reintentar.addEventListener("click", () => loadDynamicHorarios());
+    status.appendChild(reintentar);
+  }
+}
+
 async function loadDynamicHorarios() {
   const scheduleContainer = document.querySelector(".schedule");
-  if (!scheduleContainer || typeof PestalozziAPI === "undefined") {
+  if (!scheduleContainer) {
+    return;
+  }
+
+  if (typeof PestalozziAPI === "undefined") {
+    mostrarEstadoHorarios("error", "No pudimos cargar los horarios en este momento.");
     return;
   }
 
   try {
     const res = await PestalozziAPI.getHorarios();
     if (!res.ok || !Array.isArray(res.data) || res.data.length === 0) {
+      mostrarEstadoHorarios("error", "No pudimos cargar los horarios en este momento.");
       return;
     }
 
@@ -80,9 +128,11 @@ async function loadDynamicHorarios() {
       li.appendChild(spanHours);
       scheduleContainer.appendChild(li);
     });
+
+    mostrarEstadoHorarios("ok");
   } catch (err) {
-    // Si la API no está encendida, se conserva el HTML estático de respaldo
-    console.info("Horarios cargados desde caché estática HTML (servidor API offline).");
+    console.warn("No se pudieron cargar los horarios desde la API:", err.message);
+    mostrarEstadoHorarios("error", "No pudimos cargar los horarios en este momento.");
   }
 }
 

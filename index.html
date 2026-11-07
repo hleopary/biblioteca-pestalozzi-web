@@ -152,16 +152,14 @@
           </a>
         </div>
 
-        <ul class="schedule" aria-label="Horarios de atención de la biblioteca">
-          <li class="schedule-day"><span class="day">Lunes</span><span class="hours">Cerrado</span></li>
-          <li class="schedule-day is-open"><span class="day">Martes</span><span class="hours">16:00 &ndash; 18:00</span>
-          </li>
-          <li class="schedule-day is-open"><span class="day">Miércoles</span><span class="hours">10:00 &ndash;
-              12:00</span></li>
-          <li class="schedule-day"><span class="day">Jueves</span><span class="hours">Cerrado</span></li>
-          <li class="schedule-day"><span class="day">Viernes</span><span class="hours">Cerrado</span></li>
-          <li class="schedule-day"><span class="day">Sábado</span><span class="hours">Cerrado</span></li>
-        </ul>
+        <div class="horarios-lista">
+          <ul class="schedule" aria-label="Horarios de atención de la biblioteca" hidden></ul>
+          <p id="horarios-status" class="schedule-status" role="status" aria-live="polite">Cargando horarios…</p>
+          <noscript>
+            <p class="schedule-status">Los horarios se actualizan con JavaScript. Consultá la cartelera por
+              <a href="#contacto">teléfono o WhatsApp</a>.</p>
+          </noscript>
+        </div>
       </div>
     </section>
 

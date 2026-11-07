@@ -637,6 +637,39 @@ textarea:focus-visible {
   gap: 8px;
 }
 
+/* La lista permanece oculta hasta que la API responde. Si falla, se muestra
+   un estado explícito con alternativa de contacto, nunca una tabla vacía. */
+.schedule[hidden] {
+  display: none;
+}
+
+.horarios-lista {
+  min-width: 0;
+}
+
+.schedule-status {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  color: var(--color-text-muted);
+}
+
+.schedule-status a {
+  color: var(--color-primary);
+}
+
+.link-button {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--color-primary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .schedule-day {
   display: flex;
   align-items: center;

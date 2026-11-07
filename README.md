@@ -133,6 +133,17 @@ La versión de `leopary_prueba2` reimplementa el sitio según la **maqueta entre
 
 > **Nota:** los bloques `.media` conservan un degradado como respaldo por si falta el archivo; las imágenes se asignan por CSS (`background-image`) en `css/styles.css`, con rutas relativas a la carpeta `css/` (`../assets/img/...`). Se aceptan `.avif`.
 
+## Horarios de atención
+
+El tablón público **no está fijado en el HTML**: `js/main.js` lo construye con la respuesta de `GET /api/horarios`, que lee la tabla `horarios` de SQLite.
+
+- **Para cambiar un horario**: usar el panel (`admin.html` → *Horarios Cuatrimestrales*). El cambio se publica al guardar, sin editar archivos ni redesplegar.
+- **Para cambiar los datos iniciales**: editar `db/seed.sql` y ejecutar `npm run db:reset` (o `npm run db:seed` sobre una base vacía).
+- **Si la API no responde**: el tablón muestra un estado de fallo explícito, con enlace a WhatsApp y un botón para reintentar. Nunca queda una tabla vacía que se lea como "cerrado toda la semana".
+- **Sin JavaScript**: se muestra un aviso con enlace a los canales de contacto.
+
+El detalle de la decisión está en [docs/adr/ADR-001-persistence-and-hosting.md](docs/adr/ADR-001-persistence-and-hosting.md).
+
 ## Catálogos externos (Koha y Greenstone - Feat #3):
 Centralizados en `js/main.js` bajo el objeto `DATOS_CATALOGOS`. A la espera de la provisión de URLs institucionales definitivas por parte de la biblioteca, los enlaces cuentan con un manejador preventivo.
 

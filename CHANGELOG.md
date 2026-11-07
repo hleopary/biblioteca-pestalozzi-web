@@ -107,6 +107,11 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
 - **Manual Técnico** en `docs/manual-tecnico.md` y su PDF (16 páginas): arquitectura, estructura, DER, instalación, componentes, validaciones, pruebas y despliegue.
 - **Manual de Usuario** en `docs/manual-usuario/` y su PDF (18 páginas): recorrido del sitio, flujos de uso, guía del panel, 20 capturas, mensajes frecuentes y preguntas frecuentes.
 
+### Arquitectura y tablón (Etapa 3)
+- **ADR-001 de persistencia y hosting** en `docs/adr/`: decisión de SQLite + Railway, costo, protección de escritura, reconciliación con el stack de Etapa 2 y tooling fijado.
+- **Tablón de horarios sin filas fijas**: se quitaron las seis filas estáticas de `index.html`; la lista se construye con la API.
+- **Estado de fallo explícito**: si la API no responde, el tablón muestra un mensaje, un enlace a WhatsApp y un botón para reintentar. Se agregó un aviso para navegadores sin JavaScript.
+
 ### Pendiente
 - Incorporación de favicon e isotipos definitivos en el encabezado.
 - Refinamiento de columna extra de contacto en el pie de página.
