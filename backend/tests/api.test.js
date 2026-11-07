@@ -215,3 +215,105 @@ test("POST /api/visitas rechaza un correo con formato inválido", async () => {
   assert.equal(respuesta.status, 400);
   assert.match(cuerpo.error, /correo/i);
 });
+
+test("POST /api/contactos guarda una consulta y el panel la lista", async () => {
+  const crear = await fetch(`${base}/contactos`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      nombre: "Ana Pérez",
+      email: "ana@example.com",
+      telefono: "2214556677",
+      mensaje: "Consulta de prueba desde la suite"
+    })
+  });
+  const cuerpo = await crear.json();
+
+  assert.equal(crear.status, 201);
+  assert.equal(cuerpo.ok, true);
+
+  const lista = await fetch(`${base}/contactos`, { headers: autorizacion() }).then((r) => r.json());
+  assert.ok(lista.data.some((contacto) => contacto.id === cuerpo.data.id));
+
+  const borrar = await fetch(`${base}/contactos/${cuerpo.data.id}`, {
+    method: "DELETE",
+    headers: autorizacion()
+  });
+  assert.equal(borrar.status, 200);
+});
+
+test("POST /api/contactos rechaza una consulta sin mensaje", async () => {
+  const respuesta = await fetch(`${base}/contactos`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ nombre: "Ana Pérez", email: "ana@example.com" })
+  });
+
+  assert.equal(respuesta.status, 400);
+});
+
+test("GET /api/catalogos/categorias devuelve categorías con sus materiales", async () => {
+  const respuesta = await fetch(`${base}/catalogos/categorias`).then((r) => r.json());
+
+  assert.equal(respuesta.ok, true);
+  assert.ok(respuesta.data.length >= 2);
+  assert.ok(respuesta.data.every((categoria) => Array.isArray(categoria.materiales)));
+  assert.ok(respuesta.data.some((categoria) => categoria.materiales.length > 0));
+});
+
+test("El catálogo permite crear categoría y material, y protege la categoría con materiales", async () => {
+  const crearCategoria = await fetch(`${base}/catalogos/categorias`, {
+    method: "POST",
+    headers: autorizacion(),
+    body: JSON.stringify({ nombre: "Categoría de prueba", descripcion: "Temporal" })
+  });
+  const categoria = await crearCategoria.json();
+
+  assert.equal(crearCategoria.status, 201);
+
+  const crearMaterial = await fetch(`${base}/catalogos/materiales`, {
+    method: "POST",
+    headers: autorizacion(),
+    body: JSON.stringify({
+      titulo: "Material de prueba",
+      autor: "Autora de prueba",
+      id_categoria: categoria.data.id
+    })
+  });
+  const material = await crearMaterial.json();
+
+  assert.equal(crearMaterial.status, 201);
+
+  // La categoría con materiales no se puede borrar
+  const borrarCategoriaConMateriales = await fetch(`${base}/catalogos/categorias/${categoria.data.id}`, {
+    method: "DELETE",
+    headers: autorizacion()
+  });
+  assert.equal(borrarCategoriaConMateriales.status, 400);
+
+  await fetch(`${base}/catalogos/materiales/${material.data.id}`, {
+    method: "DELETE",
+    headers: autorizacion()
+  });
+
+  const borrarCategoriaVacia = await fetch(`${base}/catalogos/categorias/${categoria.data.id}`, {
+    method: "DELETE",
+    headers: autorizacion()
+  });
+  assert.equal(borrarCategoriaVacia.status, 200);
+});
+
+test("POST /api/novedades rechaza un id_horario inexistente", async () => {
+  const respuesta = await fetch(`${base}/novedades`, {
+    method: "POST",
+    headers: autorizacion(),
+    body: JSON.stringify({
+      categoria: "Prueba",
+      titulo: "Novedad con horario inválido",
+      descripcion: "Contenido",
+      id_horario: 9999
+    })
+  });
+
+  assert.equal(respuesta.status, 400);
+});

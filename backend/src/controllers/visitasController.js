@@ -4,6 +4,8 @@ const db = require("../config/db");
 const { notificarNuevaVisita } = require("../services/emailService");
 const { validarCamposObligatorios, validarEmail } = require("../utils/validators");
 
+// El formulario y el panel usan estos nombres; la tabla sigue el DER
+// (SOLICITUDES_VISITA) y el controller traduce entre ambos.
 const CAMPOS_OBLIGATORIOS = [
   "institucion",
   "responsable",
@@ -14,6 +16,22 @@ const CAMPOS_OBLIGATORIOS = [
   "fecha_preferida",
   "turno"
 ];
+
+const SELECT_VISITAS = `
+  SELECT id_solicitud AS id,
+         escuela AS institucion,
+         docente AS responsable,
+         telefono,
+         email,
+         nivel,
+         alumnos_cant,
+         fecha_visita AS fecha_preferida,
+         turno,
+         observaciones,
+         estado,
+         created_at
+  FROM solicitudes_visita
+`;
 
 function crearVisita(req, res, next) {
   try {
@@ -54,9 +72,9 @@ function crearVisita(req, res, next) {
     }
 
     const result = db.prepare(`
-      INSERT INTO visitas (
-        institucion, responsable, telefono, email, nivel,
-        alumnos_cant, fecha_preferida, turno, observaciones, estado
+      INSERT INTO solicitudes_visita (
+        escuela, docente, telefono, email, nivel,
+        alumnos_cant, fecha_visita, turno, observaciones, estado
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pendiente')
     `).run(
       institucion.trim(),
@@ -70,7 +88,7 @@ function crearVisita(req, res, next) {
       observaciones ? observaciones.trim() : ""
     );
 
-    const nuevaVisita = db.prepare("SELECT * FROM visitas WHERE id = ?").get(result.lastInsertRowid);
+    const nuevaVisita = db.prepare(`${SELECT_VISITAS} WHERE id_solicitud = ?`).get(result.lastInsertRowid);
 
     // Disparar notificación por email asíncrona
     notificarNuevaVisita(nuevaVisita).catch((err) => {
@@ -90,7 +108,7 @@ function crearVisita(req, res, next) {
 function getVisitas(req, res, next) {
   try {
     const { estado } = req.query;
-    let query = "SELECT * FROM visitas";
+    let query = SELECT_VISITAS;
     const params = [];
 
     if (estado) {
@@ -124,9 +142,9 @@ function updateEstado(req, res, next) {
       });
     }
 
-    db.prepare("UPDATE visitas SET estado = ? WHERE id = ?").run(estado, id);
+    db.prepare("UPDATE solicitudes_visita SET estado = ? WHERE id_solicitud = ?").run(estado, id);
 
-    const visitaActualizada = db.prepare("SELECT * FROM visitas WHERE id = ?").get(id);
+    const visitaActualizada = db.prepare(`${SELECT_VISITAS} WHERE id_solicitud = ?`).get(id);
 
     if (!visitaActualizada) {
       return res.status(404).json({
@@ -148,7 +166,7 @@ function updateEstado(req, res, next) {
 function deleteVisita(req, res, next) {
   try {
     const id = parseInt(req.params.id, 10);
-    db.prepare("DELETE FROM visitas WHERE id = ?").run(id);
+    db.prepare("DELETE FROM solicitudes_visita WHERE id_solicitud = ?").run(id);
 
     res.json({
       ok: true,

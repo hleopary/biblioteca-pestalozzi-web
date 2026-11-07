@@ -20,7 +20,7 @@ function seedDatabase() {
   console.log("Iniciando sembrado de datos en la base de datos Pestalozzi...");
 
   const horariosCount = db.prepare("SELECT COUNT(*) as count FROM horarios").get().count;
-  const novedadesCount = db.prepare("SELECT COUNT(*) as count FROM novedades").get().count;
+  const novedadesCount = db.prepare("SELECT COUNT(*) as count FROM novedades_donaciones").get().count;
 
   if (horariosCount === 0 || novedadesCount === 0) {
     const seedSql = fs.readFileSync(seedPath, "utf-8");

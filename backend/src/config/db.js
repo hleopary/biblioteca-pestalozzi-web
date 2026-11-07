@@ -14,6 +14,9 @@ if (!fs.existsSync(dbDir)) {
 
 const db = new DatabaseSync(dbPath);
 
+// Integridad referencial del DER (las FK se aplican en cada conexión)
+db.exec("PRAGMA foreign_keys = ON;");
+
 // Inicializar tablas si no existen a partir del esquema versionado en db/schema.sql
 const schemaPath = path.resolve(__dirname, "../../../db/schema.sql");
 db.exec(fs.readFileSync(schemaPath, "utf-8"));
