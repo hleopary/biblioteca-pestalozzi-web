@@ -1,0 +1,804 @@
+/* ==========================================================================
+   Panel de Administración - Biblioteca Popular Pestalozzi
+   Utiliza los mismos tokens de diseño institucional de css/styles.css
+   ========================================================================== */
+
+:root {
+  --color-primary: #6b1d2b;
+  --color-primary-dark: #55151f;
+  --color-accent: #8b5e2b;
+  --color-accent-light: #d4a853;
+  --color-bg: #faf3e8;
+  --color-bg-alt: #ede4d4;
+  --color-surface: #ffffff;
+  --color-line: #c8b49a;
+  --color-text: #1c1008;
+  --color-text-muted: #6b5a48;
+  --color-success: #2d6a4f;
+  --color-warning: #b08d57;
+  --color-error: #9e2a2b;
+  --radius: 6px;
+  --font-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-base);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Header */
+.admin-header {
+  background-color: var(--color-primary);
+  color: #fff;
+  border-bottom: 3px solid var(--color-accent);
+  padding: 0.9rem 1.5rem;
+}
+
+.admin-header-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.admin-brand h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.admin-brand span {
+  color: var(--color-accent-light);
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.95rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.btn-secondary {
+  background-color: #fff;
+  color: var(--color-text);
+  border-color: var(--color-line);
+}
+.btn-secondary:hover {
+  background-color: var(--color-bg-alt);
+}
+
+.btn-danger {
+  background-color: #fff;
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+.btn-danger:hover {
+  background-color: var(--color-error);
+  color: #fff;
+}
+
+.btn-sm {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.82rem;
+}
+
+/* Contenedor Principal Amplio (100% disponible) */
+.admin-container {
+  max-width: 1440px;
+  width: 100%;
+  margin: 1.5rem auto;
+  padding: 0 1.25rem;
+  flex: 1;
+}
+
+/* Barra Superior del Dashboard: Tabs a la izquierda y Botón Notas comprimido a la derecha */
+.dashboard-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 2px solid var(--color-line);
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+/* Tabs: sin overflow que cause barras o flechas de scroll */
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: -2px; /* para unir con el borde inferior */
+  overflow: visible; /* Elimina flechas/scroll en navegadores */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  flex-wrap: wrap;
+}
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.tab-btn:hover {
+  color: var(--color-primary);
+}
+
+.tab-btn.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+/* Botón comprimido de Notas al lado de las tabs */
+.btn-notas-compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  border: 1px solid var(--color-line);
+  border-bottom: none;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius) var(--radius) 0 0;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-bottom: -2px;
+  transition: all 0.2s ease;
+  box-shadow: 0 -2px 4px rgba(0,0,0,0.03);
+}
+
+.btn-notas-compact:hover {
+  background-color: var(--color-bg-alt);
+}
+
+.badge-mini-sync {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  border-radius: 10px;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* Contenido Principal Expandido al 100% */
+.dashboard-main-full {
+  width: 100%;
+}
+
+.tab-content {
+  display: none;
+}
+.tab-content.active {
+  display: block;
+}
+
+/* ==========================================================================
+   Popover Flotante de Notas (Se abre justo DEBAJO del botón de Notas)
+   ========================================================================== */
+.notas-dropdown-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.notas-popover {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  width: 380px;
+  max-width: 90vw;
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius);
+  box-shadow: 0 14px 35px rgba(28, 16, 8, 0.22);
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+  padding: 1.25rem;
+  animation: popoverFadeIn 0.2s ease forwards;
+}
+
+.notas-popover.is-open {
+  display: flex;
+}
+
+@keyframes popoverFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.notas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.notas-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.notas-title {
+  font-size: 1.2rem;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.notas-status-pill {
+  font-size: 0.72rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 12px;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-weight: 600;
+}
+.notas-status-pill.saving {
+  background-color: #fff8e1;
+  color: #f57f17;
+}
+
+.btn-close-drawer {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 0.2rem;
+}
+.btn-close-drawer:hover {
+  color: var(--color-primary);
+}
+
+.notas-caption {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.9rem;
+  line-height: 1.35;
+}
+
+.notas-textarea {
+  width: 100%;
+  flex: 1;
+  min-height: 250px;
+  padding: 0.85rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--color-text);
+  background-color: #fffdf9;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  resize: none;
+  transition: border-color 0.2s;
+}
+.notas-textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background-color: #fff;
+}
+
+.notas-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+}
+
+.notas-meta {
+  color: var(--color-text-muted);
+}
+
+.btn-clean-notas {
+  background: none;
+  border: none;
+  color: var(--color-error);
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0.2rem;
+}
+.btn-clean-notas:hover {
+  opacity: 0.8;
+}
+
+/* ==========================================================================
+   Tarjetas y Formularios Generales
+   ========================================================================== */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+}
+
+.card-title {
+  font-size: 1.3rem;
+  margin-bottom: 0.4rem;
+  color: var(--color-primary);
+}
+
+.card-lead {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  font-size: 0.92rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  background-color: #fff;
+  color: var(--color-text);
+}
+.form-control:focus {
+  outline: 2px solid var(--color-primary);
+  border-color: transparent;
+}
+
+/* ==========================================================================
+   Tab 1: Horarios Editor
+   ========================================================================== */
+.horarios-editor {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.dia-row {
+  display: grid;
+  grid-template-columns: 140px 120px 1fr;
+  align-items: center;
+  gap: 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  padding: 0.8rem 1.2rem;
+  border-radius: var(--radius);
+}
+
+@media (max-width: 650px) {
+  .dia-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}
+
+.dia-nombre {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.dia-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   Tab 2: Visitas Escolares - Rediseño Total UX / UI
+   ========================================================================== */
+.visitas-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-line);
+  padding-bottom: 1rem;
+}
+
+.visitas-filters {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.visitas-filters .form-control {
+  padding: 0.45rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+/* Tabla 100% Fluida y sin Scroll Horizontal en Desktop */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.visitas-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  table-layout: auto;
+}
+
+.visitas-table th {
+  background-color: var(--color-bg-alt);
+  font-weight: 700;
+  color: var(--color-primary);
+  padding: 0.9rem 1.1rem;
+  text-align: left;
+  border-bottom: 2px solid var(--color-line);
+  white-space: nowrap;
+}
+
+.visitas-table td {
+  padding: 0.95rem 1.1rem;
+  border-bottom: 1px solid #f2e9dc;
+  vertical-align: middle;
+}
+
+.visitas-table tr:hover {
+  background-color: #faf5ee;
+}
+
+/* Columna Fecha y Turno */
+.col-fecha {
+  white-space: nowrap;
+}
+.fecha-main {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  display: block;
+}
+.badge-turno {
+  display: inline-block;
+  font-size: 0.72rem;
+  padding: 0.15rem 0.45rem;
+  background-color: var(--color-bg-alt);
+  color: var(--color-text-muted);
+  border-radius: 4px;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+
+/* Columna Institución */
+.inst-title {
+  font-weight: 700;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.inst-sub {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  display: block;
+  margin-top: 0.2rem;
+}
+
+/* Columna Docente y Contacto */
+.doc-name {
+  font-weight: 600;
+  color: var(--color-text);
+  font-size: 0.92rem;
+}
+
+.contact-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.8rem;
+  align-items: center;
+  margin-top: 0.2rem;
+}
+
+.contact-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-size: 0.82rem;
+}
+.contact-link:hover {
+  text-decoration: underline;
+}
+
+.contact-tel {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
+/* Badges de Estado */
+.badge {
+  display: inline-block;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.badge-pendiente {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+.badge-confirmada {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+.badge-rechazada {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+.badge-realizada {
+  background-color: #e2e3e5;
+  color: #383d41;
+  border: 1px solid #d6d8db;
+}
+
+/* Acciones */
+.actions-group {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
+.select-estado {
+  width: 120px;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-line);
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.btn-ver-obs,
+.btn-eliminar-visita {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  padding: 0.35rem 0.55rem;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+.btn-ver-obs:hover {
+  background-color: var(--color-bg-alt);
+}
+.btn-eliminar-visita:hover {
+  background-color: #fce8e6;
+  border-color: var(--color-error);
+}
+
+/* ==========================================================================
+   Tab 3: Novedades con Drag & Drop
+   ========================================================================== */
+.novedades-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.novedad-item {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.35rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  cursor: grab;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  user-select: none;
+}
+.novedad-item:hover {
+  box-shadow: 0 4px 12px rgba(28, 16, 8, 0.08);
+  border-color: var(--color-accent);
+}
+.novedad-item.dragging {
+  opacity: 0.45;
+  border: 2px dashed var(--color-accent);
+  background-color: var(--color-bg);
+  cursor: grabbing;
+}
+.novedad-item.drag-over {
+  border-top: 3px solid var(--color-primary);
+  transform: translateY(2px);
+}
+
+.drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-line);
+  font-size: 1.4rem;
+  cursor: grab;
+  padding: 0.2rem 0.4rem;
+  margin-right: 0.5rem;
+  transition: color 0.2s ease;
+}
+.novedad-item:hover .drag-handle {
+  color: var(--color-accent);
+}
+
+/* ==========================================================================
+   Modales (Perfil y Detalle Visita)
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(28, 16, 8, 0.55);
+  display: none;
+  place-items: center;
+  z-index: 2000;
+  padding: 1rem;
+}
+.modal-overlay.is-open {
+  display: grid;
+}
+
+.modal-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  max-width: 520px;
+  width: 100%;
+  padding: 1.75rem;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-line);
+  padding-bottom: 0.75rem;
+}
+
+.modal-header h3 {
+  color: var(--color-primary);
+  font-size: 1.25rem;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 0.2rem;
+}
+.modal-close:hover {
+  color: var(--color-text);
+}
+
+.profile-info {
+  background-color: var(--color-bg-alt);
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 1.25rem;
+  font-size: 0.88rem;
+}
+.profile-info p {
+  margin-bottom: 0.25rem;
+}
+
+/* Alertas */
+.alert {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  display: none;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Footer Admin */
+.admin-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--color-line);
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}

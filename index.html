@@ -288,6 +288,14 @@
                   <input type="date" id="fecha" name="fecha" required>
                   <p class="field-error" hidden>Elegí una fecha tentativa.</p>
                 </div>
+                <div class="form-field">
+                  <label for="turno">Turno preferido <span class="req">*</span></label>
+                  <select id="turno" name="turno" required>
+                    <option value="Turno Mañana">Turno Mañana (10:00 - 12:00)</option>
+                    <option value="Turno Tarde">Turno Tarde (14:00 - 18:00)</option>
+                    <option value="A convenir">A convenir</option>
+                  </select>
+                </div>
               </div>
 
               <div class="form-field">
@@ -413,11 +421,12 @@
     </div>
 
     <div class="container footer-bottom">
-      <p>&copy; <span id="year"></span> Biblioteca Popular Pestalozzi &middot; Berisso, Buenos Aires</p>
+      <p>&copy; <span id="year"></span> Biblioteca Popular Pestalozzi &middot; Berisso, Buenos Aires &middot; <a href="admin.html" style="color: var(--color-accent-light); text-decoration: underline;">Gestión Interna</a></p>
       <p>Sitio desarrollado con <span aria-hidden="true">&hearts;</span> para la comunidad &middot; Grupo Clouds</p>
     </div>
   </footer>
 
+  <script src="js/api-client.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

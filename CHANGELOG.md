@@ -10,15 +10,30 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
 ## [Sin publicar] (Unreleased)
 
 ### Añadido
-- **Registro de Decisiones de Arquitectura (ADR)**:
-  - Estructuración de la carpeta `adr/` con índice centralizado `adr/README.md`.
-  - Creación de 9 registros arquitectónicos oficiales (`ADR-0001` a `ADR-0009`) basados en las decisiones del Grupo Clouds (Jamstack, hosting $0, serverless forms, integración con Koha/Greenstone, exclusión de login obligatorio, horarios dinámicos, diseño flat editorial, optimización AVIF y flujo de ramas en GitHub Pages).
-- **Reglas operativas en `AGENTS.md`**:
-  - Incorporación como principio innegociable de la obligación de redactar el ADR y actualizar `CHANGELOG.md` al finalizar cada implementación.
+- **Backend Propio en Node.js / Express (`backend/`)**:
+  - Servidor API REST con Express, CORS y middleware centralizado de errores.
+  - Persistencia relacional portable con SQLite nativo (`node:sqlite`) en `backend/data/pestalozzi.db`.
+  - Seeder automático para poblar horarios, novedades y el usuario inicial de la bibliotecaria (`betsabe`).
+  - Módulo de autenticación con contraseñas hasheadas (`bcryptjs`) y tokens criptográficos JWT.
+  - Endpoints REST para cartelera cuatrimestral de horarios (`/api/horarios`).
+  - Endpoints para recepción, listado y cambio de estado de visitas escolares (`/api/visitas`) con notificaciones vía Nodemailer.
+  - Endpoints CRUD para novedades institucionales (`/api/novedades`).
+  - Endpoints para guardado, recuperación y eliminación de notas de la bibliotecaria (`/api/notas` con soporte `DELETE /api/notas/:id`).
+- **Panel de Gestión Interna (`admin.html`)**:
+  - Transformación del bloc de notas en un **Popover Flotante Desplegable** ubicado justo debajo del botón `📝 Notas` en la barra superior (con elevación, animación suave, foco automático y cierre por clic externo o `Escape`).
+  - Implementación de **Modal Institucional de Confirmación (`#modal-confirm`)** que reemplaza el `window.confirm()` nativo del navegador, garantizando que la eliminación de solicitudes de visitas y de novedades funcione de forma 100% fiable en cualquier navegador.
+  - Soporte nativo de **Drag & Drop** en la lista de Novedades Registradas con agarrador visual (`⠿`), permitiendo a la bibliotecaria reordenar las publicaciones arrastrándolas con persistencia inmediata en la base de datos vía `PUT /api/novedades/reordenar`.
+  - Expansión de las vistas de contenidos (Horarios, Visitas y Novedades) al 100% de ancho del panel principal.
+  - Rediseño de la tabla de Solicitudes de Visitas Escolares en 6 columnas integradas y optimizadas.
+- **Frontend Público (`index.html`)**:
+  - Implementación de **Scroll Horizontal Fluido (Carrusel)** en la sección de Novedades (`.section-novedades .card-grid-3`) con *scroll-snap* y barra de desplazamiento dorada institucional, permitiendo visualizar todas las novedades activas ordenadas según la prioridad definida en el admin.
+- **Decisiones de Arquitectura y Reglas**:
+  - Creación de `ADR-0010: Incorporación de Backend Node.js / Express para Gestión Dinámica y Persistencia`.
+  - Creación de `ADR-0011: Popover de Notas Flotante, Modal Institucional de Confirmación y Drag & Drop con Scroll en Novedades`.
+  - Actualización de `adr/README.md`.
 
 ### Pendiente
-- Conexión del formulario de visita escolar a servicio externo funcional (FormSubmit o Formspree).
-- Incorporación de favicon e isotipo definitivo en el encabezado.
+- Incorporación de favicon e isotipos definitivos en el encabezado.
 - Refinamiento de columna extra de contacto en el pie de página.
 - Ajuste de espaciados y tipografía fina según la maqueta institucional.
 
