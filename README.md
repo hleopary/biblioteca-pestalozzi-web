@@ -22,7 +22,7 @@ Sitio web estático (HTML + CSS + JS vanilla) para la **Biblioteca Popular Pesta
 - **CSS3** con variables personalizadas (custom properties), Flexbox/Grid, responsive mobile-first
 - **JavaScript vanilla (ES6+)** módulos, sin dependencias ni bundler
 - **Formularios**: FormSubmit / Formspree (sin backend propio)
-- **Despliegue**: GitHub Pages (rama `leopary_prueba2`) o Cloudflare Pages
+- **Despliegue**: Vercel (sitio estático desde `main`) y GitHub Pages como espejo
 - **Control de versiones**: Git + GitHub (`hleopary/biblioteca-pestalozzi-web`)
 
 > **Decisión**: Cero dependencias, cero build. Se abre `index.html` directo en navegador para desarrollo local.
@@ -61,7 +61,7 @@ git checkout leopary_prueba3
 # Opción B: npx live-server (si tenés Node instalado)
 ```
 
-> **Para el equipo:** clonar el repo, ubicarse en `leopary_prueba3` (`git checkout leopary_prueba3`) y abrir `index.html`. La versión publicada en GitHub Pages sale de `leopary_prueba2`.
+> **Para el equipo:** clonar el repo, ubicarse en `dev` (`git checkout dev`) y abrir `index.html`. La integración vive en `dev`; la publicación sale de `main`.
 
 ---
 
@@ -71,13 +71,28 @@ git checkout leopary_prueba3
 |------|-----------|
 | `main` | **Rama principal del proyecto** (producción / entregas formales vía PR). |
 | `dev` | **Rama de integración de desarrollo**. Todas las ramas temáticas nuevas nacen a partir de `dev`. |
-| `leopary_prueba2` | **Rama de despliegue activa en GitHub Pages** (estable). No recibe pushes directos. |
-| `leopary_prueba3` / ramas temáticas (`feat/*`) | **Ramas de trabajo** para ajustes y nuevas funcionalidades. |
+| `feat/*`, `fix/*`, `chore/*` | **Ramas de trabajo**, siempre creadas desde `dev`. |
+| `prueba/*` | Ramas de integración para resolver conflictos sin tocar la rama de otra persona. |
 > **Rama `leopary_prueba1` (eliminada el 14/10/2026):** era la primera landing institucional (02/10/2026). No se perdió historial: su commit `de32831` quedó dentro de la historia de `leopary_prueba2` y se puede recuperar con `git show de32831:index.html`.
 
-**Deploy (GitHub Pages)**: publica la rama `leopary_prueba2` / `(root)` → https://hleopary.github.io/biblioteca-pestalozzi-web/ · la rama `leopary_prueba3` **no** se publica: sus avances llegan a la web solo por merge a `leopary_prueba2`
-
 **Merge a main**: Solo vía Pull Request cuando la versión esté lista para "producción" (entrega formal).
+
+---
+
+## Deploy
+
+El sitio se publica en dos destinos desde este mismo repositorio:
+
+| Destino | Rama | Qué sirve |
+|---------|------|-----------|
+| **Vercel** (principal) | `main` en producción, `dev` en preview | Sitio estático completo |
+| **GitHub Pages** (espejo) | `main` | Sitio estático |
+
+**Vercel.** Importar el repositorio una vez y elegir el preset *Other*: no hay paso de build. `vercel.json` agrega caché larga para `assets/` y dos cabeceras de seguridad; `.vercelignore` deja fuera la base local y las dependencias del backend.
+
+**GitHub Pages.** Publica `main` / `(root)` → https://hleopary.github.io/biblioteca-pestalozzi-web/
+
+> **Alcance del deploy actual:** la API de `backend/` todavía no está publicada. El sitio funciona con el tablón estático de `index.html` y los formularios por Formspree, pero `admin.html` no puede autenticarse ni guardar cambios. La API necesita un origen con disco persistente; la migración a Vercel con Turso está planificada.
 
 ---
 
