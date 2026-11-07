@@ -1,7 +1,7 @@
 # Evidencia de pruebas — issue #13
 
 **Fecha:** 07/11/2026
-**Rama:** `dev-07nov2026A`
+**Rama:** `dev-07nov2026B` (modelo del DER)
 **Node:** v24.7.0
 **Comando principal:** `npm test` (desde `backend/`)
 
@@ -10,8 +10,8 @@
 | Suite | Archivo | Pruebas | Resultado |
 |---|---|---:|---|
 | Unitaria | `backend/tests/validators.test.js` | 12 | 12 en verde |
-| Integración | `backend/tests/api.test.js` | 7 | 7 en verde |
-| **Total** | | **19** | **19 en verde** |
+| Integración | `backend/tests/api.test.js` | 12 | 12 en verde |
+| **Total** | | **24** | **24 en verde** |
 
 Además se ejecutó el suite end-to-end anterior (`npm run test:smoke`): **13 de 13 en verde**, con la expectativa de horarios actualizada a 7 días.
 
@@ -34,7 +34,7 @@ Validan funciones puras de `backend/src/utils/validators.js`, sin base de datos 
 | 11 | `esDuplicado` otro cuatrimestre | El mismo rango en otro cuatrimestre no es duplicado |
 | 12 | `esDuplicado` lista vacía | Devuelve false sin registros |
 
-## Pruebas de integración (7)
+## Pruebas de integración (12)
 
 Levantan Express en un puerto efímero y usan una base SQLite temporal en `os.tmpdir()`. No tocan la base de desarrollo ni la de producción.
 
@@ -47,21 +47,26 @@ Levantan Express en un puerto efímero y usan una base SQLite temporal en `os.tm
 | 5 | Lectura pública refleja escritura | Un `PATCH` autenticado a horarios se ve en el `GET` público; luego se restaura |
 | 6 | Visitas sin campos | Responde 400 con mensaje de campos obligatorios |
 | 7 | Visitas con email inválido | Responde 400 nombrando el correo |
+| 8 | Alta de consulta (`CONTACTOS`) | Crea una consulta, la lista para el panel y la elimina |
+| 9 | Consulta sin mensaje | Responde 400 |
+| 10 | `GET /api/catalogos/categorias` | Devuelve las categorías con sus materiales |
+| 11 | Catálogo: crear y proteger | Crea categoría y material; la categoría con materiales no se puede borrar; vacía sí |
+| 12 | Novedad con `id_horario` inexistente | Responde 400 (clave foránea validada en la API) |
 
 ## Determinismo
 
 Se ejecutó `npm test` dos veces consecutivas con el mismo resultado:
 
 ```
-CORRIDA 1: tests 19 · pass 19 · fail 0
-CORRIDA 2: tests 19 · pass 19 · fail 0
+CORRIDA 1: tests 24 · pass 24 · fail 0
+CORRIDA 2: tests 24 · pass 24 · fail 0
 ```
 
 La salida completa de ambas corridas está en `13-salida-tests.txt` y la del suite end-to-end en `13-salida-smoke.txt`.
 
-## Hallazgo durante la implementación
+## Cambios respecto de la rama A
 
-La primera corrida falló en la prueba de email inválido: el validador de campos obligatorios trataba `alumnos_cant: 28` como ausente porque solo aceptaba strings. Se corrigió con la función `tieneContenido` (acepta números y booleanos, rechaza vacíos) y se agregó la prueba unitaria 4 para que no vuelva a pasar.
+La rama B implementa el modelo del DER: las tablas `horarios`, `solicitudes_visita` y `novedades_donaciones` usan las columnas del diagrama, y se agregan `contactos`, `categorias_coleccion` y `materiales_bibliograficos` con sus claves foráneas. Los controllers traducen esos nombres al contrato que ya usaba el frontend, por eso las pruebas existentes siguen pasando sin cambios.
 
 ## Cómo reproducir
 

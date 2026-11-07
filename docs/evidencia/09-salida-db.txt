@@ -1,7 +1,7 @@
-=== Evidencia de scripts de base — 2026-11-07T18:32:56-03:00
-=== Base temporal: ./data/evidencia-db.sqlite
+=== Evidencia de scripts de base (rama B) — 2026-11-07T19:31:40-03:00
+=== Base temporal: ./data/evidencia-b.sqlite
 
---- 1) db:reset (crear desde cero)
+--- 1) db:reset
 ✓ Archivos de base eliminados
 Iniciando sembrado de datos en la base de datos Pestalozzi...
 ✓ Contenido inicial cargado desde db/seed.sql.
@@ -9,29 +9,24 @@ Iniciando sembrado de datos en la base de datos Pestalozzi...
 Base de datos lista y sincronizada.
 
 --- 2) db:count
+  categorias_coleccion 2
+  contactos    0
   horarios     7
+  materiales_bibliograficos 6
   notas        1
-  novedades    3
+  novedades_donaciones 3
+  solicitudes_visita 0
   usuarios     1
-  visitas      0
 
---- 3) db:dump
+--- 3) integridad referencial (PRAGMA foreign_key_check)
+  violaciones: 0
+
+--- 4) db:dump
 ✓ Esquema aplicado desde db/schema.sql
-✓ Dump generado en db/dump.sql (5 tablas)
-    tablas en el dump: 5
-    inserts en el dump: 12
+✓ Dump generado en db/dump.sql (8 tablas)
+  tablas en el dump: 8
+  inserts en el dump: 20
 
---- 4) modificación manual del Martes (simula un cambio del panel)
-    Martes ahora: 20:00 - 22:00
-
---- 5) db:restore
+--- 5) modificación y db:restore
 ✓ Base restaurada desde db/dump.sql
-    Martes restaurado: 16:00 – 18:00
-    usuarios: 1
-
---- 6) segunda corrida de db:count (reproducibilidad)
-  horarios     7
-  notas        1
-  novedades    3
-  usuarios     1
-  visitas      0
+  Martes restaurado: 16:00 – 18:00

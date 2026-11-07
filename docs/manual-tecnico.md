@@ -146,85 +146,114 @@ El esquema versionado es `db/schema.sql` y es la **fuente única**: lo aplica `b
 
 El diagrama fuente está en `docs/der/der-implementado.puml`.
 
+El esquema implementa las seis entidades del DER de Etapa 2 y agrega `usuarios` y `notas`, que la Etapa 3 necesita. Son ocho tablas en total.
+
 ### 4.3 Tablas y campos
 
-#### `usuarios`
+#### `usuarios` (agregada por la Etapa 3)
 
-| Campo | Tipo | Restricciones | Descripción |
-|---|---|---|---|
-| `id` | INTEGER | PK, AUTOINCREMENT | Identificador |
-| `username` | TEXT | UNIQUE, NOT NULL | Usuario de acceso |
-| `password_hash` | TEXT | NOT NULL | Hash bcrypt (10 rondas) |
-| `nombre` | TEXT | NOT NULL | Nombre visible |
-| `email` | TEXT | — | Correo de contacto |
-| `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Alta |
+| Campo | Tipo | Restricciones |
+|---|---|---|
+| `id` | INTEGER | PK, AUTOINCREMENT |
+| `username` | TEXT | UNIQUE, NOT NULL |
+| `password_hash` | TEXT | NOT NULL (bcrypt, 10 rondas) |
+| `nombre` | TEXT | NOT NULL |
+| `email` | TEXT | — |
+| `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP |
 
-#### `horarios`
+#### `horarios` (DER)
 
-| Campo | Tipo | Restricciones | Descripción |
-|---|---|---|---|
-| `id` | INTEGER | PK, AUTOINCREMENT | Identificador |
-| `dia_orden` | INTEGER | NOT NULL | 1 = lunes … 7 = domingo |
-| `dia_nombre` | TEXT | NOT NULL | Nombre del día |
-| `horario_texto` | TEXT | NOT NULL | Rango (`16:00 – 18:00`) o `Cerrado` |
-| `activo` | INTEGER | NOT NULL, DEFAULT 0 | 1 si atiende |
-| `updated_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Última edición |
+| Campo | Tipo | Restricciones |
+|---|---|---|
+| `id_horario` | INTEGER | PK, AUTOINCREMENT |
+| `dias_atencion` | TEXT | NOT NULL (por ejemplo, "Martes") |
+| `rango_horario` | TEXT | NOT NULL ("16:00 – 18:00" o "Cerrado") |
+| `cuatrimestre` | TEXT | NOT NULL ("2026-2") |
+| `dia_orden` | INTEGER | NOT NULL (orden del tablón) |
+| `updated_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP |
 
-#### `visitas`
+#### `categorias_coleccion` (DER)
 
-| Campo | Tipo | Restricciones | Descripción |
-|---|---|---|---|
-| `id` | INTEGER | PK, AUTOINCREMENT | Identificador |
-| `institucion` | TEXT | NOT NULL | Escuela u organización |
-| `responsable` | TEXT | NOT NULL | Docente a cargo |
-| `telefono` | TEXT | NOT NULL | Contacto |
-| `email` | TEXT | NOT NULL | Correo |
-| `nivel` | TEXT | NOT NULL | Nivel o grado |
-| `alumnos_cant` | INTEGER | NOT NULL | Cantidad de alumnos |
-| `fecha_preferida` | TEXT | NOT NULL | Fecha solicitada |
-| `turno` | TEXT | NOT NULL | Turno |
-| `observaciones` | TEXT | — | Comentarios |
-| `estado` | TEXT | NOT NULL, DEFAULT 'pendiente' | pendiente / confirmada |
-| `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Alta |
+| Campo | Tipo | Restricciones |
+|---|---|---|
+| `id_categoria` | INTEGER | PK, AUTOINCREMENT |
+| `nombre` | TEXT | UNIQUE, NOT NULL |
+| `descripcion` | TEXT | — |
 
-#### `novedades`
+#### `materiales_bibliograficos` (DER)
 
-| Campo | Tipo | Restricciones | Descripción |
-|---|---|---|---|
-| `id` | INTEGER | PK, AUTOINCREMENT | Identificador |
-| `orden` | INTEGER | NOT NULL, DEFAULT 1 | Orden de publicación |
-| `categoria` | TEXT | NOT NULL | Etiqueta |
-| `categoria_color` | TEXT | NOT NULL, DEFAULT '#8b5e2b' | Color de la etiqueta |
-| `fecha_texto` | TEXT | NOT NULL | Fecha visible |
-| `titulo` | TEXT | NOT NULL | Título |
-| `descripcion` | TEXT | NOT NULL | Texto |
-| `activa` | INTEGER | NOT NULL, DEFAULT 1 | Visible u oculta |
-| `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Alta |
+| Campo | Tipo | Restricciones |
+|---|---|---|
+| `id_material` | INTEGER | PK, AUTOINCREMENT |
+| `titulo` | TEXT | NOT NULL |
+| `autor` | TEXT | — |
+| `link_koha` | TEXT | — |
+| `link_greenstone` | TEXT | — |
+| `id_categoria` | INTEGER | NOT NULL, **FK** → `categorias_coleccion.id_categoria` |
 
-#### `notas`
+#### `solicitudes_visita` (DER)
 
-| Campo | Tipo | Restricciones | Descripción |
-|---|---|---|---|
-| `id` | INTEGER | PK, CHECK (id = 1) | Fila única |
-| `contenido` | TEXT | NOT NULL, DEFAULT '' | Texto del bloc |
-| `updated_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Última edición |
+| Campo | Tipo | Restricciones |
+|---|---|---|
+| `id_solicitud` | INTEGER | PK, AUTOINCREMENT |
+| `escuela` | TEXT | NOT NULL |
+| `docente` | TEXT | NOT NULL |
+| `email` | TEXT | NOT NULL |
+| `fecha_visita` | TEXT | NOT NULL |
+| `estado` | TEXT | NOT NULL, DEFAULT 'pendiente' |
+| `telefono` | TEXT | NOT NULL |
+| `nivel` | TEXT | NOT NULL |
+| `alumnos_cant` | INTEGER | NOT NULL |
+| `turno` | TEXT | NOT NULL |
+| `observaciones` | TEXT | — |
+| `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP |
+
+#### `contactos` (DER)
+
+| Campo | Tipo | Restricciones |
+|---|---|---|
+| `id_contacto` | INTEGER | PK, AUTOINCREMENT |
+| `nombre` | TEXT | NOT NULL |
+| `email` | TEXT | NOT NULL |
+| `mensaje` | TEXT | NOT NULL |
+| `fecha_envio` | DATETIME | DEFAULT CURRENT_TIMESTAMP |
+| `telefono` | TEXT | — |
+
+#### `novedades_donaciones` (DER)
+
+| Campo | Tipo | Restricciones |
+|---|---|---|
+| `id_novedad` | INTEGER | PK, AUTOINCREMENT |
+| `titulo` | TEXT | NOT NULL |
+| `contenido` | TEXT | NOT NULL |
+| `fecha_publicacion` | TEXT | NOT NULL |
+| `id_horario` | INTEGER | **FK** → `horarios.id_horario` (opcional) |
+| `orden` | INTEGER | NOT NULL, DEFAULT 1 |
+| `categoria` | TEXT | NOT NULL |
+| `categoria_color` | TEXT | NOT NULL, DEFAULT '#8b5e2b' |
+| `activa` | INTEGER | NOT NULL, DEFAULT 1 |
+| `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP |
+
+#### `notas` (agregada por la Etapa 3)
+
+| Campo | Tipo | Restricciones |
+|---|---|---|
+| `id` | INTEGER | PK, CHECK (id = 1) |
+| `contenido` | TEXT | NOT NULL, DEFAULT '' |
+| `updated_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP |
 
 ### 4.4 Relaciones
 
-El esquema implementado **no declara claves foráneas**: cada tabla se usa de forma independiente y la aplicación no necesita uniones. Esta decisión y su correspondencia con el DER de Etapa 2 están documentadas en el ADR-0012.
+| Relación | Tipo | Clave foránea |
+|---|---|---|
+| `categorias_coleccion` → `materiales_bibliograficos` | 1:N | `materiales_bibliograficos.id_categoria` |
+| `horarios` → `novedades_donaciones` | 1:N (opcional) | `novedades_donaciones.id_horario` |
+
+Las claves foráneas se aplican en la base (`PRAGMA foreign_keys = ON` en cada conexión) y la API valida las referencias antes de escribir.
 
 ### 4.5 Correspondencia con el DER de Etapa 2
 
-| Entidad del DER | Tabla | Situación |
-|---|---|---|
-| `HORARIOS` | `horarios` | Rediseñada: una fila por día, sin cuatrimestre ni rotaciones |
-| `SOLICITUDES_VISITA` | `visitas` | Ampliada con los campos del formulario real |
-| `NOVEDADES_DONACIONES` | `novedades` | Sin la FK a horarios |
-| `CATEGORIAS_COLECCION` | — | No implementada: catálogos externos |
-| `MATERIALES_BIBLIOGRAFICOS` | — | No implementada: no se cataloga material propio |
-| `CONTACTOS` | — | No implementada: consultas por Formspree |
-| — | `usuarios` | Nueva: autenticación del panel |
-| — | `notas` | Nueva: bloc de la bibliotecaria |
+La implementación reproduce el DER: las seis entidades existen con sus nombres, claves primarias y las dos claves foráneas. Se agregaron columnas que el diagrama no detalla pero que la aplicación necesita (campos del formulario de visitas, orden y etiqueta de novedades, `dia_orden` para el tablón y `updated_at`). Las dos entidades nuevas (`usuarios` y `notas`) están documentadas en ADR-0013.
 
 ### 4.6 Creación, seed y restauración
 
@@ -359,6 +388,17 @@ El sitio público puede abrirse con doble clic en `index.html`, pero el panel y 
 | GET | `/api/notas` | JWT | Leer el bloc |
 | PUT | `/api/notas` | JWT | Guardar el bloc |
 | DELETE | `/api/notas/:id` | JWT | Eliminar una nota |
+| POST | `/api/contactos` | No | Consulta general |
+| GET | `/api/contactos` | JWT | Listar consultas |
+| DELETE | `/api/contactos/:id` | JWT | Eliminar consulta |
+| GET | `/api/catalogos/categorias` | No | Categorías con sus materiales |
+| GET | `/api/catalogos/materiales` | No | Materiales |
+| POST | `/api/catalogos/categorias` | JWT | Crear categoría |
+| PUT | `/api/catalogos/categorias/:id` | JWT | Actualizar categoría |
+| DELETE | `/api/catalogos/categorias/:id` | JWT | Eliminar categoría |
+| POST | `/api/catalogos/materiales` | JWT | Crear material |
+| PUT | `/api/catalogos/materiales/:id` | JWT | Actualizar material |
+| DELETE | `/api/catalogos/materiales/:id` | JWT | Eliminar material |
 
 ### 6.4 Controllers
 
@@ -369,6 +409,8 @@ El sitio público puede abrirse con doble clic en `index.html`, pero el panel y 
 | `visitasController` | Alta pública, listado, cambio de estado y borrado |
 | `novedadesController` | CRUD y reordenamiento de novedades |
 | `notasController` | Lectura, guardado y borrado del bloc |
+| `contactosController` | Alta pública de consultas, listado y borrado |
+| `catalogosController` | Categorías con materiales y CRUD del catálogo interno |
 
 ### 6.5 Middlewares
 
@@ -390,7 +432,7 @@ El sitio público puede abrirse con doble clic en `index.html`, pero el panel y 
 |---|---|
 | `js/api-client.js` | Cliente HTTP; usa `/api` cuando el sitio se sirve desde el mismo origen y `localhost:3000` en desarrollo con otro puerto |
 | `js/main.js` | Carga horarios y novedades desde la API, con respaldo estático si la API no responde; valida los formularios |
-| `js/admin.js` | Login, edición de horarios, CRUD de novedades, solicitudes y notas |
+| `js/admin.js` | Login, edición de horarios, CRUD de novedades, solicitudes, consultas, catálogo y notas |
 
 ---
 
@@ -439,14 +481,14 @@ Si la API no responde, el sitio público conserva el tablón y las novedades est
 | Tipo | Archivo | Pruebas |
 |---|---|---|
 | Unitarias | `backend/tests/validators.test.js` | 12 |
-| Integración | `backend/tests/api.test.js` | 7 |
+| Integración | `backend/tests/api.test.js` | 12 |
 | End-to-end histórica | `backend/test-api.js` | 13 |
 
 Comandos:
 
 ```bash
 cd backend
-npm test              # 19 pruebas (unitarias + integración)
+npm test              # 24 pruebas (unitarias + integración)
 npm run test:unit
 npm run test:integration
 npm run test:smoke    # suite end-to-end
@@ -463,7 +505,7 @@ Ninguna suite toca la base de desarrollo ni la de producción:
 
 | Ejecución | Resultado |
 |---|---|
-| `npm test` (dos corridas) | 19/19 |
+| `npm test` (dos corridas) | 24/24 |
 | `npm run test:smoke` | 13/13 |
 
 La evidencia completa está en `docs/evidencia/13-pruebas.md`, con las salidas crudas en `13-salida-tests.txt` y `13-salida-smoke.txt`.
@@ -547,5 +589,5 @@ Definir al menos `JWT_SECRET`, `ADMIN_USER`, `ADMIN_PASS` y `ADMIN_EMAIL`. Opcio
 | DER implementado | `docs/der/der-implementado.puml` |
 | Evidencia de pruebas | `docs/evidencia/13-pruebas.md` |
 | Evidencia de base de datos | `docs/evidencia/09-base-de-datos.md` |
-| Decisiones de arquitectura | `adr/` (ADR-0001 a ADR-0012) |
+| Decisiones de arquitectura | `adr/` (ADR-0001 a ADR-0013) |
 | Registro de cambios | `CHANGELOG.md` |

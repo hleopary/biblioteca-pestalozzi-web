@@ -2,7 +2,7 @@ Iniciando sembrado de datos en la base de datos Pestalozzi...
 ✓ Contenido inicial cargado desde db/seed.sql.
 ✓ Usuario admin inicial creado: "betsabe".
 Base de datos lista y sincronizada.
-(node:32492) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:90082) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
 
 === INICIANDO SUITE DE PRUEBAS AUTOMATIZADAS (Puerto 3055) ===

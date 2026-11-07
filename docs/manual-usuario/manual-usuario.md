@@ -96,7 +96,11 @@ Tres tarjetas con las novedades de la biblioteca: donaciones, recomendaciones e 
 
 Presenta las colecciones especiales, como el fondo Berisso–La Plata y la colección de colectividades de inmigrantes.
 
+Debajo de las dos tarjetas aparece **Materiales destacados**, con los títulos cargados desde el panel para cada colección. Si un material tiene enlace al catálogo, se muestra el acceso.
+
 ![Colecciones](capturas/04-colecciones.png)
+
+![Materiales destacados](capturas/12-materiales.png)
 
 ### 5.4 Sala infantil (bebeteca)
 
@@ -212,6 +216,8 @@ Al ingresar aparecen tres pestañas y el botón de notas.
 | **Horarios Cuatrimestrales** | Actualizar los días y horarios de atención |
 | **Visitas Escolares** | Ver y gestionar las solicitudes recibidas |
 | **Novedades de la Biblioteca** | Publicar, editar, eliminar y reordenar novedades |
+| **Consultas** | Leer y eliminar las consultas del formulario general |
+| **Catálogo** | Administrar las categorías de colección y sus materiales |
 | **Notas** | Bloc personal de la bibliotecaria |
 
 ### 7.1 Actualizar los horarios
@@ -242,9 +248,10 @@ El cambio se ve de inmediato en el sitio público, sin necesidad de avisar a nad
 
 1. Abrir la pestaña **Novedades de la Biblioteca**.
 2. Completar categoría, título y descripción.
-3. Presionar **Publicar novedad**.
-4. Para cambiar el orden, arrastrar las tarjetas.
-5. Para editar o eliminar, usar los botones de cada tarjeta. La eliminación pide confirmación.
+3. Si la novedad se relaciona con un día de atención, elegirlo en **Día relacionado** (es opcional).
+4. Presionar **Publicar novedad**.
+5. Para cambiar el orden, arrastrar las tarjetas.
+6. Para editar o eliminar, usar los botones de cada tarjeta. La eliminación pide confirmación.
 
 La novedad aparece en el sitio público en cuanto se publica.
 
@@ -257,6 +264,29 @@ La novedad aparece en el sitio público en cuanto se publica.
 3. El bloc guarda solo y muestra **Sincronizado** cuando terminó.
 
 Las notas son privadas: no se publican en el sitio.
+
+### 7.5 Leer y eliminar consultas
+
+![Consultas del panel](capturas/35-admin-consultas.png)
+
+1. Abrir la pestaña **Consultas**. El número entre paréntesis indica cuántas hay.
+2. Leer el nombre, el contacto y el mensaje de cada consulta.
+3. Presionar **Eliminar** y confirmar cuando la consulta ya fue respondida.
+
+Las consultas también se envían al correo de la biblioteca; el panel conserva el historial.
+
+### 7.6 Administrar el catálogo de colecciones
+
+![Catálogo del panel](capturas/36-admin-catalogo.png)
+
+1. Abrir la pestaña **Catálogo**.
+2. Para agregar un material, completar título, autor (opcional), categoría y, si existe, el enlace al catálogo Koha o Greenstone.
+3. Presionar **Agregar material**.
+4. Para crear una categoría nueva, escribir el nombre en **Nueva categoría** y presionar **Agregar**.
+5. Para borrar un material, usar **Eliminar** y confirmar.
+6. Una categoría solo se puede eliminar cuando ya no tiene materiales.
+
+Los materiales aparecen en la sección **Colecciones** del sitio público.
 
 ---
 
@@ -274,6 +304,9 @@ Las notas son privadas: no se publican en el sitio.
 | *"Cartelera de horarios guardada exitosamente."* | Se guardaron los horarios | Nada, el cambio ya está publicado |
 | *"Novedad eliminada."* | Se borró una novedad | Nada |
 | *"El catálogo estará disponible próximamente…"* | El enlace externo aún no está cargado | Esperar la confirmación de la biblioteca |
+| *"Consulta eliminada."* | Se borró una consulta del panel | Nada |
+| *"Material agregado correctamente."* | Se sumó un material al catálogo | Nada |
+| *"No se puede eliminar la categoría porque tiene materiales asociados."* | La categoría todavía tiene materiales | Borrar primero los materiales |
 
 ---
 

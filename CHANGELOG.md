@@ -112,6 +112,15 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
 - **Tablón de horarios sin filas fijas**: se quitaron las seis filas estáticas de `index.html`; la lista se construye con la API.
 - **Estado de fallo explícito**: si la API no responde, el tablón muestra un mensaje, un enlace a WhatsApp y un botón para reintentar. Se agregó un aviso para navegadores sin JavaScript.
 
+### Modelo del DER (rama B)
+- **Esquema con las seis entidades del DER** (HORARIOS, CATEGORIAS_COLECCION, MATERIALES_BIBLIOGRAFICOS, SOLICITUDES_VISITA, CONTACTOS y NOVEDADES_DONACIONES) con sus dos claves foráneas, más USUARIOS y NOTAS.
+- **Endpoints nuevos**: `/api/contactos` (alta pública, lectura y borrado autenticados) y `/api/catalogos` (categorías con materiales en lectura pública; CRUD autenticado).
+- **Formulario de consulta**: guarda en `CONTACTOS` y además reenvía por Formspree.
+- **Sitio**: los materiales de las colecciones se leen de la base.
+- **Panel**: pestañas Consultas y Catálogo, y día relacionado opcional en novedades.
+- **Pruebas**: 24 (12 unitarias y 12 de integración).
+- **DER y ADR-0013** actualizados.
+
 ### Pendiente
 - Incorporación de favicon e isotipos definitivos en el encabezado.
 - Refinamiento de columna extra de contacto en el pie de página.
