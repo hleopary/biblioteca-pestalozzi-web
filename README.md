@@ -18,14 +18,30 @@ Sitio web estático (HTML + CSS + JS vanilla) para la **Biblioteca Popular Pesta
 
 ## Stack tecnologico
 
+**Frontend**
 - **HTML5** semántico
 - **CSS3** con variables personalizadas (custom properties), Flexbox/Grid, responsive mobile-first
-- **JavaScript vanilla (ES6+)** módulos, sin dependencias ni bundler
-- **Formularios**: FormSubmit / Formspree (sin backend propio)
-- **Despliegue**: Vercel (sitio estático desde `main`) y GitHub Pages como espejo
-- **Control de versiones**: Git + GitHub (`hleopary/biblioteca-pestalozzi-web`)
+- **JavaScript vanilla (ES6+)**, sin framework ni bundler
 
-> **Decisión**: Cero dependencias, cero build. Se abre `index.html` directo en navegador para desarrollo local.
+**Backend**
+- **Node.js 24** + **Express ^4.21.1**
+- **Base de datos**: SQLite embebido con `node:sqlite`; esquema versionado en `db/schema.sql`
+- **Autenticación**: JWT (`jsonwebtoken`) + hash de contraseñas con `bcryptjs`
+- **Correo**: `nodemailer` (opcional; se simula por consola si no hay SMTP)
+- **Pruebas**: runner nativo `node:test`
+
+**Formularios**
+- **Visitas escolares**: se persisten en la base mediante la API
+- **Consulta general**: se entrega por Formspree
+
+**Despliegue**
+- **Railway**: aplicación completa (sitio + panel + API + SQLite con volumen)
+- **Vercel**: espejo estático
+- **GitHub Pages**: espejo estático desde `main`
+
+**Control de versiones**: Git + GitHub (`hleopary/biblioteca-pestalozzi-web`)
+
+> **Decisión**: el frontend mantiene cero dependencias y cero build; el backend tiene sus propias dependencias y se instala con `npm install`. La decisión completa de persistencia y hosting está en [docs/adr/ADR-001-persistence-and-hosting.md](docs/adr/ADR-001-persistence-and-hosting.md).
 
 ---
 
