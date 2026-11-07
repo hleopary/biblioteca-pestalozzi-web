@@ -16,12 +16,12 @@ function initNavToggle() {
     const isOpen = nav.classList.toggle("is-open");
     toggle.setAttribute("aria-expanded", String(isOpen));
 
-   // Actualiza el nombre accesible para lectores de pantalla
+    // Actualiza el nombre accesible para lectores de pantalla
     if (srText) {
       srText.textContent = isOpen
         ? "Cerrar menú de navegación"
         : "Abrir menú de navegación";
-    } 
+    }
   });
 
   nav.addEventListener("click", function (event) {
@@ -155,7 +155,7 @@ function initCatalogosExternos() {
     }
   }
 
-    const greenstoneEl = document.querySelector('[data-catalog="greenstone"]');
+  const greenstoneEl = document.querySelector('[data-catalog="greenstone"]');
   if (greenstoneEl) {
     if (DATOS_CATALOGOS.greenstoneUrl) {
       greenstoneEl.href = DATOS_CATALOGOS.greenstoneUrl;
@@ -185,27 +185,27 @@ function initTramites() {
   // 1. Botón de Formulario / Trámite de Asociación
   const asociacionEl = document.querySelector('[data-tramite="asociacion"]');
   if (asociacionEl) {
-    if (DATOS_TRAMITES.asociacionUrl){
-    asociacionEl.href = DATOS_TRAMITES.asociacionUrl;
-    asociacionEl.target = "_blank";
-    asociacionEl.rel = "noopener noreferrer";
+    if (DATOS_TRAMITES.asociacionUrl) {
+      asociacionEl.href = DATOS_TRAMITES.asociacionUrl;
+      asociacionEl.target = "_blank";
+      asociacionEl.rel = "noopener noreferrer";
     } else {
       asociacionEl.href = "#";
       asociacionEl.addEventListener("click", (e) => {
         e.preventDefault();
         alert("El formulario para asociarse a la biblioteca estará disponible próximamente con el enlace oficial de la biblioteca.");
-        });
-      }
+      });
     }
-      
+  }
+
 
   // 2. Botón para Pedir Préstamo
   const pedirPrestamoEl = document.querySelector('[data-tramite="pedir-prestamo"]');
   if (pedirPrestamoEl) {
-    if (DATOS_TRAMITES.pedirPrestamoUrl){
-    pedirPrestamoEl.href = DATOS_TRAMITES.pedirPrestamoUrl;
-    pedirPrestamoEl.target = "_blank";
-    pedirPrestamoEl.rel = "noopener noreferrer";
+    if (DATOS_TRAMITES.pedirPrestamoUrl) {
+      pedirPrestamoEl.href = DATOS_TRAMITES.pedirPrestamoUrl;
+      pedirPrestamoEl.target = "_blank";
+      pedirPrestamoEl.rel = "noopener noreferrer";
     } else {
       pedirPrestamoEl.href = "#";
       pedirPrestamoEl.addEventListener("click", (e) => {
@@ -218,10 +218,10 @@ function initTramites() {
   // 3. Botón para Renovar Préstamo
   const renovarEl = document.querySelector('[data-tramite="renovar-prestamo"]');
   if (renovarEl) {
-    if (DATOS_TRAMITES.renovarPrestamoUrl){
-    renovarEl.href = DATOS_TRAMITES.renovarPrestamoUrl;
-    renovarEl.target = "_blank";
-    renovarEl.rel = "noopener noreferrer";
+    if (DATOS_TRAMITES.renovarPrestamoUrl) {
+      renovarEl.href = DATOS_TRAMITES.renovarPrestamoUrl;
+      renovarEl.target = "_blank";
+      renovarEl.rel = "noopener noreferrer";
     } else {
       renovarEl.href = "#";
       renovarEl.addEventListener("click", (e) => {
@@ -231,23 +231,109 @@ function initTramites() {
     }
   }
 }
-  
+
+function initConsultaForm() {
+  const form = document.getElementById("consulta-form");
+  const status = document.getElementById("consulta-status");
+  if (!form || !status) return;
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    let isValid = true;
+    const nombre = form.querySelector("#consulta-nombre");
+    const email = form.querySelector("#consulta-email");
+    const mensaje = form.querySelector("#consulta-mensaje");
+
+    // Limpiar errores previos
+    form.querySelectorAll(".field-error").forEach((el) => (el.hidden = true));
+    form.querySelectorAll(".form-field").forEach((el) => el.classList.remove("has-error"));
+    status.hidden = true;
+
+    // Validación Nombre
+    if (!nombre.value.trim()) {
+      showFieldError(nombre, "Ingresá tu nombre.");
+      isValid = false;
+    }
+
+    // Validación Email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.value.trim() || !emailRegex.test(email.value.trim())) {
+      showFieldError(email, "Ingresá un correo electrónico válido.");
+      isValid = false;
+    }
+
+    // Validación Mensaje
+    if (!mensaje.value.trim()) {
+      showFieldError(mensaje, "Ingresá el detalle de tu consulta.");
+      isValid = false;
+    }
+
+    if (!isValid) return;
+
+    // Enviar consulta
+    const submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Enviando consulta...";
+
+    try {
+      // Endpoint compatible con Formspree / FormSubmit o backend propio
+      const response = await fetch("https://formspree.io/f/xeaawadr", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          nombre: nombre.value.trim(),
+          email: email.value.trim(),
+          telefono: form.querySelector("#consulta-telefono").value.trim(),
+          mensaje: mensaje.value.trim()
+        })
+      });
+
+      if (response.ok) {
+        status.textContent = "Consulta enviada con éxito. Te responderemos a la brevedad.";
+        status.className = "form-status is-success";
+        status.hidden = false;
+        form.reset();
+      } else {
+        throw new Error("Respuesta no satisfactoria del servidor");
+      }
+    } catch (err) {
+      status.textContent = "Ocurrió un error al enviar la consulta. Podés contactarnos directamente por WhatsApp.";
+      status.className = "form-status is-error";
+      status.hidden = false;
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Enviar consulta";
+    }
+  });
+
+  function showFieldError(input, message) {
+    const parent = input.closest(".form-field");
+    if (!parent) return;
+    parent.classList.add("has-error");
+    const err = parent.querySelector(".field-error");
+    if (err) {
+      err.textContent = message;
+      err.hidden = false;
+    }
+  }
+}
 
 // ============================================================================
 // CONFIGURACIÓN CENTRALIZADA DE DATOS DE CONTACTO (Feat #6)
 // Cambiar un valor aquí actualiza automáticamente el Footer y todos los CTA.
 // ============================================================================
 const DATOS_CONTACTO = {
-  direccionTexto: "Calle 8 N° 3656 (entre 158 y 159), Berisso, Buenos Aires", 
+  direccionTexto: "Calle 8 N° 3656 (entre 158 y 159), Berisso, Buenos Aires",
   direccionMapaUrl: "https://maps.google.com/?q=Biblioteca+Popular+Pestalozzi+Berisso",
-  telefonoVisible: "(0221) 461-1851", 
+  telefonoVisible: "(0221) 461-1851",
   telefonoHref: "tel:+542214611851",
-  whatsappNumero: "5492210000000", 
+  whatsappNumero: "5492210000000",
   whatsappMensaje: "Hola Biblioteca Pestalozzi, quería realizar una consulta desde el sitio web.",
-  email: "bibliotecapestalozziberisso@gmail.com", 
+  email: "bibliotecapestalozziberisso@gmail.com",
   redes: {
-    instagram: "https://www.instagram.com/bibliopestalozzi/", 
-    facebook: "https://www.facebook.com/bibliotecapopularpestalozzi/" 
+    instagram: "https://www.instagram.com/bibliopestalozzi/",
+    facebook: "https://www.facebook.com/bibliotecapopularpestalozzi/"
   }
 };
 
@@ -306,7 +392,7 @@ function initDatosContacto() {
   }
 
 
-  
+
   const correoBtn = document.querySelector('[data-contact="correo-consulta"]');
   if (correoBtn && DATOS_CONTACTO.email) {
     correoBtn.href = `mailto:${DATOS_CONTACTO.email}?subject=${encodeURIComponent("Consulta general - Biblioteca Pestalozzi")}`;
@@ -322,6 +408,7 @@ document.addEventListener("DOMContentLoaded", function () {
   initVisitaForm();
   initCatalogosExternos();
   initTramites();
+  initConsultaForm()
   initDatosContacto();
 
 });
