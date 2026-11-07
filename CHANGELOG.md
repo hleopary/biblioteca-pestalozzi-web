@@ -94,6 +94,17 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
   - `.tag` (13,6px) y la línea de ciudad de la marca (12,8px) se elevan a 14px (0.875rem), completando el criterio de `Feat #7`.
   - El contorno de foco también cubre `select:focus-visible`.
 
+### Pruebas, base de datos y DER (Etapa 3)
+- **Suite de pruebas con `node:test`** (sin dependencias nuevas):
+  - 12 pruebas unitarias de las validaciones puras (campos obligatorios, correo, formato y orden del rango horario, duplicados).
+  - 7 pruebas de integración sobre la API real, con Express en un puerto efímero y SQLite en un archivo temporal.
+  - Scripts `npm test`, `test:unit`, `test:integration` y `test:smoke`; evidencia en `docs/evidencia/`.
+- **Validaciones extraídas a `backend/src/utils/validators.js`** y reutilizadas por los controllers de visitas y novedades.
+- **Scripts de base de datos** en `db/` y `backend/scripts/db.js`:
+  - `db/schema.sql` como fuente única del esquema y `db/seed.sql` con el contenido inicial.
+  - Comandos `db:migrate`, `db:seed`, `db:reset`, `db:dump`, `db:restore` y `db:count`.
+- **DER reconciliado** en `docs/der/der-implementado.puml` y ADR-0012, que documenta la correspondencia con el DER de Etapa 2.
+
 ### Pendiente
 - Incorporación de favicon e isotipos definitivos en el encabezado.
 - Refinamiento de columna extra de contacto en el pie de página.

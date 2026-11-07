@@ -1,0 +1,74 @@
+@startuml
+hide circle
+skinparam shadowing false
+skinparam linetype ortho
+title Modelo entidad-relación implementado\nSistema Web Biblioteca Pestalozzi
+
+entity "USUARIOS" as usuarios {
+  * id: INTEGER <<PK>>
+  --
+  * username: TEXT <<UNIQUE>>
+  * password_hash: TEXT
+  * nombre: TEXT
+  email: TEXT
+  created_at: DATETIME
+}
+
+entity "HORARIOS" as horarios {
+  * id: INTEGER <<PK>>
+  --
+  * dia_orden: INTEGER
+  * dia_nombre: TEXT
+  * horario_texto: TEXT
+  * activo: INTEGER
+  updated_at: DATETIME
+}
+
+entity "VISITAS" as visitas {
+  * id: INTEGER <<PK>>
+  --
+  * institucion: TEXT
+  * responsable: TEXT
+  * telefono: TEXT
+  * email: TEXT
+  * nivel: TEXT
+  * alumnos_cant: INTEGER
+  * fecha_preferida: TEXT
+  * turno: TEXT
+  observaciones: TEXT
+  * estado: TEXT
+  created_at: DATETIME
+}
+
+entity "NOVEDADES" as novedades {
+  * id: INTEGER <<PK>>
+  --
+  * orden: INTEGER
+  * categoria: TEXT
+  * categoria_color: TEXT
+  * fecha_texto: TEXT
+  * titulo: TEXT
+  * descripcion: TEXT
+  * activa: INTEGER
+  created_at: DATETIME
+}
+
+entity "NOTAS" as notas {
+  * id: INTEGER <<PK>> (id = 1)
+  --
+  * contenido: TEXT
+  updated_at: DATETIME
+}
+
+note bottom of visitas
+  Sin claves foráneas: la aplicación no necesita
+  uniones entre tablas. Las entidades son independientes.
+end note
+
+note bottom of novedades
+  En el DER de Etapa 2 esta entidad tenía una FK
+  hacia HORARIOS. La versión implementada no la usa:
+  las novedades no dependen de un día de atención.
+end note
+
+@enduml
