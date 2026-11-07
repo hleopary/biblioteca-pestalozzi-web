@@ -42,3 +42,6 @@ coverage/
 # Misceláneos
 *.tgz
 .cache/
+
+# Dump generado por scripts/db.js (contiene datos de la base)
+db/dump.sql

@@ -10,7 +10,13 @@
     "test": "node --test tests/*.test.js",
     "test:unit": "node --test tests/validators.test.js",
     "test:integration": "node --test tests/api.test.js",
-    "test:smoke": "node test-api.js"
+    "test:smoke": "node test-api.js",
+    "db:migrate": "node scripts/db.js migrate",
+    "db:seed": "node scripts/db.js seed",
+    "db:reset": "node scripts/db.js reset",
+    "db:dump": "node scripts/db.js dump",
+    "db:restore": "node scripts/db.js restore",
+    "db:count": "node scripts/db.js count"
   },
   "keywords": [
     "pestalozzi",
