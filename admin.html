@@ -65,6 +65,12 @@
           <button class="tab-btn" data-tab="tab-novedades" role="tab" aria-selected="false">
             📰 Novedades de la Biblioteca
           </button>
+          <button class="tab-btn" data-tab="tab-consultas" role="tab" aria-selected="false">
+            ✉️ Consultas (<span id="count-consultas-badge">0</span>)
+          </button>
+          <button class="tab-btn" data-tab="tab-catalogo" role="tab" aria-selected="false">
+            📚 Catálogo
+          </button>
         </nav>
         <div class="notas-dropdown-wrapper">
           <button id="btn-toggle-notas" class="btn-notas-compact" type="button" aria-expanded="false" title="Abrir bloc de notas personal">
@@ -182,6 +188,12 @@
                     <label for="nov-fecha">Mes / Año visible</label>
                     <input type="text" id="nov-fecha" class="form-control" placeholder="Ej: Noviembre 2026" required>
                   </div>
+                  <div class="form-group">
+                    <label for="nov-dia">Día relacionado (opcional)</label>
+                    <select id="nov-dia" class="form-control">
+                      <option value="">Sin día relacionado</option>
+                    </select>
+                  </div>
                 </div>
 
                 <div class="form-group">
@@ -204,6 +216,73 @@
               <h3 class="card-title" style="font-size: 1.1rem;">Novedades Registradas</h3>
               <div id="novedades-list-container" class="novedades-grid">
                 <p>Cargando novedades...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pestaña 4: Consultas generales (tabla CONTACTOS del DER) -->
+          <div id="tab-consultas" class="tab-content" role="tabpanel">
+            <div class="card">
+              <h2 class="card-title">Consultas de la comunidad</h2>
+              <p class="card-lead">Mensajes recibidos desde el formulario de consulta general del sitio.</p>
+              <div id="consultas-list-container">
+                <p>Cargando consultas...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pestaña 5: Catálogo interno (CATEGORIAS_COLECCION y MATERIALES_BIBLIOGRAFICOS) -->
+          <div id="tab-catalogo" class="tab-content" role="tabpanel">
+            <div class="card" style="margin-bottom: 1.5rem;">
+              <h2 class="card-title">Agregar material</h2>
+              <p class="card-lead">Los materiales se muestran en la sección Colecciones del sitio.</p>
+              <form id="material-form">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                  <div class="form-group">
+                    <label for="mat-titulo">Título</label>
+                    <input type="text" id="mat-titulo" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="mat-autor">Autor</label>
+                    <input type="text" id="mat-autor" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for="mat-categoria">Categoría</label>
+                    <select id="mat-categoria" class="form-control" required></select>
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                  <div class="form-group">
+                    <label for="mat-koha">Enlace Koha (opcional)</label>
+                    <input type="url" id="mat-koha" class="form-control" placeholder="https://...">
+                  </div>
+                  <div class="form-group">
+                    <label for="mat-greenstone">Enlace Greenstone (opcional)</label>
+                    <input type="url" id="mat-greenstone" class="form-control" placeholder="https://...">
+                  </div>
+                </div>
+                <div style="display: flex; justify-content: flex-end;">
+                  <button type="submit" class="btn btn-primary">Agregar material</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="card">
+              <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap;">
+                <div>
+                  <h2 class="card-title" style="margin-bottom: 0.25rem;">Categorías y materiales</h2>
+                  <p class="card-lead" style="margin: 0;">Cada categoría agrupa los materiales de una colección.</p>
+                </div>
+                <form id="categoria-form" style="display: flex; gap: 0.5rem; align-items: flex-end;">
+                  <div class="form-group" style="margin: 0;">
+                    <label for="cat-nombre">Nueva categoría</label>
+                    <input type="text" id="cat-nombre" class="form-control" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Agregar</button>
+                </form>
+              </div>
+              <div id="catalogo-list-container" style="margin-top: 1.25rem;">
+                <p>Cargando catálogo...</p>
               </div>
             </div>
           </div>
