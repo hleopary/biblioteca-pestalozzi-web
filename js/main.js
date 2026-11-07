@@ -267,6 +267,15 @@ function initVisitaForm() {
 // CONFIGURACIÓN CENTRALIZADA DE CATÁLOGOS EXTERNOS (Feat #3)
 // Nota: Pendiente de recepción de URLs definitivas por parte de la biblioteca.
 // ============================================================================
+// ============================================================================
+// CONFIGURACION DE ENVIO DE FORMULARIOS (Feat #4)
+// Buzon unico para el formulario de consulta general. Al conectar la API
+// propia, basta con apuntar endpointConsulta a /api/consultas.
+// ============================================================================
+const CONFIG_ENVIO = {
+  endpointConsulta: "https://formspree.io/f/xeaawadr"
+};
+
 const DATOS_CATALOGOS = {
   kohaUrl: "",         // Reemplazar por la URL real del OPAC de Koha
   greenstoneUrl: "" // Reemplazar por la URL real de Greenstone
@@ -410,8 +419,8 @@ function initConsultaForm() {
     submitBtn.textContent = "Enviando consulta...";
 
     try {
-      // Endpoint compatible con Formspree / FormSubmit o backend propio
-      const response = await fetch("https://formspree.io/f/xeaawadr", {
+      // Endpoint centralizado (Formspree o backend propio, ver CONFIG_ENVIO)
+      const response = await fetch(CONFIG_ENVIO.endpointConsulta, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
