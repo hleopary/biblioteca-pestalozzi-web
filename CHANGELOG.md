@@ -32,6 +32,68 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
   - Creación de `ADR-0011: Popover de Notas Flotante, Modal Institucional de Confirmación y Drag & Drop con Scroll en Novedades`.
   - Actualización de `adr/README.md`.
 
+- **Registro de Decisiones de Arquitectura (ADR)**:
+  - Estructuración de la carpeta `adr/` con índice centralizado `adr/README.md`.
+  - Creación de 9 registros arquitectónicos oficiales (`ADR-0001` a `ADR-0009`) basados en las decisiones del Grupo Clouds (Jamstack, hosting $0, serverless forms, integración con Koha/Greenstone, exclusión de login obligatorio, horarios dinámicos, diseño flat editorial, optimización AVIF y flujo de ramas en GitHub Pages).
+- **Reglas operativas en `AGENTS.md`**:
+  - Incorporación como principio innegociable de la obligación de redactar el ADR y actualizar `CHANGELOG.md` al finalizar cada implementación.
+ - **Formulario de consulta general interactivo (`Feat #4` - RF06)**:
+   - Incorporación del elemento `<form id="consulta-form">` con campos para nombre, correo electrónico, teléfono (opcional) y mensaje.
+   - Validación del lado del cliente reutilizando los patrones visuales y semánticos del sistema (`.form-field`, `.field-error`, `.has-error`).
+   - Envío asincrónico mediante `fetch()` conectado a endpoint serverless sin costo (Formspree) para notificación directa a la casilla institucional.
+   - Anuncio dinámico de estados de envío y respuesta a tecnologías de asistencia mediante `role="status"` y `aria-live="polite"`.
+ - **Centralización y enrutamiento de trámites de asociación y préstamos (`Feat #5`)**:
+   - Configuración de las constantes `DATOS_TRAMITES` en `js/main.js` para los botones de asociación, solicitud y renovación de préstamos.
+   - Incorporación de atributos accesibles y apertura en pestaña nueva (`rel="noopener noreferrer"`).
+   - Incorporación del botón de WhatsApp faltante y activación del enlace de correo (`mailto:`) en el bloque de consulta de la sección.
+- **Optimización del bloque de consultas de trámites (`Feat #5`, `Feat #6`)**:
+  - Incorporación del botón interactivo de WhatsApp en la sección "¿Tenés alguna consulta?".
+  - Contenedor `.consulta-actions` en CSS con separación y alineación flexible (`flex-wrap`, `gap: var(--space-sm)`).
+  - Vinculación dinámica del botón "Enviar correo" al correo institucional (`DATOS_CONTACTO.email`) con asunto precargado.
+ - **Indicador de foco accesible (`Feat #7` - RNF01)**:
+   - Definición de la variable CSS `--color-focus` con contraste adaptativo mayor a 3:1 (WCAG 2.1 SC 1.4.11 / WCAG 2.2 SC 2.4.7) utilizando tono claro sobre fondos oscuros (header, hero, pie de página y franjas institucionales) y acento terracota sobre superficies claras.
+   - Ajuste de contornos visibles en tarjetas con `overflow: visible` para evitar recortes del anillo de navegación por teclado.
+- **Navegación de retorno al inicio en pie de página**:
+  - Incorporación del indicador explícito *"Volver al inicio ↑"* (`.volver-arriba`) en el bloque de marca del footer con atributo accesible `aria-label`.
+
+
+### Cambiado
+   Publicación de canales de contacto reales en lugar de valores de relleno (`Feat #6`)**:
+  - **Pie de Página (Footer)**:
+    - Reemplazo de dirección ficticia por ubicación real en Berisso vinculada a Google Maps (`data-contact="direccion"`).
+    - Actualización de teléfono fijo real con esquema `tel:` (`data-contact="telefono"`) y correo electrónico institucional monitoreado con esquema `mailto:` (`data-contact="email"`).
+    - Vinculación de los íconos de Instagram y Facebook a los perfiles oficiales de la biblioteca (`data-contact="instagram"` y `data-contact="facebook"`).
+  - **Llamados a la Acción (CTA de WhatsApp)**:
+    - Unificación de los enlaces de WhatsApp en los bloques "Horarios vigentes" y "Visitas escolares" hacia el número real de la biblioteca con mensaje precargado (`data-contact="whatsapp"`).
+   - **Sección Hero**:
+     - Corrección de la estadística del acervo bibliográfico a `43.000+` volúmenes según datos reales relevados con la biblioteca.
+   - **Optimización de la sección de Asociación y Préstamos**:     
+      -  Eliminación del texto introductorio duplicado en el encabezado de la sección.    
+     -  Reemplazo de la caja simple de consulta por un layout responsivo de dos columnas (`.consulta-seccion`) que integra el formulario web junto al canal directo de WhatsApp institucional.
+- **Estructura y centralización de catálogos externos (`Feat #3`)**:
+  - Configuración de las constantes `DATOS_CATALOGOS` en `js/main.js` preparadas para recibir las URLs institucionales oficiales sin recurrir a enlaces ficticios.
+  - Incorporación de control preventivo de clics y atributos accesibles para lectores de pantalla.
+- **Escala tipográfica y accesibilidad móvil (`Feat #7` - RNF01)**:
+  - Elevación de tamaños tipográficos mínimos a 14px (0.875rem) en textos secundarios (`.eyebrow`, `.tag`, `.card-date`, `.badge`, `.field-error`, `.stat-label` y `.footer-bottom`).
+  - Ajuste del tamaño de etiquetas de formularios (`.form-field label`) a 16px (1rem) para facilitar la lectura a adultos mayores y docentes.
+  - Actualización dinámica del nombre accesible en el botón de navegación móvil (`.nav-toggle`), alternando entre *"Abrir menú de navegación"* y *"Cerrar menú de navegación"*.
+- **Ajuste de interactividad e identidad institucional en el pie de página**:
+  - Unificación del nombre oficial a **Biblioteca Popular Pestalozzi** en la cabecera y pie de página para consistencia de marca.
+  - Delimitación del área activa de clic a `.brand-footer` (`width: fit-content`), evitando disparos accidentales al presionar el espacio vacío de la columna. 
+
+### Corregido
+- **Integración con `dev` (backend de gestión dinámica)**:
+  - Resolución de los conflictos en `CHANGELOG.md`, `css/styles.css` y `js/main.js` conservando los aportes de ambas ramas; `index.html` se integró sin conflictos.
+  - El bloque `DOMContentLoaded` ejecuta las seis inicializaciones (horarios y novedades dinámicos + catálogos, trámites, consulta y datos de contacto).
+- **Cabecera en pantallas angostas (≤400px)**:
+  - La marca cede espacio al botón de menú en lugar de empujarlo a una segunda fila: el header vuelve a medir 79px a 320, 360 y 375px (medía 103px e introducía 6px de desborde horizontal a 360px).
+  - La marca trunca con puntos suspensivos cuando no entra, sin alterar el layout de escritorio.
+- **Pie de página en móvil**:
+  - El correo institucional sin puntos de corte ya no fija el ancho mínimo de la grilla: se elimina el desborde horizontal de 6px a 360px (`min-width: 0` + `overflow-wrap: anywhere`).
+- **Escala tipográfica de 14px**:
+  - `.tag` (13,6px) y la línea de ciudad de la marca (12,8px) se elevan a 14px (0.875rem), completando el criterio de `Feat #7`.
+  - El contorno de foco también cubre `select:focus-visible`.
+
 ### Pendiente
 - Incorporación de favicon e isotipos definitivos en el encabezado.
 - Refinamiento de columna extra de contacto en el pie de página.
