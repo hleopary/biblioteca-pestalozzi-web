@@ -2,6 +2,18 @@
 
 const db = require("../config/db");
 const { notificarNuevaVisita } = require("../services/emailService");
+const { validarCamposObligatorios, validarEmail } = require("../utils/validators");
+
+const CAMPOS_OBLIGATORIOS = [
+  "institucion",
+  "responsable",
+  "telefono",
+  "email",
+  "nivel",
+  "alumnos_cant",
+  "fecha_preferida",
+  "turno"
+];
 
 function crearVisita(req, res, next) {
   try {
@@ -18,19 +30,18 @@ function crearVisita(req, res, next) {
     } = req.body;
 
     // Validación de campos obligatorios
-    if (
-      !institucion ||
-      !responsable ||
-      !telefono ||
-      !email ||
-      !nivel ||
-      !alumnos_cant ||
-      !fecha_preferida ||
-      !turno
-    ) {
+    if (!validarCamposObligatorios(req.body, CAMPOS_OBLIGATORIOS).ok) {
       return res.status(400).json({
         ok: false,
         error: "Todos los campos principales del formulario son obligatorios."
+      });
+    }
+
+    const emailValido = validarEmail(email);
+    if (!emailValido.ok) {
+      return res.status(400).json({
+        ok: false,
+        error: emailValido.error
       });
     }
 

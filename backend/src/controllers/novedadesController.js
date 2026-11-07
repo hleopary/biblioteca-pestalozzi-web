@@ -1,6 +1,7 @@
 "use strict";
 
 const db = require("../config/db");
+const { validarCamposObligatorios } = require("../utils/validators");
 
 function getNovedadesPublicas(req, res, next) {
   try {
@@ -35,7 +36,7 @@ function crearNovedad(req, res, next) {
   try {
     const { categoria, categoria_color, fecha_texto, titulo, descripcion, orden } = req.body;
 
-    if (!categoria || !titulo || !descripcion) {
+    if (!validarCamposObligatorios(req.body, ["categoria", "titulo", "descripcion"]).ok) {
       return res.status(400).json({
         ok: false,
         error: "Los campos categoría, título y descripción son obligatorios."
