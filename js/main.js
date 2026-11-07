@@ -137,6 +137,82 @@ async function loadDynamicHorarios() {
 }
 
 /* --------------------------------------------------------------------------
+   Carga dinámica de Colecciones y materiales (DER: CATEGORIAS_COLECCION y
+   MATERIALES_BIBLIOGRAFICOS)
+   -------------------------------------------------------------------------- */
+async function loadDynamicColecciones() {
+  const bloque = document.querySelector("#materiales-destacados");
+  const contenedor = document.querySelector("#materiales-destacados .materiales-grupos");
+  if (!bloque || !contenedor) return;
+
+  const base = typeof PestalozziAPI !== "undefined" ? PestalozziAPI.getBaseUrl() : "/api";
+
+  try {
+    const respuesta = await fetch(`${base}/catalogos/categorias`);
+    const datos = await respuesta.json();
+    const categorias = datos && datos.ok && Array.isArray(datos.data) ? datos.data : [];
+
+    if (categorias.length === 0) return;
+
+    contenedor.innerHTML = "";
+
+    categorias.forEach((categoria) => {
+      const grupo = document.createElement("div");
+      grupo.className = "materiales-grupo";
+
+      const titulo = document.createElement("h4");
+      titulo.textContent = categoria.nombre;
+      grupo.appendChild(titulo);
+
+      if (categoria.descripcion) {
+        const descripcion = document.createElement("p");
+        descripcion.className = "muted";
+        descripcion.textContent = categoria.descripcion;
+        grupo.appendChild(descripcion);
+      }
+
+      const lista = document.createElement("ul");
+      lista.className = "materiales-lista";
+
+      (categoria.materiales || []).forEach((material) => {
+        const item = document.createElement("li");
+
+        const nombre = document.createElement("span");
+        nombre.className = "material-titulo";
+        nombre.textContent = material.titulo;
+        item.appendChild(nombre);
+
+        if (material.autor) {
+          const autor = document.createElement("span");
+          autor.className = "material-autor";
+          autor.textContent = ` · ${material.autor}`;
+          item.appendChild(autor);
+        }
+
+        const enlace = material.link_koha || material.link_greenstone;
+        if (enlace) {
+          const ancla = document.createElement("a");
+          ancla.href = enlace;
+          ancla.target = "_blank";
+          ancla.rel = "noopener noreferrer";
+          ancla.textContent = "Ver en el catálogo";
+          item.appendChild(ancla);
+        }
+
+        lista.appendChild(item);
+      });
+
+      grupo.appendChild(lista);
+      contenedor.appendChild(grupo);
+    });
+
+    bloque.hidden = false;
+  } catch (err) {
+    console.warn("No se pudieron cargar los materiales destacados:", err.message);
+  }
+}
+
+/* --------------------------------------------------------------------------
    Carga dinámica de Novedades (con fallback a contenido estático)
    -------------------------------------------------------------------------- */
 async function loadDynamicNovedades() {
@@ -468,26 +544,48 @@ function initConsultaForm() {
     submitBtn.disabled = true;
     submitBtn.textContent = "Enviando consulta...";
 
-    try {
-      // Endpoint centralizado (Formspree o backend propio, ver CONFIG_ENVIO)
-      const response = await fetch(CONFIG_ENVIO.endpointConsulta, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          nombre: nombre.value.trim(),
-          email: email.value.trim(),
-          telefono: form.querySelector("#consulta-telefono").value.trim(),
-          mensaje: mensaje.value.trim()
-        })
-      });
+    const datos = {
+      nombre: nombre.value.trim(),
+      email: email.value.trim(),
+      telefono: form.querySelector("#consulta-telefono").value.trim(),
+      mensaje: mensaje.value.trim()
+    };
 
-      if (response.ok) {
+    try {
+      // 1) Guardar en la base propia (tabla CONTACTOS). Si la API no está
+      //    disponible (por ejemplo en el espejo estático), se omite.
+      let guardadaEnBase = false;
+      try {
+        const respuestaApi = await fetch("/api/contactos", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(datos)
+        });
+        guardadaEnBase = respuestaApi.ok;
+      } catch (errApi) {
+        console.warn("No se pudo guardar la consulta en la base:", errApi.message);
+      }
+
+      // 2) Reenviar a la bandeja de la biblioteca (Formspree).
+      let enviadaPorCorreo = false;
+      try {
+        const respuestaCorreo = await fetch(CONFIG_ENVIO.endpointConsulta, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(datos)
+        });
+        enviadaPorCorreo = respuestaCorreo.ok;
+      } catch (errCorreo) {
+        console.warn("No se pudo reenviar la consulta por correo:", errCorreo.message);
+      }
+
+      if (guardadaEnBase || enviadaPorCorreo) {
         status.textContent = "Consulta enviada con éxito. Te responderemos a la brevedad.";
         status.className = "form-status is-success";
         status.hidden = false;
         form.reset();
       } else {
-        throw new Error("Respuesta no satisfactoria del servidor");
+        throw new Error("No se pudo entregar la consulta por ningún canal");
       }
     } catch (err) {
       status.textContent = "Ocurrió un error al enviar la consulta. Podés contactarnos directamente por WhatsApp.";
@@ -600,6 +698,7 @@ document.addEventListener("DOMContentLoaded", function () {
   initVisitaForm();
   loadDynamicHorarios();
   loadDynamicNovedades();
+  loadDynamicColecciones();
 
   initCatalogosExternos();
   initTramites();

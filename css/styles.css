@@ -497,6 +497,70 @@ textarea:focus-visible {
   scroll-snap-align: start;
 }
 
+/* Materiales destacados (DER: CATEGORIAS_COLECCION / MATERIALES_BIBLIOGRAFICOS) */
+.materiales-destacados {
+  margin-top: 2.5rem;
+}
+
+.materiales-destacados h3 {
+  margin-bottom: 0.5rem;
+}
+
+.materiales-grupos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.materiales-grupo {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+}
+
+.materiales-grupo h4 {
+  margin: 0 0 0.35rem;
+  color: var(--color-primary);
+}
+
+.materiales-grupo p {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+}
+
+.materiales-lista {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+}
+
+.materiales-lista li {
+  padding: 0.4rem 0;
+  border-top: 1px solid var(--color-line);
+  font-size: 0.95rem;
+}
+
+.materiales-lista li:first-child {
+  border-top: 0;
+}
+
+.material-autor {
+  color: var(--color-text-muted);
+}
+
+.materiales-lista a {
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .materiales-grupos {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 900px) {
   .section-novedades .card.novedad {
     flex: 0 0 85%;
