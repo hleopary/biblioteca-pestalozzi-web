@@ -1,10 +1,8 @@
-
-> biblioteca-pestalozzi-backend@1.0.0 test:smoke
-> node test-api.js
-
 Iniciando sembrado de datos en la base de datos Pestalozzi...
+✓ Contenido inicial cargado desde db/seed.sql.
+✓ Usuario admin inicial creado: "betsabe".
 Base de datos lista y sincronizada.
-(node:24745) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:32492) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
 
 === INICIANDO SUITE DE PRUEBAS AUTOMATIZADAS (Puerto 3055) ===
@@ -13,7 +11,7 @@ Base de datos lista y sincronizada.
 ✓ [PASS] GET /api/horarios devuelve los 7 días de la semana
 ✓ [PASS] GET /api/novedades devuelve 3 novedades activas
 -------------------------------------------------------
-[SIMULACIÓN DE EMAIL] Para: bibliotecapestalozzi.berisso@gmail.com
+[SIMULACIÓN DE EMAIL] Para: pruebas@example.com
 Asunto: Nueva Solicitud de Visita Escolar: Escuela Primaria N.° 12 de Berisso
 
 Se ha recibido una nueva solicitud de visita escolar:
@@ -43,6 +41,6 @@ Puede gestionar esta solicitud desde el panel de administración.
 ✓ [PASS] DELETE /api/notas/:id elimina una nota específica
 
 -------------------------------------------------------
-✓ TODAS LAS PRUEBAS PASARON EXITOSAMENTE (12/12)
+✓ TODAS LAS PRUEBAS PASARON EXITOSAMENTE (13/13)
 -------------------------------------------------------
 
