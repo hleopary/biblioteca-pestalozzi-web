@@ -109,6 +109,15 @@ La versión de `leopary_prueba2` reimplementa el sitio según la **maqueta entre
 ## Catálogos externos (Koha y Greenstone - Feat #3):
 Centralizados en `js/main.js` bajo el objeto `DATOS_CATALOGOS`. A la espera de la provisión de URLs institucionales definitivas por parte de la biblioteca, los enlaces cuentan con un manejador preventivo.
 
+
+## Formularios y Recepción de Mensajes (Feat #1, Feat #4)
+
+Los envíos de solicitudes y consultas generales se gestionan a través de una arquitectura serverless desacoplada de costo $0:
+
+* **Mecanismo de entrega:** El formulario de consulta general (`#consulta-form`) procesa los envíos mediante peticiones HTTP `POST` hacia la API de Formspree (`CONFIG_ENVIO.endpointConsulta` en `js/main.js`), garantizando la entrega de los campos estructurados (nombre, email, teléfono y mensaje) a la bandeja de correo.
+* **Manejo de estados y accesibilidad:** Las respuestas del servidor se notifican de forma dinámica en la región `#consulta-status` (`aria-live="polite"`), conservando los datos ingresados ante cualquier error de red para permitir el reintento.
+* **Transición a backend propio:** El despacho está centralizado en el cliente; si se conecta a la API de Node.js/Express, basta con modificar el endpoint a `/api/consultas` sin alterar la estructura del formulario.
+
 ## Trámites de Asociación y Préstamos (Feat #5): 
 Las URLs de los formularios externos y la planilla de asociación están centralizadas en js/main.js bajo el objeto DATOS_TRAMITES. A la espera de la provisión de los links de los formularios definitivos por parte de la biblioteca, los enlaces cuentan con un manejador preventivo.
 

@@ -15,7 +15,11 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
   - Creación de 9 registros arquitectónicos oficiales (`ADR-0001` a `ADR-0009`) basados en las decisiones del Grupo Clouds (Jamstack, hosting $0, serverless forms, integración con Koha/Greenstone, exclusión de login obligatorio, horarios dinámicos, diseño flat editorial, optimización AVIF y flujo de ramas en GitHub Pages).
 - **Reglas operativas en `AGENTS.md`**:
   - Incorporación como principio innegociable de la obligación de redactar el ADR y actualizar `CHANGELOG.md` al finalizar cada implementación.
-<<<<<<< HEAD
+ - **Formulario de consulta general interactivo (`Feat #4` - RF06)**:
+   - Incorporación del elemento `<form id="consulta-form">` con campos para nombre, correo electrónico, teléfono (opcional) y mensaje.
+   - Validación del lado del cliente reutilizando los patrones visuales y semánticos del sistema (`.form-field`, `.field-error`, `.has-error`).
+   - Envío asincrónico mediante `fetch()` conectado a endpoint serverless sin costo (Formspree) para notificación directa a la casilla institucional.
+   - Anuncio dinámico de estados de envío y respuesta a tecnologías de asistencia mediante `role="status"` y `aria-live="polite"`.
  - **Centralización y enrutamiento de trámites de asociación y préstamos (`Feat #5`)**:
    - Configuración de las constantes `DATOS_TRAMITES` en `js/main.js` para los botones de asociación, solicitud y renovación de préstamos.
    - Incorporación de atributos accesibles y apertura en pestaña nueva (`rel="noopener noreferrer"`).
@@ -41,6 +45,9 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
     - Unificación de los enlaces de WhatsApp en los bloques "Horarios vigentes" y "Visitas escolares" hacia el número real de la biblioteca con mensaje precargado (`data-contact="whatsapp"`).
    - **Sección Hero**:
      - Corrección de la estadística del acervo bibliográfico a `43.000+` volúmenes según datos reales relevados con la biblioteca.
+   - **Optimización de la sección de Asociación y Préstamos**:     
+      -  Eliminación del texto introductorio duplicado en el encabezado de la sección.    
+     -  Reemplazo de la caja simple de consulta por un layout responsivo de dos columnas (`.consulta-seccion`) que integra el formulario web junto al canal directo de WhatsApp institucional.
 - **Estructura y centralización de catálogos externos (`Feat #3`)**:
   - Configuración de las constantes `DATOS_CATALOGOS` en `js/main.js` preparadas para recibir las URLs institucionales oficiales sin recurrir a enlaces ficticios.
   - Incorporación de control preventivo de clics y atributos accesibles para lectores de pantalla.
