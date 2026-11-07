@@ -105,6 +105,7 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
   - Comandos `db:migrate`, `db:seed`, `db:reset`, `db:dump`, `db:restore` y `db:count`.
 - **DER reconciliado** en `docs/der/der-implementado.puml` y ADR-0012, que documenta la correspondencia con el DER de Etapa 2.
 - **Manual Técnico** en `docs/manual-tecnico.md` y su PDF (16 páginas): arquitectura, estructura, DER, instalación, componentes, validaciones, pruebas y despliegue.
+- **Manual de Usuario** en `docs/manual-usuario/` y su PDF (18 páginas): recorrido del sitio, flujos de uso, guía del panel, 20 capturas, mensajes frecuentes y preguntas frecuentes.
 
 ### Pendiente
 - Incorporación de favicon e isotipos definitivos en el encabezado.
