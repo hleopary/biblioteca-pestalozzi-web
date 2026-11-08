@@ -15,6 +15,8 @@ const horariosRoutes = require("./src/routes/horariosRoutes");
 const visitasRoutes = require("./src/routes/visitasRoutes");
 const novedadesRoutes = require("./src/routes/novedadesRoutes");
 const notasRoutes = require("./src/routes/notasRoutes");
+const contactosRoutes = require("./src/routes/contactosRoutes");
+const catalogosRoutes = require("./src/routes/catalogosRoutes");
 const errorHandler = require("./src/middlewares/errorHandler");
 
 const app = express();
@@ -41,6 +43,8 @@ app.use("/api/horarios", horariosRoutes);
 app.use("/api/visitas", visitasRoutes);
 app.use("/api/novedades", novedadesRoutes);
 app.use("/api/notas", notasRoutes);
+app.use("/api/contactos", contactosRoutes);
+app.use("/api/catalogos", catalogosRoutes);
 
 // Servir archivos estáticos del frontend (landing + admin) para desarrollo o despliegue conjunto
 const frontendPath = path.resolve(__dirname, "..");

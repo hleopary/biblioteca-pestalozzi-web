@@ -1,0 +1,86 @@
+===== CORRIDA 1 (rama B) =====
+
+> biblioteca-pestalozzi-backend@1.0.0 test
+> node --test tests/*.test.js
+
+Iniciando sembrado de datos en la base de datos Pestalozzi...
+✓ Contenido inicial cargado desde db/seed.sql.
+✓ Usuario admin inicial creado: "betsabe".
+Base de datos lista y sincronizada.
+(node:90006) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ GET /api/health responde con estado activo (37.193662ms)
+✔ POST /api/auth/login entrega un token con las credenciales del seed (90.160798ms)
+✔ POST /api/auth/login rechaza una contraseña incorrecta (75.89376ms)
+✔ CRUD de novedades: crear, leer, actualizar y eliminar (11.211989ms)
+✔ La lectura pública de horarios refleja una escritura autenticada (8.996995ms)
+✔ POST /api/visitas rechaza una solicitud sin campos obligatorios (2.601039ms)
+✔ POST /api/visitas rechaza un correo con formato inválido (2.060136ms)
+✔ POST /api/contactos guarda una consulta y el panel la lista (4.884016ms)
+✔ POST /api/contactos rechaza una consulta sin mensaje (2.130202ms)
+✔ GET /api/catalogos/categorias devuelve categorías con sus materiales (2.519468ms)
+✔ El catálogo permite crear categoría y material, y protege la categoría con materiales (8.653551ms)
+✔ POST /api/novedades rechaza un id_horario inexistente (1.629711ms)
+✔ esTextoNoVacio: distingue contenido real de vacío o solo espacios (1.17067ms)
+✔ validarCamposObligatorios: acepta cuando todos los campos tienen contenido (0.568638ms)
+✔ validarCamposObligatorios: rechaza vacíos y nombra cada campo faltante (0.849926ms)
+✔ validarCamposObligatorios: acepta valores numéricos como campo presente (0.159303ms)
+✔ validarEmail: acepta formatos válidos y rechaza los inválidos (0.2336ms)
+✔ parseRangoHorario: convierte el rango a minutos desde las 00:00 (0.372485ms)
+✔ validarRangoHorario: acepta rangos bien formados y con apertura anterior al cierre (0.250236ms)
+✔ validarRangoHorario: rechaza un rango invertido con un mensaje explicativo (0.188513ms)
+✔ validarRangoHorario: rechaza formatos inválidos y horas fuera de rango (0.223612ms)
+✔ esDuplicado: detecta la misma combinación ignorando mayúsculas y espacios (0.335807ms)
+✔ esDuplicado: acepta el mismo rango en otro cuatrimestre (0.168598ms)
+✔ esDuplicado: devuelve false con una lista vacía (0.13035ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 489.24355
+===== CORRIDA 2 (determinismo) =====
+
+> biblioteca-pestalozzi-backend@1.0.0 test
+> node --test tests/*.test.js
+
+Iniciando sembrado de datos en la base de datos Pestalozzi...
+✓ Contenido inicial cargado desde db/seed.sql.
+✓ Usuario admin inicial creado: "betsabe".
+Base de datos lista y sincronizada.
+(node:90052) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ GET /api/health responde con estado activo (36.592989ms)
+✔ POST /api/auth/login entrega un token con las credenciales del seed (91.599947ms)
+✔ POST /api/auth/login rechaza una contraseña incorrecta (82.421388ms)
+✔ CRUD de novedades: crear, leer, actualizar y eliminar (11.57823ms)
+✔ La lectura pública de horarios refleja una escritura autenticada (7.441589ms)
+✔ POST /api/visitas rechaza una solicitud sin campos obligatorios (2.204509ms)
+✔ POST /api/visitas rechaza un correo con formato inválido (1.939414ms)
+✔ POST /api/contactos guarda una consulta y el panel la lista (4.689411ms)
+✔ POST /api/contactos rechaza una consulta sin mensaje (2.757268ms)
+✔ GET /api/catalogos/categorias devuelve categorías con sus materiales (3.35521ms)
+✔ El catálogo permite crear categoría y material, y protege la categoría con materiales (7.707043ms)
+✔ POST /api/novedades rechaza un id_horario inexistente (1.40927ms)
+✔ esTextoNoVacio: distingue contenido real de vacío o solo espacios (1.161065ms)
+✔ validarCamposObligatorios: acepta cuando todos los campos tienen contenido (0.865822ms)
+✔ validarCamposObligatorios: rechaza vacíos y nombra cada campo faltante (1.046155ms)
+✔ validarCamposObligatorios: acepta valores numéricos como campo presente (0.163763ms)
+✔ validarEmail: acepta formatos válidos y rechaza los inválidos (0.229407ms)
+✔ parseRangoHorario: convierte el rango a minutos desde las 00:00 (0.276762ms)
+✔ validarRangoHorario: acepta rangos bien formados y con apertura anterior al cierre (0.212002ms)
+✔ validarRangoHorario: rechaza un rango invertido con un mensaje explicativo (0.1271ms)
+✔ validarRangoHorario: rechaza formatos inválidos y horas fuera de rango (0.194522ms)
+✔ esDuplicado: detecta la misma combinación ignorando mayúsculas y espacios (0.282793ms)
+✔ esDuplicado: acepta el mismo rango en otro cuatrimestre (0.12902ms)
+✔ esDuplicado: devuelve false con una lista vacía (0.076629ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 476.829042

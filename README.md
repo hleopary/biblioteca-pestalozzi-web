@@ -18,14 +18,30 @@ Sitio web estático (HTML + CSS + JS vanilla) para la **Biblioteca Popular Pesta
 
 ## Stack tecnologico
 
+**Frontend**
 - **HTML5** semántico
 - **CSS3** con variables personalizadas (custom properties), Flexbox/Grid, responsive mobile-first
-- **JavaScript vanilla (ES6+)** módulos, sin dependencias ni bundler
-- **Formularios**: FormSubmit / Formspree (sin backend propio)
-- **Despliegue**: Vercel (sitio estático desde `main`) y GitHub Pages como espejo
-- **Control de versiones**: Git + GitHub (`hleopary/biblioteca-pestalozzi-web`)
+- **JavaScript vanilla (ES6+)**, sin framework ni bundler
 
-> **Decisión**: Cero dependencias, cero build. Se abre `index.html` directo en navegador para desarrollo local.
+**Backend**
+- **Node.js 24** + **Express ^4.21.1**
+- **Base de datos**: SQLite embebido con `node:sqlite`; esquema versionado en `db/schema.sql`
+- **Autenticación**: JWT (`jsonwebtoken`) + hash de contraseñas con `bcryptjs`
+- **Correo**: `nodemailer` (opcional; se simula por consola si no hay SMTP)
+- **Pruebas**: runner nativo `node:test`
+
+**Formularios**
+- **Visitas escolares**: se persisten en la base mediante la API
+- **Consulta general**: se entrega por Formspree
+
+**Despliegue**
+- **Railway**: aplicación completa (sitio + panel + API + SQLite con volumen)
+- **Vercel**: espejo estático
+- **GitHub Pages**: espejo estático desde `main`
+
+**Control de versiones**: Git + GitHub (`hleopary/biblioteca-pestalozzi-web`)
+
+> **Decisión**: el frontend mantiene cero dependencias y cero build; el backend tiene sus propias dependencias y se instala con `npm install`. La decisión completa de persistencia y hosting está en [docs/adr/ADR-001-persistence-and-hosting.md](docs/adr/ADR-001-persistence-and-hosting.md).
 
 ---
 
@@ -116,6 +132,17 @@ La versión de `leopary_prueba2` reimplementa el sitio según la **maqueta entre
 - [ ] Favicon e íconos definitivos
 
 > **Nota:** los bloques `.media` conservan un degradado como respaldo por si falta el archivo; las imágenes se asignan por CSS (`background-image`) en `css/styles.css`, con rutas relativas a la carpeta `css/` (`../assets/img/...`). Se aceptan `.avif`.
+
+## Horarios de atención
+
+El tablón público **no está fijado en el HTML**: `js/main.js` lo construye con la respuesta de `GET /api/horarios`, que lee la tabla `horarios` de SQLite.
+
+- **Para cambiar un horario**: usar el panel (`admin.html` → *Horarios Cuatrimestrales*). El cambio se publica al guardar, sin editar archivos ni redesplegar.
+- **Para cambiar los datos iniciales**: editar `db/seed.sql` y ejecutar `npm run db:reset` (o `npm run db:seed` sobre una base vacía).
+- **Si la API no responde**: el tablón muestra un estado de fallo explícito, con enlace a WhatsApp y un botón para reintentar. Nunca queda una tabla vacía que se lea como "cerrado toda la semana".
+- **Sin JavaScript**: se muestra un aviso con enlace a los canales de contacto.
+
+El detalle de la decisión está en [docs/adr/ADR-001-persistence-and-hosting.md](docs/adr/ADR-001-persistence-and-hosting.md).
 
 ## Catálogos externos (Koha y Greenstone - Feat #3):
 Centralizados en `js/main.js` bajo el objeto `DATOS_CATALOGOS`. A la espera de la provisión de URLs institucionales definitivas por parte de la biblioteca, los enlaces cuentan con un manejador preventivo.

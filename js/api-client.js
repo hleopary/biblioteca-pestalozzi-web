@@ -178,6 +178,56 @@ const PestalozziAPI = (function () {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
       });
+    },
+
+    // Consultas generales (tabla CONTACTOS del DER)
+    async getContactos(token) {
+      return request("/contactos", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+    },
+
+    async deleteContacto(token, id) {
+      return request(`/contactos/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+    },
+
+    // Catálogo interno (CATEGORIAS_COLECCION y MATERIALES_BIBLIOGRAFICOS)
+    async getCategorias() {
+      return request("/catalogos/categorias", { method: "GET" });
+    },
+
+    async crearCategoria(token, datos) {
+      return request("/catalogos/categorias", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify(datos)
+      });
+    },
+
+    async crearMaterial(token, datos) {
+      return request("/catalogos/materiales", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify(datos)
+      });
+    },
+
+    async deleteMaterial(token, id) {
+      return request(`/catalogos/materiales/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+    },
+
+    async deleteCategoria(token, id) {
+      return request(`/catalogos/categorias/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` }
+      });
     }
   };
 })();

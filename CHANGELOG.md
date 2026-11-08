@@ -94,6 +94,33 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
   - `.tag` (13,6px) y la línea de ciudad de la marca (12,8px) se elevan a 14px (0.875rem), completando el criterio de `Feat #7`.
   - El contorno de foco también cubre `select:focus-visible`.
 
+### Pruebas, base de datos y DER (Etapa 3)
+- **Suite de pruebas con `node:test`** (sin dependencias nuevas):
+  - 12 pruebas unitarias de las validaciones puras (campos obligatorios, correo, formato y orden del rango horario, duplicados).
+  - 7 pruebas de integración sobre la API real, con Express en un puerto efímero y SQLite en un archivo temporal.
+  - Scripts `npm test`, `test:unit`, `test:integration` y `test:smoke`; evidencia en `docs/evidencia/`.
+- **Validaciones extraídas a `backend/src/utils/validators.js`** y reutilizadas por los controllers de visitas y novedades.
+- **Scripts de base de datos** en `db/` y `backend/scripts/db.js`:
+  - `db/schema.sql` como fuente única del esquema y `db/seed.sql` con el contenido inicial.
+  - Comandos `db:migrate`, `db:seed`, `db:reset`, `db:dump`, `db:restore` y `db:count`.
+- **DER reconciliado** en `docs/der/der-implementado.puml` y ADR-0012, que documenta la correspondencia con el DER de Etapa 2.
+- **Manual Técnico** en `docs/manual-tecnico.md` y su PDF (16 páginas): arquitectura, estructura, DER, instalación, componentes, validaciones, pruebas y despliegue.
+- **Manual de Usuario** en `docs/manual-usuario/` y su PDF (18 páginas): recorrido del sitio, flujos de uso, guía del panel, 20 capturas, mensajes frecuentes y preguntas frecuentes.
+
+### Arquitectura y tablón (Etapa 3)
+- **ADR-001 de persistencia y hosting** en `docs/adr/`: decisión de SQLite + Railway, costo, protección de escritura, reconciliación con el stack de Etapa 2 y tooling fijado.
+- **Tablón de horarios sin filas fijas**: se quitaron las seis filas estáticas de `index.html`; la lista se construye con la API.
+- **Estado de fallo explícito**: si la API no responde, el tablón muestra un mensaje, un enlace a WhatsApp y un botón para reintentar. Se agregó un aviso para navegadores sin JavaScript.
+
+### Modelo del DER (rama B)
+- **Esquema con las seis entidades del DER** (HORARIOS, CATEGORIAS_COLECCION, MATERIALES_BIBLIOGRAFICOS, SOLICITUDES_VISITA, CONTACTOS y NOVEDADES_DONACIONES) con sus dos claves foráneas, más USUARIOS y NOTAS.
+- **Endpoints nuevos**: `/api/contactos` (alta pública, lectura y borrado autenticados) y `/api/catalogos` (categorías con materiales en lectura pública; CRUD autenticado).
+- **Formulario de consulta**: guarda en `CONTACTOS` y además reenvía por Formspree.
+- **Sitio**: los materiales de las colecciones se leen de la base.
+- **Panel**: pestañas Consultas y Catálogo, y día relacionado opcional en novedades.
+- **Pruebas**: 24 (12 unitarias y 12 de integración).
+- **DER y ADR-0013** actualizados.
+
 ### Pendiente
 - Incorporación de favicon e isotipos definitivos en el encabezado.
 - Refinamiento de columna extra de contacto en el pie de página.

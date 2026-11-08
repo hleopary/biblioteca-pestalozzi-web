@@ -96,6 +96,9 @@ document.addEventListener("DOMContentLoaded", () => {
     loadVisitas();
     loadNovedades();
     loadNotas();
+    loadConsultas();
+    loadCatalogo();
+    loadDiasNovedad();
   }
 
   function logout() {
@@ -579,7 +582,8 @@ document.addEventListener("DOMContentLoaded", () => {
         categoria_color: document.getElementById("nov-color").value,
         fecha_texto: document.getElementById("nov-fecha").value.trim(),
         titulo: document.getElementById("nov-titulo").value.trim(),
-        descripcion: document.getElementById("nov-desc").value.trim()
+        descripcion: document.getElementById("nov-desc").value.trim(),
+        id_horario: document.getElementById("nov-dia").value || null
       };
 
       try {
@@ -591,6 +595,273 @@ document.addEventListener("DOMContentLoaded", () => {
         showAlert("Error al crear novedad: " + err.message, true);
       }
     });
+  }
+
+  /* ------------------------------------------------------------------------
+     Consultas generales (tabla CONTACTOS del DER)
+     ------------------------------------------------------------------------ */
+  const consultasContainer = document.getElementById("consultas-list-container");
+  const badgeConsultas = document.getElementById("count-consultas-badge");
+
+  function escaparHtml(texto) {
+    return String(texto == null ? "" : texto)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  async function loadConsultas() {
+    if (!consultasContainer) return;
+
+    try {
+      const res = await PestalozziAPI.getContactos(authToken);
+      const consultas = res.data || [];
+
+      if (badgeConsultas) badgeConsultas.textContent = consultas.length;
+
+      if (consultas.length === 0) {
+        consultasContainer.innerHTML = "<p>No hay consultas registradas.</p>";
+        return;
+      }
+
+      consultasContainer.innerHTML = "";
+
+      consultas.forEach((consulta) => {
+        const item = document.createElement("div");
+        item.className = "consulta-item";
+
+        const cabecera = document.createElement("div");
+        cabecera.className = "consulta-cabecera";
+
+        const contacto = document.createElement("div");
+        const nombre = document.createElement("strong");
+        nombre.textContent = consulta.nombre;
+        contacto.appendChild(nombre);
+
+        const datos = document.createElement("small");
+        datos.textContent = ` · ${consulta.email}${consulta.telefono ? " · " + consulta.telefono : ""}`;
+        contacto.appendChild(datos);
+
+        const fecha = document.createElement("small");
+        fecha.className = "consulta-fecha";
+        fecha.textContent = consulta.fecha_envio || "";
+
+        cabecera.appendChild(contacto);
+        cabecera.appendChild(fecha);
+        item.appendChild(cabecera);
+
+        const mensaje = document.createElement("p");
+        mensaje.textContent = consulta.mensaje;
+        item.appendChild(mensaje);
+
+        const borrar = document.createElement("button");
+        borrar.type = "button";
+        borrar.className = "btn btn-danger btn-sm";
+        borrar.textContent = "Eliminar";
+        borrar.addEventListener("click", async () => {
+          const confirmado = await pedirConfirmacion("¿Eliminar esta consulta?");
+          if (!confirmado) return;
+
+          try {
+            await PestalozziAPI.deleteContacto(authToken, consulta.id);
+            showAlert("Consulta eliminada.");
+            loadConsultas();
+          } catch (err) {
+            showAlert("Error al eliminar la consulta: " + err.message, true);
+          }
+        });
+        item.appendChild(borrar);
+
+        consultasContainer.appendChild(item);
+      });
+    } catch (err) {
+      consultasContainer.innerHTML = "<p style='color: red;'>Error al cargar las consultas.</p>";
+    }
+  }
+
+  /* ------------------------------------------------------------------------
+     Catálogo interno (CATEGORIAS_COLECCION / MATERIALES_BIBLIOGRAFICOS)
+     ------------------------------------------------------------------------ */
+  const catalogoContainer = document.getElementById("catalogo-list-container");
+  const selectCategoria = document.getElementById("mat-categoria");
+  const categoriaForm = document.getElementById("categoria-form");
+  const materialForm = document.getElementById("material-form");
+
+  async function loadCatalogo() {
+    if (!catalogoContainer) return;
+
+    try {
+      const res = await PestalozziAPI.getCategorias();
+      const categorias = res.data || [];
+
+      if (selectCategoria) {
+        const seleccionada = selectCategoria.value;
+        selectCategoria.innerHTML = "";
+        categorias.forEach((categoria) => {
+          const opcion = document.createElement("option");
+          opcion.value = categoria.id;
+          opcion.textContent = categoria.nombre;
+          selectCategoria.appendChild(opcion);
+        });
+        if (seleccionada) selectCategoria.value = seleccionada;
+      }
+
+      if (categorias.length === 0) {
+        catalogoContainer.innerHTML = "<p>No hay categorías cargadas.</p>";
+        return;
+      }
+
+      catalogoContainer.innerHTML = "";
+
+      categorias.forEach((categoria) => {
+        const grupo = document.createElement("div");
+        grupo.className = "catalogo-grupo";
+
+        const titulo = document.createElement("h3");
+        titulo.textContent = categoria.nombre;
+        grupo.appendChild(titulo);
+
+        if (categoria.descripcion) {
+          const descripcion = document.createElement("p");
+          descripcion.className = "card-lead";
+          descripcion.textContent = categoria.descripcion;
+          grupo.appendChild(descripcion);
+        }
+
+        const lista = document.createElement("ul");
+        lista.className = "catalogo-lista";
+
+        (categoria.materiales || []).forEach((material) => {
+          const item = document.createElement("li");
+
+          const texto = document.createElement("span");
+          texto.textContent = material.autor ? `${material.titulo} · ${material.autor}` : material.titulo;
+          item.appendChild(texto);
+
+          const borrar = document.createElement("button");
+          borrar.type = "button";
+          borrar.className = "btn btn-danger btn-sm";
+          borrar.textContent = "Eliminar";
+          borrar.addEventListener("click", async () => {
+            const confirmado = await pedirConfirmacion(`¿Eliminar el material "${material.titulo}"?`);
+            if (!confirmado) return;
+
+            try {
+              await PestalozziAPI.deleteMaterial(authToken, material.id);
+              showAlert("Material eliminado.");
+              loadCatalogo();
+            } catch (err) {
+              showAlert("Error al eliminar el material: " + err.message, true);
+            }
+          });
+          item.appendChild(borrar);
+
+          lista.appendChild(item);
+        });
+
+        if ((categoria.materiales || []).length === 0) {
+          const vacio = document.createElement("li");
+          vacio.textContent = "Sin materiales cargados.";
+          lista.appendChild(vacio);
+        }
+
+        grupo.appendChild(lista);
+
+        const borrarCategoria = document.createElement("button");
+        borrarCategoria.type = "button";
+        borrarCategoria.className = "btn btn-danger btn-sm";
+        borrarCategoria.textContent = "Eliminar categoría";
+        borrarCategoria.disabled = (categoria.materiales || []).length > 0;
+        borrarCategoria.title = borrarCategoria.disabled
+          ? "Primero eliminá los materiales de la categoría"
+          : "";
+        borrarCategoria.addEventListener("click", async () => {
+          const confirmado = await pedirConfirmacion(`¿Eliminar la categoría "${categoria.nombre}"?`);
+          if (!confirmado) return;
+
+          try {
+            await PestalozziAPI.deleteCategoria(authToken, categoria.id);
+            showAlert("Categoría eliminada.");
+            loadCatalogo();
+          } catch (err) {
+            showAlert("Error al eliminar la categoría: " + err.message, true);
+          }
+        });
+        grupo.appendChild(borrarCategoria);
+
+        catalogoContainer.appendChild(grupo);
+      });
+    } catch (err) {
+      catalogoContainer.innerHTML = "<p style='color: red;'>Error al cargar el catálogo.</p>";
+    }
+  }
+
+  if (categoriaForm) {
+    categoriaForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const nombre = document.getElementById("cat-nombre").value.trim();
+
+      try {
+        await PestalozziAPI.crearCategoria(authToken, { nombre });
+        showAlert("Categoría creada correctamente.");
+        categoriaForm.reset();
+        loadCatalogo();
+      } catch (err) {
+        showAlert("Error al crear la categoría: " + err.message, true);
+      }
+    });
+  }
+
+  if (materialForm) {
+    materialForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const payload = {
+        titulo: document.getElementById("mat-titulo").value.trim(),
+        autor: document.getElementById("mat-autor").value.trim(),
+        id_categoria: document.getElementById("mat-categoria").value,
+        link_koha: document.getElementById("mat-koha").value.trim(),
+        link_greenstone: document.getElementById("mat-greenstone").value.trim()
+      };
+
+      try {
+        await PestalozziAPI.crearMaterial(authToken, payload);
+        showAlert("Material agregado correctamente.");
+        materialForm.reset();
+        loadCatalogo();
+      } catch (err) {
+        showAlert("Error al agregar el material: " + err.message, true);
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------------------
+     Día relacionado en novedades (FK opcional a HORARIOS)
+     ------------------------------------------------------------------------ */
+  const novDia = document.getElementById("nov-dia");
+
+  async function loadDiasNovedad() {
+    if (!novDia) return;
+
+    try {
+      const res = await PestalozziAPI.getHorarios();
+      const dias = res.data || [];
+      const seleccionado = novDia.value;
+
+      novDia.innerHTML = '<option value="">Sin día relacionado</option>';
+      dias.forEach((dia) => {
+        const opcion = document.createElement("option");
+        opcion.value = dia.id;
+        opcion.textContent = dia.dia_nombre;
+        novDia.appendChild(opcion);
+      });
+
+      if (seleccionado) novDia.value = seleccionado;
+    } catch (err) {
+      // Es un vínculo opcional: si falla, el formulario sigue funcionando.
+    }
   }
 
   /* ------------------------------------------------------------------------

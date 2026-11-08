@@ -1,5 +1,17 @@
 "use strict";
 
+const path = require("node:path");
+const os = require("node:os");
+const fs = require("node:fs");
+
+// Base temporal: este suite nunca toca la base de desarrollo ni la de producción.
+const dbPath = path.join(os.tmpdir(), `pestalozzi-smoke-${process.pid}-${Date.now()}.db`);
+process.env.DB_PATH = dbPath;
+process.env.JWT_SECRET = process.env.JWT_SECRET || "secreto-solo-para-smoke";
+process.env.ADMIN_USER = "betsabe";
+process.env.ADMIN_PASS = "pestalozzi2026";
+process.env.ADMIN_EMAIL = "pruebas@example.com";
+
 const http = require("http");
 const app = require("./server");
 
@@ -34,12 +46,12 @@ server.listen(PORT, async () => {
   });
 
   // 2. Horarios públicos
-  await test("GET /api/horarios devuelve los 6 días de la semana", async () => {
+  await test("GET /api/horarios devuelve los 7 días de la semana", async () => {
     const res = await fetch(`${baseUrl}/horarios`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
-    if (!data.ok || !Array.isArray(data.data) || data.data.length !== 6) {
-      throw new Error(`Se esperaban 6 días, recibidos: ${data.data?.length}`);
+    if (!data.ok || !Array.isArray(data.data) || data.data.length !== 7) {
+      throw new Error(`Se esperaban 7 días, recibidos: ${data.data?.length}`);
     }
   });
 
@@ -250,13 +262,20 @@ server.listen(PORT, async () => {
 
   console.log("\n-------------------------------------------------------");
   if (failures === 0) {
-    console.log("✓ TODAS LAS PRUEBAS PASARON EXITOSAMENTE (12/12)");
+    console.log("✓ TODAS LAS PRUEBAS PASARON EXITOSAMENTE (13/13)");
   } else {
     console.error(`✗ FALLARON ${failures} PRUEBAS`);
   }
   console.log("-------------------------------------------------------\n");
 
   server.close(() => {
+    for (const archivo of [dbPath, `${dbPath}-journal`, `${dbPath}-wal`, `${dbPath}-shm`]) {
+      try {
+        fs.rmSync(archivo, { force: true });
+      } catch {
+        // La limpieza no debe alterar el resultado del suite.
+      }
+    }
     process.exit(failures === 0 ? 0 : 1);
   });
 });
