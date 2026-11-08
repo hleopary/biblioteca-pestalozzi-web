@@ -10,15 +10,119 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
 ## [Sin publicar] (Unreleased)
 
 ### Añadido
+- **Backend Propio en Node.js / Express (`backend/`)**:
+  - Servidor API REST con Express, CORS y middleware centralizado de errores.
+  - Persistencia relacional portable con SQLite nativo (`node:sqlite`) en `backend/data/pestalozzi.db`.
+  - Seeder automático para poblar horarios, novedades y el usuario inicial de la bibliotecaria (`betsabe`).
+  - Módulo de autenticación con contraseñas hasheadas (`bcryptjs`) y tokens criptográficos JWT.
+  - Endpoints REST para cartelera cuatrimestral de horarios (`/api/horarios`).
+  - Endpoints para recepción, listado y cambio de estado de visitas escolares (`/api/visitas`) con notificaciones vía Nodemailer.
+  - Endpoints CRUD para novedades institucionales (`/api/novedades`).
+  - Endpoints para guardado, recuperación y eliminación de notas de la bibliotecaria (`/api/notas` con soporte `DELETE /api/notas/:id`).
+- **Panel de Gestión Interna (`admin.html`)**:
+  - Transformación del bloc de notas en un **Popover Flotante Desplegable** ubicado justo debajo del botón `📝 Notas` en la barra superior (con elevación, animación suave, foco automático y cierre por clic externo o `Escape`).
+  - Implementación de **Modal Institucional de Confirmación (`#modal-confirm`)** que reemplaza el `window.confirm()` nativo del navegador, garantizando que la eliminación de solicitudes de visitas y de novedades funcione de forma 100% fiable en cualquier navegador.
+  - Soporte nativo de **Drag & Drop** en la lista de Novedades Registradas con agarrador visual (`⠿`), permitiendo a la bibliotecaria reordenar las publicaciones arrastrándolas con persistencia inmediata en la base de datos vía `PUT /api/novedades/reordenar`.
+  - Expansión de las vistas de contenidos (Horarios, Visitas y Novedades) al 100% de ancho del panel principal.
+  - Rediseño de la tabla de Solicitudes de Visitas Escolares en 6 columnas integradas y optimizadas.
+- **Frontend Público (`index.html`)**:
+  - Implementación de **Scroll Horizontal Fluido (Carrusel)** en la sección de Novedades (`.section-novedades .card-grid-3`) con *scroll-snap* y barra de desplazamiento dorada institucional, permitiendo visualizar todas las novedades activas ordenadas según la prioridad definida en el admin.
+- **Decisiones de Arquitectura y Reglas**:
+  - Creación de `ADR-0010: Incorporación de Backend Node.js / Express para Gestión Dinámica y Persistencia`.
+  - Creación de `ADR-0011: Popover de Notas Flotante, Modal Institucional de Confirmación y Drag & Drop con Scroll en Novedades`.
+  - Actualización de `adr/README.md`.
+
 - **Registro de Decisiones de Arquitectura (ADR)**:
   - Estructuración de la carpeta `adr/` con índice centralizado `adr/README.md`.
   - Creación de 9 registros arquitectónicos oficiales (`ADR-0001` a `ADR-0009`) basados en las decisiones del Grupo Clouds (Jamstack, hosting $0, serverless forms, integración con Koha/Greenstone, exclusión de login obligatorio, horarios dinámicos, diseño flat editorial, optimización AVIF y flujo de ramas en GitHub Pages).
 - **Reglas operativas en `AGENTS.md`**:
   - Incorporación como principio innegociable de la obligación de redactar el ADR y actualizar `CHANGELOG.md` al finalizar cada implementación.
+ - **Formulario de consulta general interactivo (`Feat #4` - RF06)**:
+   - Incorporación del elemento `<form id="consulta-form">` con campos para nombre, correo electrónico, teléfono (opcional) y mensaje.
+   - Validación del lado del cliente reutilizando los patrones visuales y semánticos del sistema (`.form-field`, `.field-error`, `.has-error`).
+   - Envío asincrónico mediante `fetch()` conectado a endpoint serverless sin costo (Formspree) para notificación directa a la casilla institucional.
+   - Anuncio dinámico de estados de envío y respuesta a tecnologías de asistencia mediante `role="status"` y `aria-live="polite"`.
+ - **Centralización y enrutamiento de trámites de asociación y préstamos (`Feat #5`)**:
+   - Configuración de las constantes `DATOS_TRAMITES` en `js/main.js` para los botones de asociación, solicitud y renovación de préstamos.
+   - Incorporación de atributos accesibles y apertura en pestaña nueva (`rel="noopener noreferrer"`).
+   - Incorporación del botón de WhatsApp faltante y activación del enlace de correo (`mailto:`) en el bloque de consulta de la sección.
+- **Optimización del bloque de consultas de trámites (`Feat #5`, `Feat #6`)**:
+  - Incorporación del botón interactivo de WhatsApp en la sección "¿Tenés alguna consulta?".
+  - Contenedor `.consulta-actions` en CSS con separación y alineación flexible (`flex-wrap`, `gap: var(--space-sm)`).
+  - Vinculación dinámica del botón "Enviar correo" al correo institucional (`DATOS_CONTACTO.email`) con asunto precargado.
+ - **Indicador de foco accesible (`Feat #7` - RNF01)**:
+   - Definición de la variable CSS `--color-focus` con contraste adaptativo mayor a 3:1 (WCAG 2.1 SC 1.4.11 / WCAG 2.2 SC 2.4.7) utilizando tono claro sobre fondos oscuros (header, hero, pie de página y franjas institucionales) y acento terracota sobre superficies claras.
+   - Ajuste de contornos visibles en tarjetas con `overflow: visible` para evitar recortes del anillo de navegación por teclado.
+- **Navegación de retorno al inicio en pie de página**:
+  - Incorporación del indicador explícito *"Volver al inicio ↑"* (`.volver-arriba`) en el bloque de marca del footer con atributo accesible `aria-label`.
+
+
+### Cambiado
+   Publicación de canales de contacto reales en lugar de valores de relleno (`Feat #6`)**:
+  - **Pie de Página (Footer)**:
+    - Reemplazo de dirección ficticia por ubicación real en Berisso vinculada a Google Maps (`data-contact="direccion"`).
+    - Actualización de teléfono fijo real con esquema `tel:` (`data-contact="telefono"`) y correo electrónico institucional monitoreado con esquema `mailto:` (`data-contact="email"`).
+    - Vinculación de los íconos de Instagram y Facebook a los perfiles oficiales de la biblioteca (`data-contact="instagram"` y `data-contact="facebook"`).
+  - **Llamados a la Acción (CTA de WhatsApp)**:
+    - Unificación de los enlaces de WhatsApp en los bloques "Horarios vigentes" y "Visitas escolares" hacia el número real de la biblioteca con mensaje precargado (`data-contact="whatsapp"`).
+   - **Sección Hero**:
+     - Corrección de la estadística del acervo bibliográfico a `43.000+` volúmenes según datos reales relevados con la biblioteca.
+   - **Optimización de la sección de Asociación y Préstamos**:     
+      -  Eliminación del texto introductorio duplicado en el encabezado de la sección.    
+     -  Reemplazo de la caja simple de consulta por un layout responsivo de dos columnas (`.consulta-seccion`) que integra el formulario web junto al canal directo de WhatsApp institucional.
+- **Estructura y centralización de catálogos externos (`Feat #3`)**:
+  - Configuración de las constantes `DATOS_CATALOGOS` en `js/main.js` preparadas para recibir las URLs institucionales oficiales sin recurrir a enlaces ficticios.
+  - Incorporación de control preventivo de clics y atributos accesibles para lectores de pantalla.
+- **Escala tipográfica y accesibilidad móvil (`Feat #7` - RNF01)**:
+  - Elevación de tamaños tipográficos mínimos a 14px (0.875rem) en textos secundarios (`.eyebrow`, `.tag`, `.card-date`, `.badge`, `.field-error`, `.stat-label` y `.footer-bottom`).
+  - Ajuste del tamaño de etiquetas de formularios (`.form-field label`) a 16px (1rem) para facilitar la lectura a adultos mayores y docentes.
+  - Actualización dinámica del nombre accesible en el botón de navegación móvil (`.nav-toggle`), alternando entre *"Abrir menú de navegación"* y *"Cerrar menú de navegación"*.
+- **Ajuste de interactividad e identidad institucional en el pie de página**:
+  - Unificación del nombre oficial a **Biblioteca Popular Pestalozzi** en la cabecera y pie de página para consistencia de marca.
+  - Delimitación del área activa de clic a `.brand-footer` (`width: fit-content`), evitando disparos accidentales al presionar el espacio vacío de la columna. 
+
+### Corregido
+- **Integración con `dev` (backend de gestión dinámica)**:
+  - Resolución de los conflictos en `CHANGELOG.md`, `css/styles.css` y `js/main.js` conservando los aportes de ambas ramas; `index.html` se integró sin conflictos.
+  - El bloque `DOMContentLoaded` ejecuta las seis inicializaciones (horarios y novedades dinámicos + catálogos, trámites, consulta y datos de contacto).
+- **Cabecera en pantallas angostas (≤400px)**:
+  - La marca cede espacio al botón de menú en lugar de empujarlo a una segunda fila: el header vuelve a medir 79px a 320, 360 y 375px (medía 103px e introducía 6px de desborde horizontal a 360px).
+  - La marca trunca con puntos suspensivos cuando no entra, sin alterar el layout de escritorio.
+- **Pie de página en móvil**:
+  - El correo institucional sin puntos de corte ya no fija el ancho mínimo de la grilla: se elimina el desborde horizontal de 6px a 360px (`min-width: 0` + `overflow-wrap: anywhere`).
+- **Escala tipográfica de 14px**:
+  - `.tag` (13,6px) y la línea de ciudad de la marca (12,8px) se elevan a 14px (0.875rem), completando el criterio de `Feat #7`.
+  - El contorno de foco también cubre `select:focus-visible`.
+
+### Pruebas, base de datos y DER (Etapa 3)
+- **Suite de pruebas con `node:test`** (sin dependencias nuevas):
+  - 12 pruebas unitarias de las validaciones puras (campos obligatorios, correo, formato y orden del rango horario, duplicados).
+  - 7 pruebas de integración sobre la API real, con Express en un puerto efímero y SQLite en un archivo temporal.
+  - Scripts `npm test`, `test:unit`, `test:integration` y `test:smoke`; evidencia en `docs/evidencia/`.
+- **Validaciones extraídas a `backend/src/utils/validators.js`** y reutilizadas por los controllers de visitas y novedades.
+- **Scripts de base de datos** en `db/` y `backend/scripts/db.js`:
+  - `db/schema.sql` como fuente única del esquema y `db/seed.sql` con el contenido inicial.
+  - Comandos `db:migrate`, `db:seed`, `db:reset`, `db:dump`, `db:restore` y `db:count`.
+- **DER reconciliado** en `docs/der/der-implementado.puml` y ADR-0012, que documenta la correspondencia con el DER de Etapa 2.
+- **Manual Técnico** en `docs/manual-tecnico.md` y su PDF (16 páginas): arquitectura, estructura, DER, instalación, componentes, validaciones, pruebas y despliegue.
+- **Manual de Usuario** en `docs/manual-usuario/` y su PDF (18 páginas): recorrido del sitio, flujos de uso, guía del panel, 20 capturas, mensajes frecuentes y preguntas frecuentes.
+
+### Arquitectura y tablón (Etapa 3)
+- **ADR-001 de persistencia y hosting** en `docs/adr/`: decisión de SQLite + Railway, costo, protección de escritura, reconciliación con el stack de Etapa 2 y tooling fijado.
+- **Tablón de horarios sin filas fijas**: se quitaron las seis filas estáticas de `index.html`; la lista se construye con la API.
+- **Estado de fallo explícito**: si la API no responde, el tablón muestra un mensaje, un enlace a WhatsApp y un botón para reintentar. Se agregó un aviso para navegadores sin JavaScript.
+
+### Modelo del DER (rama B)
+- **Esquema con las seis entidades del DER** (HORARIOS, CATEGORIAS_COLECCION, MATERIALES_BIBLIOGRAFICOS, SOLICITUDES_VISITA, CONTACTOS y NOVEDADES_DONACIONES) con sus dos claves foráneas, más USUARIOS y NOTAS.
+- **Endpoints nuevos**: `/api/contactos` (alta pública, lectura y borrado autenticados) y `/api/catalogos` (categorías con materiales en lectura pública; CRUD autenticado).
+- **Formulario de consulta**: guarda en `CONTACTOS` y además reenvía por Formspree.
+- **Sitio**: los materiales de las colecciones se leen de la base.
+- **Panel**: pestañas Consultas y Catálogo, y día relacionado opcional en novedades.
+- **Pruebas**: 24 (12 unitarias y 12 de integración).
+- **DER y ADR-0013** actualizados.
 
 ### Pendiente
-- Conexión del formulario de visita escolar a servicio externo funcional (FormSubmit o Formspree).
-- Incorporación de favicon e isotipo definitivo en el encabezado.
+- Incorporación de favicon e isotipos definitivos en el encabezado.
 - Refinamiento de columna extra de contacto en el pie de página.
 - Ajuste de espaciados y tipografía fina según la maqueta institucional.
 

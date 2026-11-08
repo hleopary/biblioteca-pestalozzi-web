@@ -1,0 +1,97 @@
+@startuml
+hide circle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam defaultFontSize 14
+skinparam nodesep 45
+skinparam ranksep 45
+title Modelo entidad-relación implementado\nSistema Web Biblioteca Pestalozzi
+
+entity "USUARIOS" as usuarios {
+  * id: INTEGER <<PK>>
+  --
+  * username: TEXT <<UNIQUE>>
+  * password_hash: TEXT
+  * nombre: TEXT
+  email: TEXT
+  created_at: DATETIME
+}
+
+entity "HORARIOS" as horarios {
+  * id_horario: INTEGER <<PK>>
+  --
+  * dias_atencion: TEXT
+  * rango_horario: TEXT
+  * cuatrimestre: TEXT
+  * dia_orden: INTEGER
+  updated_at: DATETIME
+}
+
+entity "SOLICITUDES_VISITA" as solicitudes {
+  * id_solicitud: INTEGER <<PK>>
+  --
+  * escuela: TEXT
+  * docente: TEXT
+  * email: TEXT
+  * fecha_visita: TEXT
+  * estado: TEXT
+  * telefono: TEXT
+  * nivel: TEXT
+  * alumnos_cant: INTEGER
+  * turno: TEXT
+  observaciones: TEXT
+  created_at: DATETIME
+}
+
+entity "CONTACTOS" as contactos {
+  * id_contacto: INTEGER <<PK>>
+  --
+  * nombre: TEXT
+  * email: TEXT
+  * mensaje: TEXT
+  fecha_envio: DATETIME
+  telefono: TEXT
+}
+
+entity "CATEGORIAS_COLECCION" as categorias {
+  * id_categoria: INTEGER <<PK>>
+  --
+  * nombre: TEXT <<UNIQUE>>
+  descripcion: TEXT
+}
+
+entity "MATERIALES_BIBLIOGRAFICOS" as materiales {
+  * id_material: INTEGER <<PK>>
+  --
+  * titulo: TEXT
+  autor: TEXT
+  link_koha: TEXT
+  link_greenstone: TEXT
+  * id_categoria: INTEGER <<FK>>
+}
+
+entity "NOVEDADES_DONACIONES" as novedades {
+  * id_novedad: INTEGER <<PK>>
+  --
+  * titulo: TEXT
+  * contenido: TEXT
+  * fecha_publicacion: TEXT
+  id_horario: INTEGER <<FK>>
+  * orden: INTEGER
+  * categoria: TEXT
+  * categoria_color: TEXT
+  * activa: INTEGER
+  created_at: DATETIME
+}
+
+entity "NOTAS" as notas {
+  * id: INTEGER <<PK>> (id = 1)
+  --
+  * contenido: TEXT
+  updated_at: DATETIME
+}
+
+categorias ||--o{ materiales : "clasifica (1:N)"
+horarios ||--o{ novedades : "gestiona (1:N)"
+
+@enduml

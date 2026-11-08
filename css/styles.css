@@ -5,24 +5,39 @@
    ========================================================================== */
 
 :root {
-  --color-primary: #6b1d2b;      /* borravino de la maqueta (header, bandas, botones) */
-  --color-primary-dark: #55151f; /* borravino oscuro (hover) */
-  --color-accent: #8b5e2b;       /* dorado / terracota (lineas, chips, bordes) */
-  --color-accent-dark: #8b5e2b;  /* dorado para texto sobre fondos claros */
-  --color-accent-light: #d4a853; /* dorado claro (texto/iconos sobre fondos oscuros) */
-  --color-bg: #faf3e8;           /* crema (fondo general) */
-  --color-bg-alt: #ede4d4;       /* beige (horarios y visitas) */
-  --color-surface: #ffffff;      /* tarjetas blancas */
-  --color-surface-alt: #ede4d4;  /* tarjetas beige (bebeteca, tramites, consulta) */
-  --color-off: #eadecd;          /* celda apagada (horarios) */
-  --color-off-border: #d7c7b1;   /* borde de celda apagada */
-  --color-line: #c8b49a;         /* lineas separadoras y bordes de tarjeta */
+  --color-primary: #6b1d2b;
+  /* borravino de la maqueta (header, bandas, botones) */
+  --color-primary-dark: #55151f;
+  /* borravino oscuro (hover) */
+  --color-accent: #8b5e2b;
+  /* dorado / terracota (lineas, chips, bordes) */
+  --color-accent-dark: #8b5e2b;
+  /* dorado para texto sobre fondos claros */
+  --color-accent-light: #d4a853;
+  /* dorado claro (texto/iconos sobre fondos oscuros) */
+  --color-bg: #faf3e8;
+  /* crema (fondo general) */
+  --color-bg-alt: #ede4d4;
+  /* beige (horarios y visitas) */
+  --color-surface: #ffffff;
+  /* tarjetas blancas */
+  --color-surface-alt: #ede4d4;
+  /* tarjetas beige (bebeteca, tramites, consulta) */
+  --color-off: #eadecd;
+  /* celda apagada (horarios) */
+  --color-off-border: #d7c7b1;
+  /* borde de celda apagada */
+  --color-line: #c8b49a;
+  /* lineas separadoras y bordes de tarjeta */
   --color-border: #c8b49a;
-  --color-footer: #1c1008;       /* pie de pagina */
+  --color-footer: #1c1008;
+  /* pie de pagina */
   --color-text: #1c1008;
   --color-text-muted: #6b5a48;
   --color-error: #b3261e;
   --color-success: #1b5e20;
+  --color-focus: var(--color-accent);
+  /* ~5:1 sobre fondo claro */
 
   --font-base: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-heading: Georgia, "Times New Roman", serif;
@@ -66,19 +81,41 @@ h3 {
   margin: 0 0 var(--space-md);
 }
 
-h1 { font-size: clamp(2.25rem, 5vw, 3.5rem); }
-h2 { font-size: clamp(1.6rem, 3.5vw, 2.25rem); color: var(--color-primary); }
-h3 { font-size: 1.15rem; }
+h1 {
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+}
 
-p { margin: 0 0 var(--space-md); }
+h2 {
+  font-size: clamp(1.6rem, 3.5vw, 2.25rem);
+  color: var(--color-primary);
+}
 
-a { color: var(--color-primary); }
+h3 {
+  font-size: 1.15rem;
+}
+
+p {
+  margin: 0 0 var(--space-md);
+}
+
+a {
+  color: var(--color-primary);
+}
+
+.site-header,
+.section-band,
+.hero,
+.site-footer {
+  --color-focus: var(--color-accent-light);
+  /* > 4.5:1 sobre fondo borravino/oscuro */
+}
 
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
+select:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid var(--color-accent);
+  outline: 3px solid var(--color-focus);
   outline-offset: 2px;
 }
 
@@ -159,7 +196,9 @@ textarea:focus-visible {
   margin: 0 0 0.5rem;
 }
 
-.muted { color: var(--color-text-muted); }
+.muted {
+  color: var(--color-text-muted);
+}
 
 /* --------------------------------------------------------------------------
    Header
@@ -189,25 +228,40 @@ textarea:focus-visible {
   gap: 0.65rem;
   color: #fff;
   text-decoration: none;
+  /* Permite que la marca ceda espacio al botón de menú en pantallas angostas
+     en lugar de bajar el botón a una segunda fila. */
+  min-width: 0;
+  max-width: calc(100% - 3.75rem);
 }
 
-.brand-icon { width: 2rem; height: 2rem; color: var(--color-accent); }
+.brand-icon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--color-accent);
+}
 
 .brand-text {
   display: flex;
   flex-direction: column;
   line-height: 1.15;
+  min-width: 0;
 }
 
 .brand-text strong {
   font-family: var(--font-heading);
   font-size: 1.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .brand-text small {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   color: rgba(255, 255, 255, 0.75);
   letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .main-nav ul {
@@ -260,8 +314,13 @@ textarea:focus-visible {
   position: absolute;
 }
 
-.nav-toggle-bar::before { top: -6px; }
-.nav-toggle-bar::after { top: 6px; }
+.nav-toggle-bar::before {
+  top: -6px;
+}
+
+.nav-toggle-bar::after {
+  top: 6px;
+}
 
 /* --------------------------------------------------------------------------
    Hero
@@ -288,7 +347,18 @@ textarea:focus-visible {
   align-items: center;
 }
 
-.hero .eyebrow { color: var(--color-accent-light); }
+.hero .eyebrow {
+  color: var(--color-accent-light);
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-accent-dark);
+  margin: 0 0 0.5rem;
+}
 
 .hero h1 {
   color: #fff;
@@ -303,7 +373,9 @@ textarea:focus-visible {
 }
 
 /* Segunda línea del título, en dorado claro (como la maqueta) */
-.hero-title-accent { color: var(--color-accent-light); }
+.hero-title-accent {
+  color: var(--color-accent-light);
+}
 
 /* Bloque único con borde que agrupa las dos estadísticas, separadas por una línea.
    En la maqueta es un panel borravino de ~224px de ancho, alineado al borde derecho. */
@@ -323,7 +395,7 @@ textarea:focus-visible {
   text-align: center;
 }
 
-.stat + .stat {
+.stat+.stat {
   border-top: 1px solid rgba(212, 168, 83, 0.5);
 }
 
@@ -336,15 +408,17 @@ textarea:focus-visible {
 }
 
 .stat-label {
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* --------------------------------------------------------------------------
    Secciones generales
    -------------------------------------------------------------------------- */
 
-.section { padding: var(--space-xl) 0; }
+.section {
+  padding: var(--space-xl) 0;
+}
 
 .section-lead {
   color: var(--color-text-muted);
@@ -359,23 +433,139 @@ textarea:focus-visible {
   padding: 2.5rem 0 3.25rem;
 }
 
-.section-band .eyebrow { color: var(--color-accent-light); }
-.section-band h2 { color: var(--color-bg); margin-bottom: 0.75rem; }
+.section-band .eyebrow {
+  color: var(--color-accent-light);
+}
+
+.section-band h2 {
+  color: var(--color-bg);
+  margin-bottom: 0.75rem;
+}
 
 .section-band .section-lead {
   color: rgba(250, 243, 232, 0.9);
   max-width: 41rem;
 }
 
-.section-body { padding: 3rem 0; }
-.section-body .card-grid { margin-top: 0; }
+.section-body {
+  padding: 3rem 0;
+}
+
+.section-body .card-grid {
+  margin-top: 0;
+}
 
 /* Fondos por sección (maqueta) */
-.section-horarios { background-color: var(--color-bg-alt); }
+.section-horarios {
+  background-color: var(--color-bg-alt);
+}
 
 .section-novedades {
   background-color: var(--color-bg);
   border-top: 1px solid var(--color-line);
+}
+
+/* Novedades: scroll horizontal fluido si hay más de 3 publicaciones */
+.section-novedades .card-grid-3 {
+  display: flex;
+  overflow-x: auto;
+  gap: var(--space-lg);
+  padding-bottom: 1.25rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.section-novedades .card-grid-3::-webkit-scrollbar {
+  height: 6px;
+}
+.section-novedades .card-grid-3::-webkit-scrollbar-track {
+  background: var(--color-bg-alt);
+  border-radius: 4px;
+}
+.section-novedades .card-grid-3::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 4px;
+}
+.section-novedades .card-grid-3::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+.section-novedades .card.novedad {
+  flex: 0 0 calc((100% - (var(--space-lg) * 2)) / 3);
+  min-width: 290px;
+  max-width: 380px;
+  scroll-snap-align: start;
+}
+
+/* Materiales destacados (DER: CATEGORIAS_COLECCION / MATERIALES_BIBLIOGRAFICOS) */
+.materiales-destacados {
+  margin-top: 2.5rem;
+}
+
+.materiales-destacados h3 {
+  margin-bottom: 0.5rem;
+}
+
+.materiales-grupos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.materiales-grupo {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+}
+
+.materiales-grupo h4 {
+  margin: 0 0 0.35rem;
+  color: var(--color-primary);
+}
+
+.materiales-grupo p {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+}
+
+.materiales-lista {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+}
+
+.materiales-lista li {
+  padding: 0.4rem 0;
+  border-top: 1px solid var(--color-line);
+  font-size: 0.95rem;
+}
+
+.materiales-lista li:first-child {
+  border-top: 0;
+}
+
+.material-autor {
+  color: var(--color-text-muted);
+}
+
+.materiales-lista a {
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .materiales-grupos {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .section-novedades .card.novedad {
+    flex: 0 0 85%;
+    min-width: 260px;
+  }
 }
 
 .section-colecciones,
@@ -386,16 +576,22 @@ textarea:focus-visible {
 }
 
 .section-visitas,
-.section-catalogos { border-top: 1px solid var(--color-line); }
+.section-catalogos {
+  border-top: 1px solid var(--color-line);
+}
 
-.section-visitas .section-body { background-color: var(--color-bg-alt); }
+.section-visitas .section-body {
+  background-color: var(--color-bg-alt);
+}
 
 /* Bebeteca y Asociación: línea separadora del ancho del contenedor */
 .section-bebeteca,
-.section-asociacion { padding-top: 0; }
+.section-asociacion {
+  padding-top: 0;
+}
 
-.section-bebeteca > .container,
-.section-asociacion > .container {
+.section-bebeteca>.container,
+.section-asociacion>.container {
   border-top: 1px solid var(--color-line);
   padding-top: 1.5rem;
 }
@@ -420,14 +616,19 @@ textarea:focus-visible {
   text-align: center;
 }
 
-.btn .icon { width: 1.1rem; height: 1.1rem; }
+.btn .icon {
+  width: 1.1rem;
+  height: 1.1rem;
+}
 
 .btn-primary {
   background-color: var(--color-primary);
   color: #fff;
 }
 
-.btn-primary:hover { background-color: var(--color-primary-dark); }
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+}
 
 .btn-secondary {
   background-color: transparent;
@@ -435,7 +636,9 @@ textarea:focus-visible {
   color: var(--color-primary);
 }
 
-.btn-secondary:hover { background-color: rgba(107, 29, 40, 0.06); }
+.btn-secondary:hover {
+  background-color: rgba(107, 29, 40, 0.06);
+}
 
 /* Enlace de contacto tipo texto borravino con ícono (la maqueta no usa verde) */
 .link-chat {
@@ -447,8 +650,15 @@ textarea:focus-visible {
   text-decoration: none;
 }
 
-.link-chat .icon { width: 1.05rem; height: 1.05rem; }
-.link-chat:hover { color: var(--color-accent); text-decoration: underline; }
+.link-chat .icon {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.link-chat:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
 
 .link-arrow {
   display: inline-flex;
@@ -460,8 +670,14 @@ textarea:focus-visible {
   margin-top: auto;
 }
 
-.link-arrow .icon { width: 1rem; height: 1rem; }
-.link-arrow:hover { color: var(--color-accent-dark); }
+.link-arrow .icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.link-arrow:hover {
+  color: var(--color-accent-dark);
+}
 
 /* --------------------------------------------------------------------------
    Sección: Horarios
@@ -485,6 +701,39 @@ textarea:focus-visible {
   gap: 8px;
 }
 
+/* La lista permanece oculta hasta que la API responde. Si falla, se muestra
+   un estado explícito con alternativa de contacto, nunca una tabla vacía. */
+.schedule[hidden] {
+  display: none;
+}
+
+.horarios-lista {
+  min-width: 0;
+}
+
+.schedule-status {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  color: var(--color-text-muted);
+}
+
+.schedule-status a {
+  color: var(--color-primary);
+}
+
+.link-button {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--color-primary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .schedule-day {
   display: flex;
   align-items: center;
@@ -502,8 +751,14 @@ textarea:focus-visible {
   border-color: var(--color-line);
 }
 
-.schedule-day .day { font-weight: 600; }
-.schedule-day .hours { color: var(--color-text-muted); font-size: 0.9rem; }
+.schedule-day .day {
+  font-weight: 600;
+}
+
+.schedule-day .hours {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
 
 /* --------------------------------------------------------------------------
    Tarjetas
@@ -515,8 +770,13 @@ textarea:focus-visible {
   margin-top: var(--space-lg);
 }
 
-.card-grid-2 { grid-template-columns: repeat(2, 1fr); }
-.card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.card-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.card-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
 
 .card {
   display: flex;
@@ -524,7 +784,7 @@ textarea:focus-visible {
   background-color: var(--color-surface);
   border: 1px solid var(--color-line);
   border-radius: var(--radius);
-  overflow: hidden;
+  overflow: visible;
   box-shadow: var(--shadow);
 }
 
@@ -536,7 +796,10 @@ textarea:focus-visible {
   flex: 1;
 }
 
-.card-body p { margin: 0; color: var(--color-text-muted); }
+.card-body p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
 
 .card h3 {
   margin: 0;
@@ -547,7 +810,7 @@ textarea:focus-visible {
 .tag {
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   font-weight: 700;
   color: var(--color-accent-dark);
 }
@@ -564,15 +827,27 @@ textarea:focus-visible {
   letter-spacing: 0.06em;
 }
 
-.novedad:nth-child(1) .tag { --tag-color: #8b5e2b; } /* tostado  - Donacion provincial */
-.novedad:nth-child(2) .tag { --tag-color: #6b1d2b; } /* bordo    - Recomendacion de la semana */
-.novedad:nth-child(3) .tag { --tag-color: #3d5a3e; } /* verde    - Donacion de socios */
+.novedad:nth-child(1) .tag {
+  --tag-color: #8b5e2b;
+}
+
+/* tostado  - Donacion provincial */
+.novedad:nth-child(2) .tag {
+  --tag-color: #6b1d2b;
+}
+
+/* bordo    - Recomendacion de la semana */
+.novedad:nth-child(3) .tag {
+  --tag-color: #3d5a3e;
+}
+
+/* verde    - Donacion de socios */
 
 .card-date {
   margin-top: auto;
   padding-top: 0.6rem;
   border-top: 1px solid var(--color-line);
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   color: var(--color-text-muted);
 }
 
@@ -587,6 +862,10 @@ textarea:focus-visible {
   background-image: linear-gradient(140deg, #8b5e2b, #4a121c);
   background-size: cover;
   background-position: center;
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+  overflow: hidden;
+  /* Mantiene la curvatura de la imagen */
 }
 
 .media--berisso {
@@ -599,7 +878,9 @@ textarea:focus-visible {
     linear-gradient(140deg, #8b5e2b, #4a121c);
 }
 
-.media-tall { min-height: 12.5rem; }
+.media-tall {
+  min-height: 12.5rem;
+}
 
 .media-label {
   font-size: 0.75rem;
@@ -615,11 +896,11 @@ textarea:focus-visible {
   right: 0.75rem;
   background-color: var(--color-accent);
   color: var(--color-bg);
-  font-size: 0.72rem;
+  font-size: 0.875rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 0.25rem 0.65rem;
+  padding: 0.35rem 0.75rem;
   border-radius: 4px;
 }
 
@@ -627,7 +908,9 @@ textarea:focus-visible {
    Sección: Bebeteca
    -------------------------------------------------------------------------- */
 
-.h2-emoji { margin-right: 0.35rem; }
+.h2-emoji {
+  margin-right: 0.35rem;
+}
 
 .bebeteca-grid {
   list-style: none;
@@ -663,7 +946,7 @@ textarea:focus-visible {
 
 .bebeteca-card p {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: var(--color-text-muted);
 }
 
@@ -686,7 +969,9 @@ textarea:focus-visible {
   border-radius: var(--radius);
 }
 
-.visitas-info h3 { margin-bottom: var(--space-md); }
+.visitas-info h3 {
+  margin-bottom: var(--space-md);
+}
 
 .steps {
   list-style: none;
@@ -731,7 +1016,9 @@ textarea:focus-visible {
   box-shadow: var(--shadow);
 }
 
-.form-field { margin-bottom: var(--space-md); }
+.form-field {
+  margin-bottom: var(--space-md);
+}
 
 .form-row {
   display: grid;
@@ -741,14 +1028,17 @@ textarea:focus-visible {
 
 .form-field label {
   display: block;
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 600;
   margin-bottom: 0.35rem;
 }
 
-.req { color: var(--color-error); }
+.req {
+  color: var(--color-error);
+}
 
 .form-field input,
+.form-field select,
 .form-field textarea {
   width: 100%;
   padding: 0.7rem 0.8rem;
@@ -759,14 +1049,19 @@ textarea:focus-visible {
   border-radius: 8px;
 }
 
-.form-field textarea { resize: vertical; }
+.form-field textarea {
+  resize: vertical;
+}
 
 .form-field.has-error input,
-.form-field.has-error textarea { border-color: var(--color-error); }
+.form-field.has-error select,
+.form-field.has-error textarea {
+  border-color: var(--color-error);
+}
 
 .field-error {
   margin: 0.35rem 0 0;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   color: var(--color-error);
 }
 
@@ -792,17 +1087,23 @@ textarea:focus-visible {
    -------------------------------------------------------------------------- */
 
 .catalogo,
-.tramite { padding: var(--space-lg); }
+.tramite {
+  padding: var(--space-lg);
+}
 
 .catalogo .card-body,
-.tramite .card-body { padding: 0; }
+.tramite .card-body {
+  padding: 0;
+}
 
 /* Trámites (asociación) y consulta: fondo beige en la maqueta */
 .tramite,
-.consulta { background-color: var(--color-surface-alt); }
+.consulta {
+  background-color: var(--color-surface-alt);
+}
 
-.catalogo > .icon,
-.tramite > .icon {
+.catalogo>.icon,
+.tramite>.icon {
   color: var(--color-primary);
   margin-bottom: 0.75rem;
 }
@@ -832,7 +1133,50 @@ textarea:focus-visible {
   margin: 0 0 0.25rem;
 }
 
-.consulta .muted { margin: 0; }
+.consulta .muted {
+  margin: 0;
+}
+
+.consulta-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm, 0.75rem);
+  /* Distancia corta entre ambos botones */
+  flex-wrap: wrap;
+}
+
+/* Layout del bloque de consultas de trámites */
+.consulta-seccion {
+  margin-top: var(--space-xl);
+  display: grid;
+  grid-template-columns: 32% 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.consulta-info {
+  padding: 1.5rem;
+  background-color: var(--color-surface-alt);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+}
+
+.consulta-urgencia {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-line);
+}
+
+.consulta-urgencia p {
+  margin-bottom: var(--space-xs);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 960px) {
+  .consulta-seccion {
+    grid-template-columns: 1fr;
+  }
+}
 
 /* --------------------------------------------------------------------------
    Footer
@@ -852,8 +1196,36 @@ textarea:focus-visible {
   padding-bottom: var(--space-lg);
 }
 
-.brand-footer { margin-bottom: var(--space-md); }
-.brand-footer .brand-text strong { color: #fff; font-size: 1.3rem; }
+.footer-grid > * {
+  min-width: 0;
+}
+
+.brand-footer {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: var(--space-md);
+  text-decoration: none;
+}
+
+.brand-footer .brand-text strong {
+  color: #fff;
+  font-size: 1.3rem;
+}
+
+/* Indicador visual "Volver al inicio ↑" */
+.brand-footer .volver-arriba {
+  font-size: 0.875rem;
+  /* Mínimo 14px accesible */
+  color: var(--color-accent-light);
+  margin-top: 0.2rem;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.brand-footer:hover .volver-arriba {
+  transform: translateY(-2px);
+}
 
 .footer-brand p {
   color: rgba(255, 255, 255, 0.7);
@@ -885,9 +1257,9 @@ textarea:focus-visible {
 .footer-heading {
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  font-size: 0.72rem;
+  font-size: 0.8752rem;
   font-weight: 700;
-  color: var(--color-accent);
+  color: var(--color-accent-light);
   margin-bottom: var(--space-sm);
 }
 
@@ -898,8 +1270,30 @@ textarea:focus-visible {
   margin: 0 0 0.6rem;
 }
 
-.footer-contact a { color: rgba(255, 255, 255, 0.85); }
-.footer-contact .icon { color: var(--color-accent-light); margin-top: 0.15rem; }
+.footer-contact a {
+  color: rgba(255, 255, 255, 0.85);
+  /* Los correos institucionales no tienen puntos de corte: permitir el salto
+     evita que ensanchen la columna y desborden el viewport en móvil. */
+  overflow-wrap: anywhere;
+}
+
+.footer-contact p a {
+  text-decoration: none;
+  /* Elimina el subrayado por defecto */
+  color: inherit;
+  /* Hereda el color del texto contenedor o mantiene la paleta */
+  transition: color 0.2s ease;
+}
+
+.footer-contact p a:hover {
+  color: var(--color-accent-light);
+  /* Se ilumina con el dorado claro institucional */
+}
+
+.footer-contact .icon {
+  color: var(--color-accent-light);
+  margin-top: 0.15rem;
+}
 
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.15);
@@ -909,28 +1303,76 @@ textarea:focus-visible {
   justify-content: space-between;
   gap: var(--space-md);
   flex-wrap: wrap;
-  font-size: 0.82rem;
+  font-size: 0.875rem;
 }
 
-.footer-bottom p { margin: 0; }
+.footer-bottom p {
+  margin: 0;
+}
 
 /* --------------------------------------------------------------------------
    Responsive
    -------------------------------------------------------------------------- */
 
 @media (max-width: 960px) {
-  .hero-inner { grid-template-columns: 1fr; }
-  .hero-stats { max-width: none; justify-self: stretch; }
+  .hero-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-stats {
+    max-width: none;
+    justify-self: stretch;
+  }
+
   .horarios-grid,
-  .visitas-grid { grid-template-columns: 1fr; }
-  .schedule { grid-template-columns: repeat(2, 1fr); }
-  .card-grid-3 { grid-template-columns: repeat(2, 1fr); }
-  .bebeteca-grid { grid-template-columns: repeat(2, 1fr); }
-  .footer-grid { grid-template-columns: 1fr; }
+  .visitas-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .card-grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bebeteca-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 400px) {
+  .brand-icon {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+
+  .brand {
+    gap: 0.4rem;
+  }
+
+  .brand-text strong {
+    font-size: 1.05rem;
+  }
 }
 
 @media (max-width: 768px) {
-  .nav-toggle { display: inline-flex; }
+  .nav-toggle {
+    display: inline-flex;
+  }
+
+  .header-inner {
+    gap: 0.5rem;
+  }
+
+  .brand {
+    gap: 0.5rem;
+  }
 
   .main-nav {
     display: none;
@@ -938,24 +1380,41 @@ textarea:focus-visible {
     padding-bottom: var(--space-sm);
   }
 
-  .main-nav.is-open { display: block; }
+  .main-nav.is-open {
+    display: block;
+  }
 
   .main-nav ul {
     flex-direction: column;
     gap: var(--space-xs);
   }
 
-  .form-row { grid-template-columns: 1fr; }
-  .schedule { grid-template-columns: 1fr; }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule {
+    grid-template-columns: 1fr;
+  }
+
   .card-grid-2,
-  .card-grid-3 { grid-template-columns: 1fr; }
-  .bebeteca-grid { grid-template-columns: 1fr; }
+  .card-grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .bebeteca-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (min-width: 769px) {
-  .main-nav { display: block !important; }
+  .main-nav {
+    display: block !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
+  html {
+    scroll-behavior: auto;
+  }
 }

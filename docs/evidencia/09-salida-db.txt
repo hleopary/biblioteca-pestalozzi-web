@@ -1,0 +1,32 @@
+=== Evidencia de scripts de base (rama B) — 2026-11-07T19:31:40-03:00
+=== Base temporal: ./data/evidencia-b.sqlite
+
+--- 1) db:reset
+✓ Archivos de base eliminados
+Iniciando sembrado de datos en la base de datos Pestalozzi...
+✓ Contenido inicial cargado desde db/seed.sql.
+✓ Usuario admin inicial creado: "betsabe".
+Base de datos lista y sincronizada.
+
+--- 2) db:count
+  categorias_coleccion 2
+  contactos    0
+  horarios     7
+  materiales_bibliograficos 6
+  notas        1
+  novedades_donaciones 3
+  solicitudes_visita 0
+  usuarios     1
+
+--- 3) integridad referencial (PRAGMA foreign_key_check)
+  violaciones: 0
+
+--- 4) db:dump
+✓ Esquema aplicado desde db/schema.sql
+✓ Dump generado en db/dump.sql (8 tablas)
+  tablas en el dump: 8
+  inserts en el dump: 20
+
+--- 5) modificación y db:restore
+✓ Base restaurada desde db/dump.sql
+  Martes restaurado: 16:00 – 18:00

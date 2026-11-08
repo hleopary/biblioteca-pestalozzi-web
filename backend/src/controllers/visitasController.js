@@ -1,0 +1,185 @@
+"use strict";
+
+const db = require("../config/db");
+const { notificarNuevaVisita } = require("../services/emailService");
+const { validarCamposObligatorios, validarEmail } = require("../utils/validators");
+
+// El formulario y el panel usan estos nombres; la tabla sigue el DER
+// (SOLICITUDES_VISITA) y el controller traduce entre ambos.
+const CAMPOS_OBLIGATORIOS = [
+  "institucion",
+  "responsable",
+  "telefono",
+  "email",
+  "nivel",
+  "alumnos_cant",
+  "fecha_preferida",
+  "turno"
+];
+
+const SELECT_VISITAS = `
+  SELECT id_solicitud AS id,
+         escuela AS institucion,
+         docente AS responsable,
+         telefono,
+         email,
+         nivel,
+         alumnos_cant,
+         fecha_visita AS fecha_preferida,
+         turno,
+         observaciones,
+         estado,
+         created_at
+  FROM solicitudes_visita
+`;
+
+function crearVisita(req, res, next) {
+  try {
+    const {
+      institucion,
+      responsable,
+      telefono,
+      email,
+      nivel,
+      alumnos_cant,
+      fecha_preferida,
+      turno,
+      observaciones
+    } = req.body;
+
+    // Validación de campos obligatorios
+    if (!validarCamposObligatorios(req.body, CAMPOS_OBLIGATORIOS).ok) {
+      return res.status(400).json({
+        ok: false,
+        error: "Todos los campos principales del formulario son obligatorios."
+      });
+    }
+
+    const emailValido = validarEmail(email);
+    if (!emailValido.ok) {
+      return res.status(400).json({
+        ok: false,
+        error: emailValido.error
+      });
+    }
+
+    const cantidad = parseInt(alumnos_cant, 10);
+    if (isNaN(cantidad) || cantidad <= 0) {
+      return res.status(400).json({
+        ok: false,
+        error: "La cantidad de alumnos debe ser un número entero positivo."
+      });
+    }
+
+    const result = db.prepare(`
+      INSERT INTO solicitudes_visita (
+        escuela, docente, telefono, email, nivel,
+        alumnos_cant, fecha_visita, turno, observaciones, estado
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pendiente')
+    `).run(
+      institucion.trim(),
+      responsable.trim(),
+      telefono.trim(),
+      email.trim(),
+      nivel.trim(),
+      cantidad,
+      fecha_preferida.trim(),
+      turno.trim(),
+      observaciones ? observaciones.trim() : ""
+    );
+
+    const nuevaVisita = db.prepare(`${SELECT_VISITAS} WHERE id_solicitud = ?`).get(result.lastInsertRowid);
+
+    // Disparar notificación por email asíncrona
+    notificarNuevaVisita(nuevaVisita).catch((err) => {
+      console.error("Error no bloqueante en notificación de visita:", err.message);
+    });
+
+    res.status(201).json({
+      ok: true,
+      mensaje: "Solicitud de visita escolar recibida correctamente. Nos contactaremos a la brevedad.",
+      data: nuevaVisita
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+function getVisitas(req, res, next) {
+  try {
+    const { estado } = req.query;
+    let query = SELECT_VISITAS;
+    const params = [];
+
+    if (estado) {
+      query += " WHERE estado = ?";
+      params.push(estado);
+    }
+
+    query += " ORDER BY created_at DESC";
+
+    const visitas = db.prepare(query).all(...params);
+
+    res.json({
+      ok: true,
+      data: visitas
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+function updateEstado(req, res, next) {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const { estado } = req.body;
+
+    const estadosValidos = ["pendiente", "confirmada", "rechazada", "realizada"];
+    if (!estadosValidos.includes(estado)) {
+      return res.status(400).json({
+        ok: false,
+        error: `Estado inválido. Opciones válidas: ${estadosValidos.join(", ")}`
+      });
+    }
+
+    db.prepare("UPDATE solicitudes_visita SET estado = ? WHERE id_solicitud = ?").run(estado, id);
+
+    const visitaActualizada = db.prepare(`${SELECT_VISITAS} WHERE id_solicitud = ?`).get(id);
+
+    if (!visitaActualizada) {
+      return res.status(404).json({
+        ok: false,
+        error: "Solicitud de visita no encontrada."
+      });
+    }
+
+    res.json({
+      ok: true,
+      mensaje: `Estado de la visita escolar actualizado a '${estado}'.`,
+      data: visitaActualizada
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+function deleteVisita(req, res, next) {
+  try {
+    const id = parseInt(req.params.id, 10);
+    db.prepare("DELETE FROM solicitudes_visita WHERE id_solicitud = ?").run(id);
+
+    res.json({
+      ok: true,
+      mensaje: "Solicitud eliminada con éxito."
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = {
+  crearVisita,
+  getVisitas,
+  updateEstado,
+  deleteVisita
+};

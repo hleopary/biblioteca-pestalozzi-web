@@ -1,0 +1,38 @@
+{
+  "name": "biblioteca-pestalozzi-backend",
+  "version": "1.0.0",
+  "description": "Backend API REST para gestión dinámica de la Biblioteca Popular Pestalozzi (Berisso)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed": "node src/config/seeder.js",
+    "test": "node --test tests/*.test.js",
+    "test:unit": "node --test tests/validators.test.js",
+    "test:integration": "node --test tests/api.test.js",
+    "test:smoke": "node test-api.js",
+    "db:migrate": "node scripts/db.js migrate",
+    "db:seed": "node scripts/db.js seed",
+    "db:reset": "node scripts/db.js reset",
+    "db:dump": "node scripts/db.js dump",
+    "db:restore": "node scripts/db.js restore",
+    "db:count": "node scripts/db.js count"
+  },
+  "keywords": [
+    "pestalozzi",
+    "biblioteca",
+    "express",
+    "api",
+    "sqlite"
+  ],
+  "author": "Grupo Clouds (IFTS29)",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.9.15"
+  }
+}

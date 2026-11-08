@@ -1,0 +1,8 @@
+# No subir datos locales ni dependencias
+backend/data/
+backend/node_modules/
+node_modules/
+*.log
+
+# Metadatos
+.git/
