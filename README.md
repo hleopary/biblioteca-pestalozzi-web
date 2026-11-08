@@ -85,30 +85,40 @@ git checkout leopary_prueba3
 
 | Rama | Propósito |
 |------|-----------|
-| `main` | **Rama principal del proyecto** (producción / entregas formales vía PR). |
-| `dev` | **Rama de integración de desarrollo**. Todas las ramas temáticas nuevas nacen a partir de `dev`. |
-| `feat/*`, `fix/*`, `chore/*` | **Ramas de trabajo**, siempre creadas desde `dev`. |
-| `prueba/*` | Ramas de integración para resolver conflictos sin tocar la rama de otra persona. |
-> **Rama `leopary_prueba1` (eliminada el 14/10/2026):** era la primera landing institucional (02/10/2026). No se perdió historial: su commit `de32831` quedó dentro de la historia de `leopary_prueba2` y se puede recuperar con `git show de32831:index.html`.
+| `main` | **Release**: versión consolidada que se presenta. Solo recibe merges desde `dev`. |
+| `dev` | **Rama troncal** y de despliegue. Todas las tareas nacen de acá. |
+| `feat/*`, `fix/*`, `chore/*` | Ramas de trabajo, siempre creadas desde `dev`. |
+| `deprecated/*` | Ramas archivadas: se conservan por historial y no se usan. |
 
-**Merge a main**: Solo vía Pull Request cuando la versión esté lista para "producción" (entrega formal).
+**Ramas activas: solo `dev` y `main`.** El resto quedó bajo `deprecated/` el 08/11/2026.
+
+**Merge a main**: solo vía Pull Request cuando la versión esté lista para la entrega formal.
 
 ---
 
 ## Deploy
 
-El sitio se publica en dos destinos desde este mismo repositorio:
+**Aplicación completa (canónica): Railway**
 
-| Destino | Rama | Qué sirve |
-|---------|------|-----------|
-| **Vercel** (principal) | `main` en producción, `dev` en preview | Sitio estático completo |
-| **GitHub Pages** (espejo) | `main` | Sitio estático |
+**https://biblioteca-pestalozzi-production.up.railway.app**
 
-**Vercel.** Importar el repositorio una vez y elegir el preset *Other*: no hay paso de build. `vercel.json` agrega caché larga para `assets/` y dos cabeceras de seguridad; `.vercelignore` deja fuera la base local y las dependencias del backend.
+- Sitio público, panel (`/admin.html`) y API (`/api`) en el mismo origen.
+- Base SQLite con volumen persistente en `/app/backend/data`.
+- Es el destino de la presentación y el que se entrega a la biblioteca.
 
-**GitHub Pages.** Publica `main` / `(root)` → https://hleopary.github.io/biblioteca-pestalozzi-web/
+**Espejo estático: Vercel**
 
-> **Alcance del deploy actual:** la API de `backend/` todavía no está publicada. El sitio funciona con el tablón estático de `index.html` y los formularios por Formspree, pero `admin.html` no puede autenticarse ni guardar cambios. La API necesita un origen con disco persistente; la migración a Vercel con Turso está planificada.
+**https://biblioteca-pestalozzi-web.vercel.app**
+
+- Solo el sitio, sin API. Si la API no está accesible, el tablón muestra un estado de fallo explícito con enlace de contacto.
+- Sirve para revisar el diseño sin backend.
+
+**GitHub Pages:** despublicado el 08/11/2026. El sitio canónico es Railway.
+
+### Cómo se despliega
+
+- **Railway**: `railway up` desde una copia del repositorio con el Dockerfile incluido (el archivo vive fuera del repo, en la carpeta temporal). Variables: `JWT_SECRET`, `ADMIN_USER`, `ADMIN_PASS`, `ADMIN_EMAIL`. La base se crea sola en el volumen al arrancar.
+- **Vercel**: importar el repositorio, preset *Other*, sin build. `vercel.json` define caché y cabeceras.
 
 ---
 
