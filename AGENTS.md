@@ -134,10 +134,11 @@ Todas las variables de diseño están centralizadas en el bloque `:root` de `css
 
 ## 6. Flujo de Trabajo en Git
 
-- **`main`**: Rama principal del proyecto (producción y entregas consolidadas).
-- **`dev`**: Rama troncal de desarrollo. **Todas las nuevas tareas nacen de aquí.**
+- **`main`**: Rama de release (producción y entregas consolidadas). Solo recibe merges desde `dev` por Pull Request.
+- **`dev`**: Rama troncal de desarrollo y de despliegue. **Todas las nuevas tareas nacen de aquí.**
 - **`feat/*`, `fix/*`, `chore/*`**: Ramas de trabajo individuales creadas obligatoriamente a partir de `dev`.
-- **`leopary_prueba2`**: Rama de despliegue activa en GitHub Pages.
+- **`deprecated/*`**: Ramas archivadas. Se conservan por historial; no se usan ni se mergean.
+- **Despliegue**: Railway sirve la aplicación completa (sitio, panel y API). Vercel es un espejo estático. GitHub Pages quedó despublicado el 08/11/2026.
 - **Mensajes de commit**: Seguir el estándar Conventional Commits en español:
   - `feat: ...` para nuevas funcionalidades.
   - `fix: ...` para corrección de errores.
