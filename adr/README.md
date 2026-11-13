@@ -28,4 +28,5 @@ Cada documento describe una decisión técnica o de diseño significativa, su co
 | [ADR-0011](0011-popover-notas-drag-drop-novedades.md) | Popover de Notas Flotante, Modal Institucional de Confirmación y Drag & Drop con Scroll en Novedades | Aceptado | 2026-10-30 |
 | [ADR-0012](0012-reconciliacion-der-etapa2.md) | Reconciliación del DER de Etapa 2 con la base implementada | Aceptado | 2026-11-07 |
 | [ADR-0013](0013-implementacion-der-etapa2.md) | Implementación del DER de Etapa 2 como esquema real (rama B) | Aceptado | 2026-11-07 |
-| [ADR-0014](0014-renderizado-seguro-de-solicitudes.md) | Renderizado seguro de solicitudes de visita en el panel | Aceptado | 2026-11-13 |
+| [ADR-0014](0014-coleccion-postman-api.md) | Colección de Postman para la API REST | Aceptado | 2026-11-13 |
+| [ADR-0015](0015-renderizado-seguro-de-solicitudes.md) | Renderizado seguro de solicitudes de visita en el panel | Aceptado | 2026-11-13 |

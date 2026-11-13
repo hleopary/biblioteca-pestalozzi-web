@@ -1,4 +1,4 @@
-# ADR-0014: Renderizado seguro de solicitudes de visita en el panel
+# ADR-0015: Renderizado seguro de solicitudes de visita en el panel
 
 - **Estado**: Aceptado
 - **Fecha**: 2026-11-13
