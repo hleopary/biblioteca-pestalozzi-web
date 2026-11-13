@@ -9,6 +9,9 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
 
 ## [Sin publicar] (Unreleased)
 
+### Corregido
+- El panel de visitas ahora representa los datos enviados por el público como texto, sin insertarlos como HTML en la tabla ni en el modal de detalle.
+
 ### Añadido
 - **Backend Propio en Node.js / Express (`backend/`)**:
   - Servidor API REST con Express, CORS y middleware centralizado de errores.
