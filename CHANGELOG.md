@@ -13,6 +13,10 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
 - El panel de visitas ahora representa los datos enviados por el público como texto, sin insertarlos como HTML en la tabla ni en el modal de detalle.
 
 ### Añadido
+- **Prueba de regresión del renderizado seguro de solicitudes de visita** (`backend/tests/admin-render.test.js`):
+  - Verifica que la tabla y el modal del panel no interpelen datos en `innerHTML` y que usen `textContent`.
+  - Comprueba que el filtro de correo rechace direcciones con `?`, `#`, `&` y valores no simples.
+  - Controla que el ADR-0015 esté documentado e indexado.
 - **Colección de Postman para la API REST**:
   - Colección importable en `backend/docs/postman/collection/` con endpoints públicos, autenticados y CRUD.
   - Variables reutilizables para URL base, token JWT e identificadores generados durante las pruebas.
