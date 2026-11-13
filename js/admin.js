@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let authToken = localStorage.getItem(tokenKey);
   let currentUser = null;
   let allVisitas = []; // Almacena visitas para filtrado y búsqueda local
+  const estadosVisita = ["pendiente", "confirmada", "realizada", "rechazada"];
 
   // Elementos DOM
   const alertBox = document.getElementById("admin-alert");
@@ -303,6 +304,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function crearElementoTexto(tag, clase, valor) {
+    const elemento = document.createElement(tag);
+    if (clase) elemento.className = clase;
+    elemento.textContent = valor ?? "";
+    return elemento;
+  }
+
+  function crearEnlaceCorreo(email, clase = "") {
+    const valor = String(email ?? "");
+    if (!/^[^\s@?&#]+@[^\s@?&#]+\.[^\s@?&#]+$/.test(valor)) {
+      return crearElementoTexto("span", clase, valor);
+    }
+
+    const enlace = crearElementoTexto("a", clase, valor);
+    enlace.href = `mailto:${valor}`;
+    return enlace;
+  }
+
+  function agregarCampoDetalle(contenedor, etiqueta, valor) {
+    const parrafo = document.createElement("p");
+    const rotulo = crearElementoTexto("strong", "", `${etiqueta}:`);
+    parrafo.append(rotulo, document.createTextNode(` ${valor ?? ""}`));
+    contenedor.appendChild(parrafo);
+  }
+
   function renderVisitas() {
     if (!visitasTableBody) return;
     const estadoFiltro = filtroVisitas ? filtroVisitas.value : "";
@@ -331,44 +357,77 @@ document.addEventListener("DOMContentLoaded", () => {
 
     filtradas.forEach((v) => {
       const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td class="col-fecha">
-          <span class="fecha-main">${v.fecha_preferida}</span>
-          <span class="badge-turno">${v.turno}</span>
-        </td>
-        <td>
-          <div class="inst-title">${v.institucion}</div>
-          <span class="inst-sub">Nivel: ${v.nivel}</span>
-        </td>
-        <td>
-          <div class="doc-name">${v.responsable}</div>
-          <div style="margin-top: 0.25rem;">
-            <a href="mailto:${v.email}" class="contact-link">${v.email}</a>
-            <span class="contact-tel">📞 ${v.telefono}</span>
-          </div>
-        </td>
-        <td style="text-align: center;">
-          <span class="alumnos-badge">${v.alumnos_cant}</span>
-        </td>
-        <td>
-          <span class="badge badge-${v.estado}">${v.estado.toUpperCase()}</span>
-        </td>
-        <td>
-          <div class="actions-group">
-            <select class="select-estado" data-id="${v.id}" title="Cambiar estado">
-              <option value="pendiente" ${v.estado === "pendiente" ? "selected" : ""}>Pendiente</option>
-              <option value="confirmada" ${v.estado === "confirmada" ? "selected" : ""}>Confirmar</option>
-              <option value="realizada" ${v.estado === "realizada" ? "selected" : ""}>Realizada</option>
-              <option value="rechazada" ${v.estado === "rechazada" ? "selected" : ""}>Rechazar</option>
-            </select>
-            <button class="btn-ver-obs" data-id="${v.id}" title="Ver observaciones y datos completos">👁️</button>
-            <button class="btn-eliminar-visita" data-id="${v.id}" title="Eliminar solicitud" style="color: var(--color-error);">🗑️</button>
-          </div>
-        </td>
-      `;
+      const celdaFecha = document.createElement("td");
+      celdaFecha.className = "col-fecha";
+      celdaFecha.append(
+        crearElementoTexto("span", "fecha-main", v.fecha_preferida),
+        crearElementoTexto("span", "badge-turno", v.turno)
+      );
+
+      const celdaInstitucion = document.createElement("td");
+      celdaInstitucion.append(
+        crearElementoTexto("div", "inst-title", v.institucion),
+        crearElementoTexto("span", "inst-sub", `Nivel: ${v.nivel ?? ""}`)
+      );
+
+      const celdaContacto = document.createElement("td");
+      celdaContacto.appendChild(crearElementoTexto("div", "doc-name", v.responsable));
+      const datosContacto = document.createElement("div");
+      datosContacto.style.marginTop = "0.25rem";
+      const enlaceEmail = crearEnlaceCorreo(v.email, "contact-link");
+      datosContacto.append(
+        enlaceEmail,
+        crearElementoTexto("span", "contact-tel", `📞 ${v.telefono ?? ""}`)
+      );
+      celdaContacto.appendChild(datosContacto);
+
+      const celdaAlumnos = document.createElement("td");
+      celdaAlumnos.style.textAlign = "center";
+      celdaAlumnos.appendChild(crearElementoTexto("span", "alumnos-badge", v.alumnos_cant));
+
+      const celdaEstado = document.createElement("td");
+      const estado = estadosVisita.includes(v.estado) ? v.estado : "pendiente";
+      const insigniaEstado = crearElementoTexto("span", "badge", estado.toUpperCase());
+      insigniaEstado.classList.add(`badge-${estado}`);
+      celdaEstado.appendChild(insigniaEstado);
+
+      const celdaAcciones = document.createElement("td");
+      const grupoAcciones = document.createElement("div");
+      grupoAcciones.className = "actions-group";
+
+      const selectEstado = document.createElement("select");
+      selectEstado.className = "select-estado";
+      selectEstado.dataset.id = String(v.id);
+      selectEstado.title = "Cambiar estado";
+      [
+        ["pendiente", "Pendiente"],
+        ["confirmada", "Confirmar"],
+        ["realizada", "Realizada"],
+        ["rechazada", "Rechazar"]
+      ].forEach(([valor, etiqueta]) => {
+        const opcion = crearElementoTexto("option", "", etiqueta);
+        opcion.value = valor;
+        opcion.selected = estado === valor;
+        selectEstado.appendChild(opcion);
+      });
+      selectEstado.value = estado;
+
+      const btnDetalle = crearElementoTexto("button", "btn-ver-obs", "👁️");
+      btnDetalle.type = "button";
+      btnDetalle.dataset.id = String(v.id);
+      btnDetalle.title = "Ver observaciones y datos completos";
+
+      const btnDel = crearElementoTexto("button", "btn-eliminar-visita", "🗑️");
+      btnDel.type = "button";
+      btnDel.dataset.id = String(v.id);
+      btnDel.title = "Eliminar solicitud";
+      btnDel.style.color = "var(--color-error)";
+
+      grupoAcciones.append(selectEstado, btnDetalle, btnDel);
+      celdaAcciones.appendChild(grupoAcciones);
+      tr.append(celdaFecha, celdaInstitucion, celdaContacto, celdaAlumnos, celdaEstado, celdaAcciones);
 
       // Evento de cambio de estado
-      const selectEstado = tr.querySelector(".select-estado");
       selectEstado.addEventListener("change", async (e) => {
         const nuevoEstado = e.target.value;
         try {
@@ -382,13 +441,11 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       // Evento de ver detalle
-      const btnDetalle = tr.querySelector(".btn-ver-obs");
       btnDetalle.addEventListener("click", () => {
         abrirModalDetalleVisita(v);
       });
 
       // Evento de eliminar visita con confirmación institucional
-      const btnDel = tr.querySelector(".btn-eliminar-visita");
       btnDel.addEventListener("click", async () => {
         const confirmed = await pedirConfirmacion(`¿Seguro que deseás eliminar la solicitud de "${v.institucion}" (${v.fecha_preferida})?`);
         if (!confirmed) return;
@@ -412,28 +469,95 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!modalVisita) return;
     const body = document.getElementById("modal-visita-body");
     if (body) {
-      body.innerHTML = `
-        <div style="background: var(--color-bg-alt); padding: 1rem; border-radius: var(--radius); margin-bottom: 1rem;">
-          <h4 style="color: var(--color-primary); font-size: 1.15rem; margin-bottom: 0.3rem;">${v.institucion}</h4>
-          <p><strong>Nivel / Grado:</strong> ${v.nivel} &middot; <strong>Alumnos:</strong> ${v.alumnos_cant}</p>
-          <p><strong>Fecha solicitada:</strong> ${v.fecha_preferida} &middot; <strong>Turno:</strong> ${v.turno}</p>
-          <p><strong>Estado actual:</strong> <span class="badge badge-${v.estado}">${v.estado}</span></p>
-        </div>
+      body.replaceChildren();
 
-        <div style="margin-bottom: 1rem;">
-          <h5 style="color: var(--color-text); font-size: 0.95rem; margin-bottom: 0.25rem;">Contacto del Docente:</h5>
-          <p><strong>Responsable:</strong> ${v.responsable}</p>
-          <p><strong>Email:</strong> <a href="mailto:${v.email}">${v.email}</a></p>
-          <p><strong>Teléfono / WhatsApp:</strong> <a href="https://wa.me/${v.telefono.replace(/\D/g, '')}" target="_blank">${v.telefono}</a></p>
-        </div>
+      const resumen = document.createElement("div");
+      resumen.style.cssText = "background: var(--color-bg-alt); padding: 1rem; border-radius: var(--radius); margin-bottom: 1rem;";
+      const titulo = crearElementoTexto("h4", "", v.institucion);
+      titulo.style.cssText = "color: var(--color-primary); font-size: 1.15rem; margin-bottom: 0.3rem;";
+      resumen.appendChild(titulo);
 
-        <div>
-          <h5 style="color: var(--color-text); font-size: 0.95rem; margin-bottom: 0.25rem;">Comentarios / Observaciones:</h5>
-          <p style="background: #fff; border: 1px solid var(--color-line); border-radius: var(--radius); padding: 0.75rem; white-space: pre-wrap; font-style: ${v.observaciones ? 'normal' : 'italic'}; color: ${v.observaciones ? 'inherit' : 'var(--color-text-muted)'};">
-            ${v.observaciones ? v.observaciones : "No se registraron comentarios adicionales."}
-          </p>
-        </div>
-      `;
+      const datosAcademicos = document.createElement("p");
+      const rotuloNivel = document.createElement("strong");
+      rotuloNivel.textContent = "Nivel / Grado:";
+      const alumnos = document.createElement("strong");
+      alumnos.textContent = "Alumnos:";
+      datosAcademicos.append(
+        rotuloNivel,
+        document.createTextNode(` ${v.nivel ?? ""} · `),
+        alumnos,
+        document.createTextNode(` ${v.alumnos_cant ?? ""}`)
+      );
+      resumen.appendChild(datosAcademicos);
+
+      const datosFecha = document.createElement("p");
+      const fecha = document.createElement("strong");
+      fecha.textContent = "Fecha solicitada:";
+      const turno = document.createElement("strong");
+      turno.textContent = "Turno:";
+      datosFecha.append(
+        fecha,
+        document.createTextNode(` ${v.fecha_preferida ?? ""} · `),
+        turno,
+        document.createTextNode(` ${v.turno ?? ""}`)
+      );
+      resumen.appendChild(datosFecha);
+
+      const estado = estadosVisita.includes(v.estado) ? v.estado : "pendiente";
+      const datosEstado = document.createElement("p");
+      const rotuloEstado = document.createElement("strong");
+      rotuloEstado.textContent = "Estado actual:";
+      const insigniaEstado = crearElementoTexto("span", "badge", estado);
+      insigniaEstado.classList.add(`badge-${estado}`);
+      datosEstado.append(rotuloEstado, document.createTextNode(" "), insigniaEstado);
+      resumen.appendChild(datosEstado);
+
+      const contacto = document.createElement("div");
+      contacto.style.marginBottom = "1rem";
+      const tituloContacto = crearElementoTexto("h5", "", "Contacto del Docente:");
+      tituloContacto.style.cssText = "color: var(--color-text); font-size: 0.95rem; margin-bottom: 0.25rem;";
+      contacto.appendChild(tituloContacto);
+      agregarCampoDetalle(contacto, "Responsable", v.responsable);
+
+      const datosEmail = document.createElement("p");
+      const rotuloEmail = document.createElement("strong");
+      rotuloEmail.textContent = "Email:";
+      const enlaceEmail = crearEnlaceCorreo(v.email);
+      datosEmail.append(rotuloEmail, document.createTextNode(" "), enlaceEmail);
+      contacto.appendChild(datosEmail);
+
+      const datosTelefono = document.createElement("p");
+      const rotuloTelefono = document.createElement("strong");
+      rotuloTelefono.textContent = "Teléfono / WhatsApp:";
+      const telefono = String(v.telefono ?? "");
+      const numeroWhatsApp = telefono.replace(/\D/g, "");
+      datosTelefono.append(rotuloTelefono, document.createTextNode(" "));
+      if (numeroWhatsApp) {
+        const enlaceWhatsApp = crearElementoTexto("a", "", telefono);
+        enlaceWhatsApp.href = `https://wa.me/${numeroWhatsApp}`;
+        enlaceWhatsApp.target = "_blank";
+        enlaceWhatsApp.rel = "noopener noreferrer";
+        datosTelefono.appendChild(enlaceWhatsApp);
+      } else {
+        datosTelefono.appendChild(document.createTextNode(telefono));
+      }
+      contacto.appendChild(datosTelefono);
+
+      const observaciones = document.createElement("div");
+      const tituloObservaciones = crearElementoTexto("h5", "", "Comentarios / Observaciones:");
+      tituloObservaciones.style.cssText = "color: var(--color-text); font-size: 0.95rem; margin-bottom: 0.25rem;";
+      const textoObservaciones = crearElementoTexto(
+        "p",
+        "",
+        v.observaciones || "No se registraron comentarios adicionales."
+      );
+      textoObservaciones.style.cssText =
+        "background: #fff; border: 1px solid var(--color-line); border-radius: var(--radius); padding: 0.75rem; white-space: pre-wrap;";
+      textoObservaciones.style.fontStyle = v.observaciones ? "normal" : "italic";
+      textoObservaciones.style.color = v.observaciones ? "inherit" : "var(--color-text-muted)";
+      observaciones.append(tituloObservaciones, textoObservaciones);
+
+      body.append(resumen, contacto, observaciones);
     }
     modalVisita.classList.add("is-open");
   }
