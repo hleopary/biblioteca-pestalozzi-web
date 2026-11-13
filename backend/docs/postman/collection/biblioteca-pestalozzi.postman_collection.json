@@ -1,0 +1,247 @@
+{
+  "info": {
+    "_postman_id": "c0f1f8d7-9c2a-4a63-9f7e-2d2b0f3f5b10",
+    "name": "Biblioteca Popular Pestalozzi API",
+    "description": "Colección de endpoints públicos y administrativos de la API REST. Ejecutar primero Auth > Iniciar sesión para guardar el token JWT.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000/api" },
+    { "key": "username", "value": "betsabe" },
+    { "key": "password", "value": "pestalozzi2026" },
+    { "key": "token", "value": "" },
+    { "key": "visitaId", "value": "" },
+    { "key": "novedadId", "value": "" },
+    { "key": "contactoId", "value": "" },
+    { "key": "categoriaId", "value": "" },
+    { "key": "materialId", "value": "" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{token}}", "type": "string" }
+    ]
+  },
+  "item": [
+    {
+      "name": "Públicos",
+      "item": [
+        {
+          "name": "Health check",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/health", "auth": { "type": "noauth" } },
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Responde correctamente', function () {", "    pm.response.to.have.status(200);", "});"] } }]
+        },
+        {
+          "name": "Listar horarios",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/horarios", "auth": { "type": "noauth" } }
+        },
+        {
+          "name": "Listar novedades activas",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/novedades", "auth": { "type": "noauth" } }
+        },
+        {
+          "name": "Listar categorías con materiales",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/catalogos/categorias", "auth": { "type": "noauth" } }
+        },
+        {
+          "name": "Listar materiales",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/catalogos/materiales", "auth": { "type": "noauth" } }
+        },
+        {
+          "name": "Crear solicitud de visita",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"institucion\": \"Escuela Primaria N.° 12 de Berisso\",\n  \"responsable\": \"Mariana Gómez\",\n  \"email\": \"docente@escuela12.edu.ar\",\n  \"telefono\": \"2214556677\",\n  \"nivel\": \"4to grado\",\n  \"alumnos_cant\": 28,\n  \"fecha_preferida\": \"2026-11-15\",\n  \"turno\": \"Turno Mañana\",\n  \"observaciones\": \"Interés especial en la colección de colectividades\"\n}" },
+            "url": "{{baseUrl}}/visitas",
+            "auth": { "type": "noauth" }
+          },
+          "event": [{ "listen": "test", "script": { "exec": ["if (pm.response.code === 201) {", "    pm.collectionVariables.set('visitaId', pm.response.json().data.id);", "}"] } }]
+        },
+        {
+          "name": "Crear consulta de contacto",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Ana Pérez\",\n  \"email\": \"ana.perez@example.com\",\n  \"telefono\": \"2214000000\",\n  \"mensaje\": \"Consulta sobre horarios de atención.\"\n}" },
+            "url": "{{baseUrl}}/contactos",
+            "auth": { "type": "noauth" }
+          },
+          "event": [{ "listen": "test", "script": { "exec": ["if (pm.response.code === 201) {", "    pm.collectionVariables.set('contactoId', pm.response.json().data.id);", "}"] } }]
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Iniciar sesión",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}" },
+            "url": "{{baseUrl}}/auth/login",
+            "auth": { "type": "noauth" }
+          },
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Login exitoso', function () {", "    pm.response.to.have.status(200);", "});", "pm.collectionVariables.set('token', pm.response.json().token);"] } }]
+        },
+        {
+          "name": "Verificar sesión",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/auth/verify" }
+        },
+        {
+          "name": "Cambiar contraseña",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"currentPassword\": \"{{password}}\",\n  \"newPassword\": \"pestalozzi2026\"\n}" },
+            "url": "{{baseUrl}}/auth/password"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Horarios",
+      "item": [
+        {
+          "name": "Actualizar horario de un día",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"activo\": true,\n  \"horario_texto\": \"16:00 - 18:00\"\n}" },
+            "url": "{{baseUrl}}/horarios/2"
+          }
+        },
+        {
+          "name": "Actualizar grilla completa",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"horarios\": [\n    { \"dia_orden\": 1, \"activo\": 0, \"horario_texto\": \"Cerrado\" },\n    { \"dia_orden\": 2, \"activo\": 1, \"horario_texto\": \"16:00 - 18:00\" },\n    { \"dia_orden\": 3, \"activo\": 1, \"horario_texto\": \"10:00 - 12:00\" },\n    { \"dia_orden\": 4, \"activo\": 1, \"horario_texto\": \"14:00 - 17:00\" },\n    { \"dia_orden\": 5, \"activo\": 0, \"horario_texto\": \"Cerrado\" },\n    { \"dia_orden\": 6, \"activo\": 0, \"horario_texto\": \"Cerrado\" }\n  ]\n}" },
+            "url": "{{baseUrl}}/horarios"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Visitas",
+      "item": [
+        { "name": "Listar visitas", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/visitas" } },
+        { "name": "Filtrar visitas por estado", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/visitas?estado=pendiente" } },
+        {
+          "name": "Actualizar estado",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"estado\": \"confirmada\"\n}" },
+            "url": "{{baseUrl}}/visitas/{{visitaId}}/estado"
+          }
+        },
+        { "name": "Eliminar visita", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/visitas/{{visitaId}}" } }
+      ]
+    },
+    {
+      "name": "Novedades",
+      "item": [
+        { "name": "Listar novedades administrativas", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/novedades/admin" } },
+        {
+          "name": "Crear novedad",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"categoria\": \"Taller Infantil\",\n  \"categoria_color\": \"#3d5a3e\",\n  \"fecha_texto\": \"Noviembre 2026\",\n  \"titulo\": \"Taller de Cuentos y Títeres\",\n  \"descripcion\": \"Actividad comunitaria para niños y familias.\",\n  \"orden\": 1\n}" },
+            "url": "{{baseUrl}}/novedades"
+          },
+          "event": [{ "listen": "test", "script": { "exec": ["if (pm.response.code === 201) {", "    pm.collectionVariables.set('novedadId', pm.response.json().data.id);", "}"] } }]
+        },
+        {
+          "name": "Editar novedad",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"titulo\": \"Taller de Cuentos y Títeres - Actualizado\",\n  \"activa\": true\n}" },
+            "url": "{{baseUrl}}/novedades/{{novedadId}}"
+          }
+        },
+        {
+          "name": "Reordenar novedades",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"ordenIds\": [1, 2, 3]\n}" },
+            "url": "{{baseUrl}}/novedades/reordenar"
+          }
+        },
+        { "name": "Eliminar novedad", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/novedades/{{novedadId}}" } }
+      ]
+    },
+    {
+      "name": "Notas",
+      "item": [
+        { "name": "Obtener notas", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/notas" } },
+        {
+          "name": "Guardar notas",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"contenido\": \"Recordatorio de prueba desde Postman.\"\n}" },
+            "url": "{{baseUrl}}/notas"
+          }
+        },
+        { "name": "Eliminar nota", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/notas/1" } }
+      ]
+    },
+    {
+      "name": "Contactos",
+      "item": [
+        { "name": "Listar consultas", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/contactos" } },
+        { "name": "Eliminar consulta", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/contactos/{{contactoId}}" } }
+      ]
+    },
+    {
+      "name": "Catálogos",
+      "item": [
+        {
+          "name": "Crear categoría",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Nueva colección\",\n  \"descripcion\": \"Categoría creada desde Postman.\"\n}" },
+            "url": "{{baseUrl}}/catalogos/categorias"
+          },
+          "event": [{ "listen": "test", "script": { "exec": ["if (pm.response.code === 201) {", "    pm.collectionVariables.set('categoriaId', pm.response.json().data.id);", "}"] } }]
+        },
+        {
+          "name": "Editar categoría",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"descripcion\": \"Descripción actualizada desde Postman.\"\n}" },
+            "url": "{{baseUrl}}/catalogos/categorias/{{categoriaId}}"
+          }
+        },
+        {
+          "name": "Crear material",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"titulo\": \"Material de prueba\",\n  \"autor\": \"Autor de prueba\",\n  \"link_koha\": \"https://koha.example.org/material\",\n  \"link_greenstone\": \"https://greenstone.example.org/material\",\n  \"id_categoria\": {{categoriaId}}\n}" },
+            "url": "{{baseUrl}}/catalogos/materiales"
+          },
+          "event": [{ "listen": "test", "script": { "exec": ["if (pm.response.code === 201) {", "    pm.collectionVariables.set('materialId', pm.response.json().data.id);", "}"] } }]
+        },
+        {
+          "name": "Editar material",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"autor\": \"Autor actualizado\"\n}" },
+            "url": "{{baseUrl}}/catalogos/materiales/{{materialId}}"
+          }
+        },
+        { "name": "Eliminar material", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/catalogos/materiales/{{materialId}}" } },
+        { "name": "Eliminar categoría", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/catalogos/categorias/{{categoriaId}}" } }
+      ]
+    }
+  ]
+}

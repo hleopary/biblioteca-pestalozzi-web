@@ -10,6 +10,9 @@ y este proyecto adhiere al versionado semántico y convenciones de Git del Grupo
 ## [Sin publicar] (Unreleased)
 
 ### Añadido
+- **Colección de Postman para la API REST**:
+  - Colección importable en `backend/docs/postman/collection/` con endpoints públicos, autenticados y CRUD.
+  - Variables reutilizables para URL base, token JWT e identificadores generados durante las pruebas.
 - **Backend Propio en Node.js / Express (`backend/`)**:
   - Servidor API REST con Express, CORS y middleware centralizado de errores.
   - Persistencia relacional portable con SQLite nativo (`node:sqlite`) en `backend/data/pestalozzi.db`.
